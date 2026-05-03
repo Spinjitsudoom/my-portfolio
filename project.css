@@ -695,3 +695,145 @@ td {
 .dl-note a { color: var(--accent); text-decoration: none; }
 .dl-note a:hover { text-decoration: underline; }
 .dl-note strong { color: var(--text); }
+
+/* ── HERO BADGES ── */
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.hero-badge {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.hero-badge-green { color: #3fb950; border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.07); }
+
+/* ── SECTION SUB-HEADING ── */
+.section-sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: -1.75rem;
+  margin-bottom: 2rem;
+}
+
+/* ── INTERACTIVE MOCKUP ── */
+
+/* Cursor on clickable rows/tabs */
+[data-album], [data-tab] { cursor: pointer; user-select: none; }
+
+/* Spotify connected pulse */
+@keyframes spotify-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.spotify-dot { animation: spotify-pulse 2.4s ease-in-out infinite; }
+
+/* Preview area fade transition */
+.preview-area {
+  transition: opacity 0.15s ease;
+}
+
+.preview-area.refreshing { opacity: 0; }
+
+/* Track row entrance animation */
+@keyframes trackIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.track-anim {
+  animation: trackIn 0.22s ease both;
+}
+
+/* Execute done state */
+.foot-btn-primary.executed {
+  background: #238636;
+  border-color: #238636;
+}
+
+/* Log area */
+.log-area {
+  padding: 0.5rem;
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.72rem;
+  line-height: 1.7;
+}
+
+.log-line { padding: 0.05rem 0.25rem; }
+.log-line:nth-child(odd) { background: rgba(255,255,255,0.02); }
+
+.log-dim   { color: #444; }
+.log-ok    { color: #2ecc71; }
+.log-warn  { color: #f39c12; }
+.log-err   { color: #e74c3c; }
+.log-score { color: #555; }
+
+/* FAQ */
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.faq-item {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.faq-item:hover { border-color: var(--accent); }
+
+.faq-item summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.2rem;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+  color: var(--accent);
+}
+
+.faq-item p {
+  padding: 0 1.25rem 1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: none;
+}
+
+.faq-item p code {
+  font-size: 0.83rem;
+  color: var(--accent-hover);
+}

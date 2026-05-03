@@ -16,6 +16,7 @@
         <li><a href="#features">Features</a></li>
         <li><a href="#how-it-works">How it works</a></li>
         <li><a href="#download">Download</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
     </nav>
@@ -26,9 +27,15 @@
     <div class="container">
       <div class="project-hero-icon">🎵</div>
       <h1>Music Manager Ultimate</h1>
-      <p class="project-subtitle">Organise your music library the smart way — Spotify metadata, file renaming, embedded tags, cover art, and audio conversion in one app.</p>
+      <p class="project-subtitle">Your music library, perfectly organised — Spotify metadata, file renaming, embedded tags, cover art, and audio conversion in one app.</p>
+      <div class="hero-meta">
+        <span class="hero-badge">Open Source</span>
+        <span class="hero-badge">Free</span>
+        <span class="hero-badge">Windows &amp; Linux</span>
+        <span class="hero-badge hero-badge-green">● Spotify connected</span>
+      </div>
       <div class="hero-actions">
-        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest" class="btn" target="_blank" rel="noopener">⬇ Download</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest" class="btn" target="_blank" rel="noopener">⬇ Download v2.1.0</a>
         <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn btn-outline" target="_blank" rel="noopener">View on GitHub</a>
       </div>
     </div>
@@ -37,9 +44,11 @@
   <!-- App Mockup -->
   <section class="section mockup-section">
     <div class="container">
-      <h2 class="section-heading">See it in <span class="accent">action</span></h2>
-      <div class="mockup-wrap">
+      <h2 class="section-heading fade-in">See it in <span class="accent">action</span></h2>
+      <p class="section-sub fade-in">Click any album in the sidebar — the preview updates live.</p>
+      <div class="mockup-wrap fade-in">
 
+        <!-- Title bar -->
         <div class="titlebar">
           <div class="dots">
             <div class="dot dot-r"></div>
@@ -50,64 +59,90 @@
           <span class="titlebar-menu">File</span>
         </div>
 
+        <!-- Toolbar -->
         <div class="app-toolbar">
           <div class="tb-btn">Browse</div>
           <div class="tb-input">/music/Avenged Sevenfold</div>
-          <div class="tb-select">Avenged Sevenfold ▾</div>
-          <div class="tb-select">Hail to the King ▾</div>
+          <div class="tb-select" id="tb-artist">Avenged Sevenfold ▾</div>
+          <div class="tb-select" id="tb-album">Hail to the King ▾</div>
           <div class="tb-btn tb-btn-accent">Batch</div>
         </div>
 
+        <!-- Status bar -->
         <div class="app-status-bar">
-          <div class="status-dot status-green">✓ Hail to the King (2013)</div>
-          <div class="status-dot status-blue">11 / 11 matched</div>
-          <div class="status-dot status-dim">0 missing</div>
-          <div class="status-dot status-green">● Spotify connected</div>
+          <div class="status-dot status-green" id="status-album-name">✓ Hail to the King (2013)</div>
+          <div class="status-dot status-blue" id="status-match-count">11 / 11 matched</div>
+          <div class="status-dot status-dim" id="status-missing">0 missing</div>
+          <div class="status-dot status-green"><span class="spotify-dot">●</span> Spotify connected</div>
         </div>
 
+        <!-- Body -->
         <div class="app-body">
 
+          <!-- Releases sidebar -->
           <div class="app-sidebar">
             <div class="app-sidebar-hdr">
               SPOTIFY RELEASES
               <span class="sidebar-badge">34</span>
             </div>
             <div class="app-sidebar-list">
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#1a0a2e,#3d1b6e);">♪</div><div class="release-info"><div class="release-title">Sounding the Seventh Trumpet</div><div class="release-meta">2001 · Album</div></div><div class="release-count">13</div></div>
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a1a2e,#1b3d6e);">♪</div><div class="release-info"><div class="release-title">Waking the Fallen</div><div class="release-meta">2003 · Album</div></div><div class="release-count">12</div></div>
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#2e0a0a,#6e1b1b);">♪</div><div class="release-info"><div class="release-title">City of Evil</div><div class="release-meta">2005 · Album</div></div><div class="release-count">11</div></div>
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a2e0a,#1b6e1b);">♪</div><div class="release-info"><div class="release-title">Nightmare</div><div class="release-meta">2010 · Album</div></div><div class="release-count">11</div></div>
-              <div class="release-row selected"><div class="thumb" style="background:linear-gradient(135deg,#1a1a0a,#3d3d00);">♫</div><div class="release-info"><div class="release-title">Hail to the King</div><div class="release-meta">2013 · Album</div></div><div class="release-count">11</div></div>
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#1a0a1a,#3d003d);">♪</div><div class="release-info"><div class="release-title">The Stage</div><div class="release-meta">2016 · Album</div></div><div class="release-count">11</div></div>
-              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a1a1a,#003d3d);">♪</div><div class="release-info"><div class="release-title">Life Is But a Dream...</div><div class="release-meta">2023 · Album</div></div><div class="release-count">10</div></div>
+              <div class="release-row" data-album="sounding">
+                <div class="thumb" style="background:linear-gradient(135deg,#1a0a2e,#3d1b6e);">♪</div>
+                <div class="release-info"><div class="release-title">Sounding the Seventh Trumpet</div><div class="release-meta">2001 · Album</div></div>
+                <div class="release-count">13</div>
+              </div>
+              <div class="release-row" data-album="waking">
+                <div class="thumb" style="background:linear-gradient(135deg,#0a1a2e,#1b3d6e);">♪</div>
+                <div class="release-info"><div class="release-title">Waking the Fallen</div><div class="release-meta">2003 · Album</div></div>
+                <div class="release-count">12</div>
+              </div>
+              <div class="release-row" data-album="city">
+                <div class="thumb" style="background:linear-gradient(135deg,#2e0a0a,#6e1b1b);">♪</div>
+                <div class="release-info"><div class="release-title">City of Evil</div><div class="release-meta">2005 · Album</div></div>
+                <div class="release-count">11</div>
+              </div>
+              <div class="release-row" data-album="nightmare">
+                <div class="thumb" style="background:linear-gradient(135deg,#0a2e0a,#1b6e1b);">♪</div>
+                <div class="release-info"><div class="release-title">Nightmare</div><div class="release-meta">2010 · Album</div></div>
+                <div class="release-count">11</div>
+              </div>
+              <div class="release-row selected" data-album="hail">
+                <div class="thumb" style="background:linear-gradient(135deg,#1a1a0a,#3d3d00);">♫</div>
+                <div class="release-info"><div class="release-title">Hail to the King</div><div class="release-meta">2013 · Album</div></div>
+                <div class="release-count">11</div>
+              </div>
+              <div class="release-row" data-album="stage">
+                <div class="thumb" style="background:linear-gradient(135deg,#1a0a1a,#3d003d);">♪</div>
+                <div class="release-info"><div class="release-title">The Stage</div><div class="release-meta">2016 · Album</div></div>
+                <div class="release-count">11</div>
+              </div>
+              <div class="release-row" data-album="dream">
+                <div class="thumb" style="background:linear-gradient(135deg,#0a1a1a,#003d3d);">♪</div>
+                <div class="release-info"><div class="release-title">Life Is But a Dream...</div><div class="release-meta">2023 · Album</div></div>
+                <div class="release-count">10</div>
+              </div>
             </div>
           </div>
 
+          <!-- Centre panel -->
           <div class="app-centre">
             <div class="app-tabs">
-              <div class="app-tab active">Preview</div>
-              <div class="app-tab">Log</div>
+              <div class="app-tab active" data-tab="preview" id="tab-preview">Preview</div>
+              <div class="app-tab" data-tab="log" id="tab-log">Log</div>
             </div>
-            <div class="preview-area">
-              <div class="preview-hdr">11 matched · 0 unmatched · 11 total</div>
-              <div class="track-row"><span class="track-num">1</span><span class="track-name">01 Shepherd of Fire.flac</span><span class="arrow">→</span><span class="track-new">01 - Shepherd of Fire.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">2</span><span class="track-name">02 Hail to the King.flac</span><span class="arrow">→</span><span class="track-new">02 - Hail to the King.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">3</span><span class="track-name">03 Doing Time.flac</span><span class="arrow">→</span><span class="track-new">03 - Doing Time.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">4</span><span class="track-name">track04.flac</span><span class="arrow">→</span><span class="track-new">04 - This Means War.flac</span><span class="score score-mid">78%</span></div>
-              <div class="track-row"><span class="track-num">5</span><span class="track-name">05 Requiem.flac</span><span class="arrow">→</span><span class="track-new">05 - Requiem.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">6</span><span class="track-name">06 Crimson Day.flac</span><span class="arrow">→</span><span class="track-new">06 - Crimson Day.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">7</span><span class="track-name">07 Heretic.flac</span><span class="arrow">→</span><span class="track-new">07 - Heretic.flac</span><span class="score score-high">100%</span></div>
-              <div class="track-row"><span class="track-num">8</span><span class="track-name">Coming Home.flac</span><span class="arrow">→</span><span class="track-new">08 - Coming Home.flac</span><span class="score score-high">95%</span></div>
+            <div class="preview-area" id="preview-pane">
+              <!-- populated by JS -->
             </div>
           </div>
 
+          <!-- Art panel -->
           <div class="art-panel">
-            <div class="art-img">🎵</div>
+            <div class="art-img" id="art-img-el">🎵</div>
             <div class="meta-grid">
-              <div class="meta-row"><span class="meta-label">Artist</span><span class="meta-val">Avenged Sevenfold</span></div>
-              <div class="meta-row"><span class="meta-label">Album</span><span class="meta-val">Hail to the King</span></div>
-              <div class="meta-row"><span class="meta-label">Year</span><span class="meta-val">2013</span></div>
-              <div class="meta-row"><span class="meta-label">Genre</span><span class="meta-val">Metal</span></div>
+              <div class="meta-row"><span class="meta-label">Artist</span><span class="meta-val" id="meta-artist-val">Avenged Sevenfold</span></div>
+              <div class="meta-row"><span class="meta-label">Album</span><span class="meta-val" id="meta-album-val">Hail to the King</span></div>
+              <div class="meta-row"><span class="meta-label">Year</span><span class="meta-val" id="meta-year-val">2013</span></div>
+              <div class="meta-row"><span class="meta-label">Genre</span><span class="meta-val" id="meta-genre-val">Heavy Metal</span></div>
             </div>
             <div class="art-chips">
               <div class="art-chip">Art</div>
@@ -119,25 +154,26 @@
 
         </div>
 
+        <!-- Footer bar -->
         <div class="app-footer-bar">
-          <span>11 / 11 tracks matched</span>
+          <span id="footer-count">11 / 11 tracks matched</span>
           <div class="footer-btns">
             <div class="foot-btn">Convert</div>
-            <div class="foot-btn foot-btn-primary">Execute Rename + Tag</div>
+            <div class="foot-btn foot-btn-primary" id="execute-btn">Execute Rename + Tag</div>
             <div class="foot-btn">Refresh</div>
-            <div class="foot-btn">Undo</div>
+            <div class="foot-btn" id="undo-btn">Undo</div>
           </div>
         </div>
 
-      </div>
+      </div><!-- /mockup-wrap -->
     </div>
   </section>
 
   <!-- Features -->
   <section id="features" class="section alt">
     <div class="container">
-      <h2 class="section-heading">Everything you need to <span class="accent">clean up your library</span></h2>
-      <div class="feature-cards">
+      <h2 class="section-heading fade-in">Everything you need to <span class="accent">clean up your library</span></h2>
+      <div class="feature-cards stagger-children">
 
         <div class="feature-card">
           <div class="feature-card-icon">🎵</div>
@@ -160,7 +196,7 @@
         <div class="feature-card">
           <div class="feature-card-icon">🖼️</div>
           <h3>Cover Art</h3>
-          <p>Downloads the highest-resolution image from Spotify's CDN and embeds it into your files. The sidebar shows 64×64 thumbnails for every release as they load.</p>
+          <p>Downloads the highest-resolution image from Spotify's CDN and embeds it into your files. Sidebar shows 64×64 thumbnails for every release as they load.</p>
         </div>
 
         <div class="feature-card">
@@ -171,8 +207,8 @@
 
         <div class="feature-card">
           <div class="feature-card-icon">↩️</div>
-          <h3>Preview & Undo</h3>
-          <p>See exactly which files will be renamed and what their new names will be before committing. Every execute operation can be fully reversed.</p>
+          <h3>Preview &amp; Undo</h3>
+          <p>See exactly which files will be renamed before committing. Every execute operation can be fully reversed with a single click.</p>
         </div>
 
         <div class="feature-card">
@@ -194,8 +230,8 @@
   <!-- How it works -->
   <section id="how-it-works" class="section">
     <div class="container">
-      <h2 class="section-heading">How it <span class="accent">works</span></h2>
-      <div class="workflow-steps">
+      <h2 class="section-heading fade-in">How it <span class="accent">works</span></h2>
+      <div class="workflow-steps stagger-children">
 
         <div class="workflow-step">
           <div class="step-num">1</div>
@@ -252,26 +288,27 @@
   <!-- Download -->
   <section id="download" class="section alt">
     <div class="container">
-      <h2 class="section-heading">Download <span class="accent">v2.1.0</span></h2>
-      <div class="dl-cards">
+      <h2 class="section-heading fade-in">Download <span class="accent">v2.1.0</span></h2>
+      <div class="dl-cards stagger-children">
 
         <div class="dl-card">
           <h3>Windows</h3>
-          <p>Extract the ZIP and run <code>MusicManager.exe</code> — Qt6 DLLs bundled.</p>
+          <p>Standalone executable — Qt6 DLLs bundled. Extract and run.</p>
+          <pre><code>MusicManager.exe</code></pre>
           <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest" target="_blank" rel="noopener">⬇ Download for Windows</a>
         </div>
 
         <div class="dl-card">
-          <h3>AppImage</h3>
-          <p>Requires <code>qt6-qtbase</code> on the host system.</p>
+          <h3>Linux — AppImage</h3>
+          <p>Requires <code>qt6-qtbase</code> and <code>qt6-qtbase-gui</code> on the host.</p>
           <pre><code>chmod +x MusicManager.AppImage
 ./MusicManager.AppImage</code></pre>
           <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.AppImage" target="_blank" rel="noopener">⬇ Download AppImage</a>
         </div>
 
         <div class="dl-card">
-          <h3>Flatpak</h3>
-          <p>Self-contained — no system Qt6 required.</p>
+          <h3>Linux — Flatpak</h3>
+          <p>Self-contained sandbox — no system Qt6 required.</p>
           <pre><code>flatpak install --user MusicManager.flatpak
 flatpak run com.musicmanager.MusicManager</code></pre>
           <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.flatpak" target="_blank" rel="noopener">⬇ Download Flatpak</a>
@@ -282,13 +319,58 @@ flatpak run com.musicmanager.MusicManager</code></pre>
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2 class="section-heading fade-in">Frequently asked <span class="accent">questions</span></h2>
+      <div class="faq-list stagger-children">
+
+        <details class="faq-item">
+          <summary>Do I need a Spotify Premium subscription?</summary>
+          <p>No — a free Spotify account is enough. The app only uses the Spotify Web API for metadata (artist names, album art, track listings). It does not stream or play music.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>What audio formats are supported?</summary>
+          <p>For renaming and tag writing: MP3, FLAC, M4A, OGG, and WAV. For audio conversion via FFmpeg: the same five formats, with AAC↔M4A handled as a lossless remux and all other pairs transcoded.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Does it work offline?</summary>
+          <p>An internet connection is required to fetch metadata and cover art from Spotify. The rename and tag-write operations themselves run entirely locally once metadata has been fetched.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Is FFmpeg required?</summary>
+          <p>Only for the audio conversion feature (File → Convert). Renaming and tag writing work without FFmpeg. If conversion is attempted without FFmpeg on your PATH, the app will show a clear error.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I undo after closing the app?</summary>
+          <p>Undo is available within the same session. Closing the app clears the undo history. It's recommended to use the Preview tab to verify all renames before executing.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Is there a Python version?</summary>
+          <p>Yes — the <code>python source code/</code> directory in the repository contains a fully functional Python version using <code>customtkinter</code>. Run it with <code>python music_organizer.py</code> after installing the dependencies.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Where are my Spotify credentials stored?</summary>
+          <p>Your Client ID and Secret are stored locally in a <code>config.json</code> file in the app's directory. They are never transmitted anywhere other than directly to Spotify's API.</p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
   <!-- Technical details -->
-  <section class="section">
+  <section class="section alt">
     <div class="container project-layout">
 
       <main class="project-main">
 
-        <div class="prose-block">
+        <div class="prose-block fade-in">
           <h2>Python — Getting Started</h2>
           <h3>Install dependencies</h3>
           <pre><code>pip install customtkinter pillow spotipy thefuzz mutagen</code></pre>
@@ -298,11 +380,11 @@ python music_organizer.py</code></pre>
           <p class="note">FFmpeg must be on your <code>PATH</code> for audio conversion to work.</p>
         </div>
 
-        <div class="prose-block">
+        <div class="prose-block fade-in">
           <h2>C++/Qt6 — Build from Source</h2>
-          <h3>Install dependencies (Fedora)</h3>
+          <h3>Fedora / RHEL</h3>
           <pre><code>sudo dnf install cmake gcc-c++ qt6-qtbase-devel openssl-devel</code></pre>
-          <h3>Install dependencies (Ubuntu/Debian)</h3>
+          <h3>Ubuntu / Debian</h3>
           <pre><code>sudo apt install cmake g++ qt6-base-dev libssl-dev</code></pre>
           <h3>Build</h3>
           <pre><code>cd "c++ source code"
@@ -311,7 +393,7 @@ cmake --build build -j$(nproc)
 ./build/MusicManager</code></pre>
         </div>
 
-        <div class="prose-block">
+        <div class="prose-block fade-in">
           <h2>Spotify API Setup</h2>
           <ol class="steps">
             <li>Go to <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and create a free app.</li>
@@ -373,6 +455,258 @@ cmake --build build -j$(nproc)
   <footer>
     <p>Music Manager Ultimate · MIT License · &copy; 2026 Etienne Axiak</p>
   </footer>
+
+  <script src="main.js"></script>
+  <script>
+  'use strict';
+
+  const ALBUMS = {
+    sounding: {
+      title: 'Sounding the Seventh Trumpet', year: '2001', genre: 'Metalcore',
+      gradient: 'linear-gradient(135deg,#1a0a2e,#3d1b6e)',
+      matched: 10, total: 13,
+      tracks: [
+        [1,'01 To End the Rapture.mp3',    '01 - To End the Rapture.mp3',          100],
+        [2,'02 Turn the Other Way.mp3',    '02 - Turn the Other Way.mp3',          100],
+        [3,'track3.mp3',                   '03 - Thick and Thin.mp3',               71],
+        [4,'04 We Come Out at Night.mp3',  '04 - We Come Out at Night.mp3',        100],
+        [5,'05 Darkness.mp3',              '05 - Darkness Surrounding.mp3',         82],
+        [6,'art_of_subconscious.mp3',      '06 - The Art of Subconscious Illusion.mp3', 76],
+        [7,'07 Starting Over.mp3',         '07 - Starting Over.mp3',               100],
+        [8,'track8.mp3',                   '08 - Breaking Their Hold.mp3',          65],
+      ]
+    },
+    waking: {
+      title: 'Waking the Fallen', year: '2003', genre: 'Metalcore',
+      gradient: 'linear-gradient(135deg,#0a1a2e,#1b3d6e)',
+      matched: 11, total: 12,
+      tracks: [
+        [1,'01 Waking the Fallen.flac',    '01 - Waking the Fallen.flac',          100],
+        [2,'02 Chapter Four.flac',         '02 - Chapter Four.flac',               100],
+        [3,'remenissions.flac',            '03 - Remenissions.flac',                88],
+        [4,'04 Desecrate.flac',            '04 - Desecrate Through Reverence.flac', 79],
+        [5,'05 Eternal Rest.flac',         '05 - Eternal Rest.flac',               100],
+        [6,'wont see you pt1.flac',        '06 - I Won\'t See You Tonight Pt. 1.flac', 93],
+        [7,'wont see you pt2.flac',        '07 - I Won\'t See You Tonight Pt. 2.flac', 93],
+        [8,'track8.flac',                  '08 - Clairvoyant Disease.flac',         62],
+      ]
+    },
+    city: {
+      title: 'City of Evil', year: '2005', genre: 'Hard Rock',
+      gradient: 'linear-gradient(135deg,#2e0a0a,#6e1b1b)',
+      matched: 11, total: 11,
+      tracks: [
+        [1,'01 Beast and the Harlot.flac', '01 - Beast and the Harlot.flac',       100],
+        [2,'02 Burn It Down.flac',         '02 - Burn It Down.flac',               100],
+        [3,'bat country.flac',             '03 - Bat Country.flac',                 91],
+        [4,'04 Trashed and Scattered.flac','04 - Trashed and Scattered.flac',       100],
+        [5,'05 Seize the Day.flac',        '05 - Seize the Day.flac',              100],
+        [6,'Sidewinder.flac',              '06 - Sidewinder.flac',                  88],
+        [7,'the wicked end.flac',          '07 - The Wicked End.flac',              74],
+        [8,'08 Strength.flac',             '08 - Strength of the World.flac',       83],
+      ]
+    },
+    nightmare: {
+      title: 'Nightmare', year: '2010', genre: 'Heavy Metal',
+      gradient: 'linear-gradient(135deg,#0a2e0a,#1b6e1b)',
+      matched: 10, total: 11,
+      tracks: [
+        [1,'01 Nightmare.flac',            '01 - Nightmare.flac',                  100],
+        [2,'02 Welcome to the Family.flac','02 - Welcome to the Family.flac',      100],
+        [3,'03 Danger Line.flac',          '03 - Danger Line.flac',                100],
+        [4,'buried alive.flac',            '04 - Buried Alive.flac',                86],
+        [5,'natural born killer.flac',     '05 - Natural Born Killer.flac',         89],
+        [6,'06 So Far Away.flac',          '06 - So Far Away.flac',                100],
+        [7,'god hates everyone.flac',      '07 - God Hates Everyone.flac',          91],
+        [8,'track8.flac',                  '08 - Victim.flac',                      67],
+      ]
+    },
+    hail: {
+      title: 'Hail to the King', year: '2013', genre: 'Heavy Metal',
+      gradient: 'linear-gradient(135deg,#1a1a0a,#3d3d00)',
+      matched: 11, total: 11,
+      tracks: [
+        [1,'01 Shepherd of Fire.flac',     '01 - Shepherd of Fire.flac',           100],
+        [2,'02 Hail to the King.flac',     '02 - Hail to the King.flac',           100],
+        [3,'03 Doing Time.flac',           '03 - Doing Time.flac',                 100],
+        [4,'track04.flac',                 '04 - This Means War.flac',              78],
+        [5,'05 Requiem.flac',              '05 - Requiem.flac',                    100],
+        [6,'06 Crimson Day.flac',          '06 - Crimson Day.flac',                100],
+        [7,'07 Heretic.flac',              '07 - Heretic.flac',                    100],
+        [8,'Coming Home.flac',             '08 - Coming Home.flac',                 95],
+      ]
+    },
+    stage: {
+      title: 'The Stage', year: '2016', genre: 'Progressive Metal',
+      gradient: 'linear-gradient(135deg,#1a0a1a,#3d003d)',
+      matched: 11, total: 11,
+      tracks: [
+        [1,'01 The Stage.flac',            '01 - The Stage.flac',                  100],
+        [2,'02 Paradigm.flac',             '02 - Paradigm.flac',                   100],
+        [3,'sunny disposition.flac',       '03 - Sunny Disposition.flac',           88],
+        [4,'04 God Damn.flac',             '04 - God Damn.flac',                   100],
+        [5,'creating god.flac',            '05 - Creating God.flac',                84],
+        [6,'06 Angels.flac',               '06 - Angels.flac',                     100],
+        [7,'roman sky.flac',               '07 - Roman Sky.flac',                   91],
+        [8,'fermi paradox.flac',           '08 - Fermi Paradox.flac',               87],
+      ]
+    },
+    dream: {
+      title: 'Life Is But a Dream...', year: '2023', genre: 'Avant-garde Metal',
+      gradient: 'linear-gradient(135deg,#0a1a1a,#003d3d)',
+      matched: 9, total: 10,
+      tracks: [
+        [1,'01 Game Over.flac',            '01 - Game Over.flac',                  100],
+        [2,'02 Mattel.flac',               '02 - Mattel.flac',                     100],
+        [3,'nobody.flac',                  '03 - Nobody.flac',                      88],
+        [4,'we love you.flac',             '04 - We Love You.flac',                 87],
+        [5,'05 Cosmic.flac',               '05 - Cosmic.flac',                     100],
+        [6,'track6.flac',                  '06 - G.flac',                           58],
+        [7,'easier.flac',                  '07 - Easier.flac',                      91],
+        [8,'death.flac',                   '08 - Death.flac',                       94],
+      ]
+    }
+  };
+
+  let currentAlbum = 'hail';
+  let currentTab = 'preview';
+  let executed = false;
+
+  function renderPreview(id) {
+    const album = ALBUMS[id];
+    const missing = album.total - album.matched;
+    const hdr = `${album.matched} matched · ${missing} unmatched · ${album.total} total`;
+    let html = `<div class="preview-hdr">${hdr}</div>`;
+    album.tracks.forEach(([num, orig, renamed, score], i) => {
+      const cls = score >= 80 ? 'score-high' : 'score-mid';
+      const delay = (i * 0.04).toFixed(2);
+      html += `
+        <div class="track-row track-anim" style="animation-delay:${delay}s">
+          <span class="track-num">${num}</span>
+          <span class="track-name">${orig}</span>
+          <span class="arrow">→</span>
+          <span class="track-new">${renamed}</span>
+          <span class="score ${cls}">${score}%</span>
+        </div>`;
+    });
+    return html;
+  }
+
+  function renderLog(id) {
+    const album = ALBUMS[id];
+    const avg = Math.round(album.tracks.reduce((s, t) => s + t[3], 0) / album.tracks.length);
+    const missing = album.total - album.matched;
+    let lines = [
+      `<span class="log-dim">[09:14:02]</span>  Session: /music/Avenged Sevenfold`,
+      `<span class="log-dim">[09:14:03]</span>  Spotify connected (Client: ****f4a2)`,
+      `<span class="log-dim">[09:14:04]</span>  Artist detected: Avenged Sevenfold (34 releases)`,
+      `<span class="log-dim">[09:14:09]</span>  Selected: ${album.title} (${album.year}) — ${album.total} tracks`,
+      `<span class="log-dim">[09:14:09]</span>  Fuzzy matching ${album.total} files — avg confidence ${avg}%`,
+    ];
+    album.tracks.forEach(([num, orig, renamed, score], i) => {
+      const s = String(10 + i).padStart(2, '0');
+      const icon = score >= 80 ? '<span class="log-ok">✓</span>' : score >= 60 ? '<span class="log-warn">~</span>' : '<span class="log-err">✗</span>';
+      lines.push(`<span class="log-dim">[09:14:${s}]</span>  ${icon} ${orig} → ${renamed} <span class="log-score">(${score}%)</span>`);
+    });
+    const doneTime = String(10 + album.tracks.length).padStart(2, '0');
+    lines.push(`<span class="log-dim">[09:14:${doneTime}]</span>  Done — <span class="log-ok">${album.matched}/${album.total} renamed</span>${missing > 0 ? `, <span class="log-warn">${missing} unmatched</span>` : ''}`);
+    return `<div class="log-area">${lines.map(l => `<div class="log-line">${l}</div>`).join('')}</div>`;
+  }
+
+  function updateMockup(id) {
+    const album = ALBUMS[id];
+    const missing = album.total - album.matched;
+
+    document.getElementById('status-album-name').textContent = `✓ ${album.title} (${album.year})`;
+    document.getElementById('status-match-count').textContent = `${album.matched} / ${album.total} matched`;
+    document.getElementById('status-missing').textContent = `${missing} missing`;
+    document.getElementById('tb-album').textContent = album.title + ' ▾';
+    document.getElementById('footer-count').textContent = `${album.matched} / ${album.total} tracks matched`;
+
+    document.getElementById('art-img-el').style.background = album.gradient;
+    document.getElementById('meta-album-val').textContent = album.title;
+    document.getElementById('meta-year-val').textContent = album.year;
+    document.getElementById('meta-genre-val').textContent = album.genre;
+  }
+
+  function refreshPane() {
+    const pane = document.getElementById('preview-pane');
+    pane.classList.add('refreshing');
+    setTimeout(() => {
+      pane.innerHTML = currentTab === 'preview'
+        ? renderPreview(currentAlbum)
+        : renderLog(currentAlbum);
+      pane.classList.remove('refreshing');
+    }, 160);
+  }
+
+  function selectAlbum(id) {
+    if (id === currentAlbum) return;
+    currentAlbum = id;
+    executed = false;
+    document.getElementById('execute-btn').textContent = 'Execute Rename + Tag';
+    document.getElementById('execute-btn').classList.remove('executed');
+
+    document.querySelectorAll('[data-album]').forEach(r =>
+      r.classList.toggle('selected', r.dataset.album === id)
+    );
+    updateMockup(id);
+    refreshPane();
+  }
+
+  function switchTab(name) {
+    if (name === currentTab) return;
+    currentTab = name;
+    document.querySelectorAll('[data-tab]').forEach(t =>
+      t.classList.toggle('active', t.dataset.tab === name)
+    );
+    refreshPane();
+  }
+
+  // Execute button interaction
+  document.getElementById('execute-btn').addEventListener('click', () => {
+    const btn = document.getElementById('execute-btn');
+    if (executed) return;
+    btn.textContent = 'Renaming…';
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      executed = true;
+      btn.textContent = '✓ Done';
+      btn.style.opacity = '1';
+      btn.classList.add('executed');
+      currentTab = 'log';
+      document.querySelectorAll('[data-tab]').forEach(t =>
+        t.classList.toggle('active', t.dataset.tab === 'log')
+      );
+      refreshPane();
+    }, 900);
+  });
+
+  // Undo button
+  document.getElementById('undo-btn').addEventListener('click', () => {
+    if (!executed) return;
+    executed = false;
+    document.getElementById('execute-btn').textContent = 'Execute Rename + Tag';
+    document.getElementById('execute-btn').classList.remove('executed');
+    currentTab = 'preview';
+    document.querySelectorAll('[data-tab]').forEach(t =>
+      t.classList.toggle('active', t.dataset.tab === 'preview')
+    );
+    refreshPane();
+  });
+
+  // Wire up release rows and tabs
+  document.querySelectorAll('[data-album]').forEach(row =>
+    row.addEventListener('click', () => selectAlbum(row.dataset.album))
+  );
+  document.querySelectorAll('[data-tab]').forEach(tab =>
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab))
+  );
+
+  // Init
+  updateMockup('hail');
+  document.getElementById('preview-pane').innerHTML = renderPreview('hail');
+  </script>
 
 </body>
 </html>

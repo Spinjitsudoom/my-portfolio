@@ -245,3 +245,39 @@ footer {
     gap: 1.2rem;
   }
 }
+
+/* SCROLL ANIMATIONS */
+.fade-in {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* HERO ENTRANCE */
+@keyframes heroUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-content {
+  animation: heroUp 0.75s ease both;
+}
+
+.hero-content h1      { animation: heroUp 0.7s 0.05s ease both; }
+.hero-content .tagline { animation: heroUp 0.7s 0.18s ease both; }
+.hero-content .btn     { animation: heroUp 0.7s 0.32s ease both; }
+
+/* NAV ACTIVE */
+nav ul a.nav-active {
+  color: var(--text);
+}
+
+/* CARD GLOW ON HOVER */
+.card:hover {
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(88, 166, 255, 0.08);
+}

@@ -224,6 +224,12 @@ nav ul a:hover {
   margin-top: 0.25rem;
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 /* FOOTER */
 footer {
   border-top: 1px solid var(--border);

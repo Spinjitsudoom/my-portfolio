@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TMDB Media Manager — Etienne Axiak</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="project.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="index.html" class="nav-name">← Etienne Axiak</a>
+      <ul>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="project-hero">
+    <div class="container">
+      <div class="project-hero-icon">🎬</div>
+      <h1>TMDB Media Manager</h1>
+      <p class="project-subtitle">Automated TV show renaming for Plex, Jellyfin, and Emby — powered by The Movie Database.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" class="btn" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container project-layout">
+
+      <main class="project-main">
+
+        <div class="prose-block">
+          <h2>Overview</h2>
+          <p>Media Manager Ultimate is a Python GUI utility that organizes your media library by syncing local files with <strong>The Movie Database (TMDb)</strong>. It ensures your shows are named perfectly so that media servers like Plex and Jellyfin can fetch metadata, posters, and episode summaries without errors.</p>
+        </div>
+
+        <div class="prose-block">
+          <h2>Features</h2>
+          <div class="feature-list">
+            <div class="feature">
+              <span class="feature-icon">🔍</span>
+              <div>
+                <h4>Fuzzy Title Matching</h4>
+                <p>Automatically pairs messy filenames with official episode titles using string similarity scoring.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🔢</span>
+              <div>
+                <h4>Sequential Numeric Matching</h4>
+                <p>Quickly renames files based on their directory order — perfect for new season rips.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🌐</span>
+              <div>
+                <h4>TMDb Integration</h4>
+                <p>Pulls real-time data from the official TMDb API for accurate episode titles and metadata.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🎨</span>
+              <div>
+                <h4>Dynamic Theme Engine</h4>
+                <p>Supports 9 visual styles (Slate, Emerald, Midnight, and more) with a zero-glare dark mode.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🛡️</span>
+              <div>
+                <h4>Preview Mode</h4>
+                <p>See exactly what will happen before a single file is renamed. Nothing changes until you confirm.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose-block">
+          <h2>Getting Started</h2>
+          <h3>1. Install dependencies</h3>
+          <pre><code>pip install -r requirements.txt</code></pre>
+          <h3>2. Launch the app</h3>
+          <pre><code>python media_dashboard.py</code></pre>
+          <p class="note">Linux users: if the app fails to open, install Tkinter — <code>sudo apt install python3-tk</code> (Debian/Ubuntu) or <code>sudo dnf install python3-tkinter</code> (Fedora).</p>
+        </div>
+
+        <div class="prose-block">
+          <h2>TMDb API Setup</h2>
+          <ol class="steps">
+            <li>Sign up for a free account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TheMovieDB.org</a> and generate a <strong>v3 API key</strong>.</li>
+            <li>Launch the application and go to <strong>File → Settings</strong>.</li>
+            <li>Paste your key into the <strong>TMDb API Key</strong> field and click <strong>Save Settings</strong>.</li>
+          </ol>
+          <p class="note">Your key is stored locally in <code>config.json</code> and is never uploaded or hardcoded into the source.</p>
+        </div>
+
+      </main>
+
+      <aside class="project-sidebar">
+        <div class="sidebar-card">
+          <h4>Tech Stack</h4>
+          <div class="tag-list">
+            <span class="tag">Python</span>
+            <span class="tag">Tkinter</span>
+            <span class="tag">TMDb API</span>
+            <span class="tag">thefuzz</span>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Requirements</h4>
+          <ul class="sidebar-list">
+            <li>Python 3.x</li>
+            <li>tmdbv3api 1.7.7</li>
+            <li>thefuzz 0.20.0</li>
+            <li>python-Levenshtein 0.23.0</li>
+          </ul>
+        </div>
+        <div class="sidebar-card">
+          <h4>Project Files</h4>
+          <ul class="sidebar-list">
+            <li><code>media_dashboard.py</code> — GUI controller</li>
+            <li><code>tmdb_engine.py</code> — API &amp; fuzzy logic</li>
+            <li><code>themes.py</code> — theme engine</li>
+            <li><code>settings_manager.py</code> — config persistence</li>
+          </ul>
+        </div>
+        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" class="btn sidebar-btn" target="_blank" rel="noopener">View on GitHub</a>
+      </aside>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Etienne Axiak</p>
+  </footer>
+
+</body>
+</html>

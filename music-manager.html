@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Manager Ultimate — Etienne Axiak</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="project.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="index.html" class="nav-name">← Etienne Axiak</a>
+      <ul>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="project-hero">
+    <div class="container">
+      <div class="project-hero-icon">🎵</div>
+      <h1>Music Manager Ultimate</h1>
+      <p class="project-subtitle">Cross-platform music library organiser — fetches metadata from Spotify, renames files, writes tags, downloads cover art, and converts audio formats.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container project-layout">
+
+      <main class="project-main">
+
+        <div class="prose-block">
+          <h2>Overview</h2>
+          <p>Music Manager Ultimate is a cross-platform music library organiser available as both a <strong>Python</strong> desktop app and a compiled <strong>C++/Qt6</strong> application. It connects to the Spotify API to automatically detect artists, fetch album art, match your local audio files to the correct track names, and write clean embedded tags — all in one step.</p>
+        </div>
+
+        <div class="prose-block">
+          <h2>How It Works</h2>
+          <ol class="steps">
+            <li><strong>Browse</strong> — point the app at a folder containing artist sub-folders.</li>
+            <li><strong>Auto-detect</strong> — the app searches Spotify and populates the releases sidebar with album art thumbnails.</li>
+            <li><strong>Select a release</strong> — click any album or single to fetch its full track list and cover art.</li>
+            <li><strong>Match</strong> — the fuzzy matcher maps your local files to the correct track names using edit-distance scoring.</li>
+            <li><strong>Preview</strong> — the Preview tab shows exactly which files will be renamed, with per-track confidence scores.</li>
+            <li><strong>Execute</strong> — click <strong>Execute Rename + Tag</strong> to rename files, write all embedded tags, and embed cover art.</li>
+            <li><strong>Undo</strong> — every rename operation can be fully reversed.</li>
+          </ol>
+        </div>
+
+        <div class="prose-block">
+          <h2>Features</h2>
+          <div class="feature-list">
+            <div class="feature">
+              <span class="feature-icon">🎨</span>
+              <div>
+                <h4>9 Colour Themes</h4>
+                <p>Dark, Light, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Slate.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🔄</span>
+              <div>
+                <h4>Audio Conversion</h4>
+                <p>Convert between MP3, FLAC, M4A, OGG, and WAV with quality presets. M4A remuxing is lossless stream copy.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">📦</span>
+              <div>
+                <h4>Batch Mode</h4>
+                <p>Process all artist sub-folders in the root directory automatically in one pass.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🖼️</span>
+              <div>
+                <h4>Cover Art</h4>
+                <p>Downloads and embeds album art directly from Spotify into the audio file.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">💻</span>
+              <div>
+                <h4>Python &amp; C++/Qt6</h4>
+                <p>Available as a Python script or a compiled C++/Qt6 binary — Windows, Linux AppImage, and Flatpak.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose-block">
+          <h2>Downloads</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Package</th><th>Platform</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>MusicManager-Windows.zip</code></td><td>Windows 10/11 — extract and run <code>MusicManager.exe</code></td></tr>
+                <tr><td><code>MusicManager.AppImage</code></td><td>Linux (any) — <code>chmod +x</code> then run</td></tr>
+                <tr><td><code>MusicManager.flatpak</code></td><td>Linux — install via <code>flatpak install</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>See the <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases" target="_blank" rel="noopener">Releases</a> page for the latest builds.</p>
+        </div>
+
+        <div class="prose-block">
+          <h2>Python — Getting Started</h2>
+          <h3>Install dependencies</h3>
+          <pre><code>pip install customtkinter pillow spotipy thefuzz mutagen</code></pre>
+          <h3>Run</h3>
+          <pre><code>cd "python source code"
+python music_organizer.py</code></pre>
+          <p class="note">FFmpeg must be on your <code>PATH</code> for audio conversion to work.</p>
+        </div>
+
+        <div class="prose-block">
+          <h2>C++/Qt6 — Build from Source</h2>
+          <h3>Install dependencies (Fedora)</h3>
+          <pre><code>sudo dnf install cmake gcc-c++ qt6-qtbase-devel openssl-devel</code></pre>
+          <h3>Build</h3>
+          <pre><code>cd "c++ source code"
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
+./build/MusicManager</code></pre>
+        </div>
+
+        <div class="prose-block">
+          <h2>Spotify API Setup</h2>
+          <ol class="steps">
+            <li>Go to <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and create a free app.</li>
+            <li>Copy the <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+            <li>In the app: <strong>File → Settings</strong>, paste both values, click <strong>Save</strong>.</li>
+          </ol>
+          <p class="note">A green status dot in the status bar confirms the connection is active.</p>
+        </div>
+
+      </main>
+
+      <aside class="project-sidebar">
+        <div class="sidebar-card">
+          <h4>Tech Stack</h4>
+          <div class="tag-list">
+            <span class="tag">Python</span>
+            <span class="tag">C++17</span>
+            <span class="tag">Qt6</span>
+            <span class="tag">Spotify API</span>
+            <span class="tag">FFmpeg</span>
+            <span class="tag">TagLib</span>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Platforms</h4>
+          <ul class="sidebar-list">
+            <li>Windows 10/11</li>
+            <li>Linux (AppImage)</li>
+            <li>Linux (Flatpak)</li>
+            <li>Any OS (Python)</li>
+          </ul>
+        </div>
+        <div class="sidebar-card">
+          <h4>Python Modules</h4>
+          <ul class="sidebar-list">
+            <li><code>music_organizer.py</code> — main window</li>
+            <li><code>spotify_engine.py</code> — Spotify API</li>
+            <li><code>base_engine.py</code> — fuzzy matching</li>
+            <li><code>metadata_writer.py</code> — tag writing</li>
+            <li><code>remux_engine.py</code> — FFmpeg wrapper</li>
+          </ul>
+        </div>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn sidebar-btn" target="_blank" rel="noopener">View on GitHub</a>
+      </aside>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Etienne Axiak</p>
+  </footer>
+
+</body>
+</html>

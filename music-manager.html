@@ -13,103 +13,280 @@
     <nav>
       <a href="index.html" class="nav-name">← Etienne Axiak</a>
       <ul>
-        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#download">Download</a></li>
         <li><a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- Hero -->
   <section class="project-hero">
     <div class="container">
       <div class="project-hero-icon">🎵</div>
       <h1>Music Manager Ultimate</h1>
-      <p class="project-subtitle">Cross-platform music library organiser — fetches metadata from Spotify, renames files, writes tags, downloads cover art, and converts audio formats.</p>
+      <p class="project-subtitle">Organise your music library the smart way — Spotify metadata, file renaming, embedded tags, cover art, and audio conversion in one app.</p>
       <div class="hero-actions">
-        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn" target="_blank" rel="noopener">View on GitHub</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest" class="btn" target="_blank" rel="noopener">⬇ Download</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn btn-outline" target="_blank" rel="noopener">View on GitHub</a>
       </div>
     </div>
   </section>
 
+  <!-- App Mockup -->
+  <section class="section mockup-section">
+    <div class="container">
+      <h2 class="section-heading">See it in <span class="accent">action</span></h2>
+      <div class="mockup-wrap">
+
+        <div class="titlebar">
+          <div class="dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="titlebar-title">Music Manager Ultimate v2.1.0</span>
+          <span class="titlebar-menu">File</span>
+        </div>
+
+        <div class="app-toolbar">
+          <div class="tb-btn">Browse</div>
+          <div class="tb-input">/music/Avenged Sevenfold</div>
+          <div class="tb-select">Avenged Sevenfold ▾</div>
+          <div class="tb-select">Hail to the King ▾</div>
+          <div class="tb-btn tb-btn-accent">Batch</div>
+        </div>
+
+        <div class="app-status-bar">
+          <div class="status-dot status-green">✓ Hail to the King (2013)</div>
+          <div class="status-dot status-blue">11 / 11 matched</div>
+          <div class="status-dot status-dim">0 missing</div>
+          <div class="status-dot status-green">● Spotify connected</div>
+        </div>
+
+        <div class="app-body">
+
+          <div class="app-sidebar">
+            <div class="app-sidebar-hdr">
+              SPOTIFY RELEASES
+              <span class="sidebar-badge">34</span>
+            </div>
+            <div class="app-sidebar-list">
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#1a0a2e,#3d1b6e);">♪</div><div class="release-info"><div class="release-title">Sounding the Seventh Trumpet</div><div class="release-meta">2001 · Album</div></div><div class="release-count">13</div></div>
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a1a2e,#1b3d6e);">♪</div><div class="release-info"><div class="release-title">Waking the Fallen</div><div class="release-meta">2003 · Album</div></div><div class="release-count">12</div></div>
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#2e0a0a,#6e1b1b);">♪</div><div class="release-info"><div class="release-title">City of Evil</div><div class="release-meta">2005 · Album</div></div><div class="release-count">11</div></div>
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a2e0a,#1b6e1b);">♪</div><div class="release-info"><div class="release-title">Nightmare</div><div class="release-meta">2010 · Album</div></div><div class="release-count">11</div></div>
+              <div class="release-row selected"><div class="thumb" style="background:linear-gradient(135deg,#1a1a0a,#3d3d00);">♫</div><div class="release-info"><div class="release-title">Hail to the King</div><div class="release-meta">2013 · Album</div></div><div class="release-count">11</div></div>
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#1a0a1a,#3d003d);">♪</div><div class="release-info"><div class="release-title">The Stage</div><div class="release-meta">2016 · Album</div></div><div class="release-count">11</div></div>
+              <div class="release-row"><div class="thumb" style="background:linear-gradient(135deg,#0a1a1a,#003d3d);">♪</div><div class="release-info"><div class="release-title">Life Is But a Dream...</div><div class="release-meta">2023 · Album</div></div><div class="release-count">10</div></div>
+            </div>
+          </div>
+
+          <div class="app-centre">
+            <div class="app-tabs">
+              <div class="app-tab active">Preview</div>
+              <div class="app-tab">Log</div>
+            </div>
+            <div class="preview-area">
+              <div class="preview-hdr">11 matched · 0 unmatched · 11 total</div>
+              <div class="track-row"><span class="track-num">1</span><span class="track-name">01 Shepherd of Fire.flac</span><span class="arrow">→</span><span class="track-new">01 - Shepherd of Fire.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">2</span><span class="track-name">02 Hail to the King.flac</span><span class="arrow">→</span><span class="track-new">02 - Hail to the King.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">3</span><span class="track-name">03 Doing Time.flac</span><span class="arrow">→</span><span class="track-new">03 - Doing Time.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">4</span><span class="track-name">track04.flac</span><span class="arrow">→</span><span class="track-new">04 - This Means War.flac</span><span class="score score-mid">78%</span></div>
+              <div class="track-row"><span class="track-num">5</span><span class="track-name">05 Requiem.flac</span><span class="arrow">→</span><span class="track-new">05 - Requiem.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">6</span><span class="track-name">06 Crimson Day.flac</span><span class="arrow">→</span><span class="track-new">06 - Crimson Day.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">7</span><span class="track-name">07 Heretic.flac</span><span class="arrow">→</span><span class="track-new">07 - Heretic.flac</span><span class="score score-high">100%</span></div>
+              <div class="track-row"><span class="track-num">8</span><span class="track-name">Coming Home.flac</span><span class="arrow">→</span><span class="track-new">08 - Coming Home.flac</span><span class="score score-high">95%</span></div>
+            </div>
+          </div>
+
+          <div class="art-panel">
+            <div class="art-img">🎵</div>
+            <div class="meta-grid">
+              <div class="meta-row"><span class="meta-label">Artist</span><span class="meta-val">Avenged Sevenfold</span></div>
+              <div class="meta-row"><span class="meta-label">Album</span><span class="meta-val">Hail to the King</span></div>
+              <div class="meta-row"><span class="meta-label">Year</span><span class="meta-val">2013</span></div>
+              <div class="meta-row"><span class="meta-label">Genre</span><span class="meta-val">Metal</span></div>
+            </div>
+            <div class="art-chips">
+              <div class="art-chip">Art</div>
+              <div class="art-chip">Tags</div>
+              <div class="art-chip">Genre</div>
+            </div>
+            <div class="fetch-btn">Fetch Artwork</div>
+          </div>
+
+        </div>
+
+        <div class="app-footer-bar">
+          <span>11 / 11 tracks matched</span>
+          <div class="footer-btns">
+            <div class="foot-btn">Convert</div>
+            <div class="foot-btn foot-btn-primary">Execute Rename + Tag</div>
+            <div class="foot-btn">Refresh</div>
+            <div class="foot-btn">Undo</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section alt">
+    <div class="container">
+      <h2 class="section-heading">Everything you need to <span class="accent">clean up your library</span></h2>
+      <div class="feature-cards">
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🎵</div>
+          <h3>Spotify Metadata</h3>
+          <p>Search any artist, browse every release with album art thumbnails, and pull accurate track names, years, and genres directly from Spotify's database.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🔍</div>
+          <h3>Fuzzy File Matching</h3>
+          <p>Automatically maps your local audio files to the correct tracks using edit-distance scoring — works even with messy or incomplete filenames.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🏷️</div>
+          <h3>Tag Writing</h3>
+          <p>Embeds artist, album, title, year, genre, track number, disc number, and cover art into ID3v2 (MP3), Vorbis (FLAC/OGG), and MP4/M4A atoms.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🖼️</div>
+          <h3>Cover Art</h3>
+          <p>Downloads the highest-resolution image from Spotify's CDN and embeds it into your files. The sidebar shows 64×64 thumbnails for every release as they load.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🔄</div>
+          <h3>Audio Conversion</h3>
+          <p>Convert between MP3, FLAC, M4A, OGG, and WAV via FFmpeg. AAC↔M4A is remuxed losslessly; all other pairs use Low / Medium / High / Best quality presets.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">↩️</div>
+          <h3>Preview & Undo</h3>
+          <p>See exactly which files will be renamed and what their new names will be before committing. Every execute operation can be fully reversed.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">📁</div>
+          <h3>Batch Mode</h3>
+          <p>Process an entire artist directory in one click — the app auto-detects and matches every album sub-folder without manual selection.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon">🎨</div>
+          <h3>9 Colour Themes</h3>
+          <p>Dark, Light, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Slate — switch instantly from File → Settings.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="section">
+    <div class="container">
+      <h2 class="section-heading">How it <span class="accent">works</span></h2>
+      <div class="workflow-steps">
+
+        <div class="workflow-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Browse to your music folder</h3>
+            <p>Point the app at a root directory containing artist sub-folders. The path is remembered between sessions.</p>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Artist is auto-detected</h3>
+            <p>The app searches Spotify for the folder name and populates the releases sidebar with album art thumbnails loading in the background.</p>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Select a release</h3>
+            <p>Click any album or single. The app fetches the full track list, cover art, and metadata from Spotify.</p>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Review the match preview</h3>
+            <p>The Preview tab shows every file → new name mapping with a confidence percentage. High-confidence matches are green; uncertain ones are amber.</p>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Execute Rename + Tag</h3>
+            <p>One click renames all files, writes embedded tags (title, artist, album, year, genre, track number), and embeds the cover art.</p>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h3>Undo if needed</h3>
+            <p>Changed your mind? Hit Undo to restore the original filenames instantly.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section id="download" class="section alt">
+    <div class="container">
+      <h2 class="section-heading">Download <span class="accent">v2.1.0</span></h2>
+      <div class="dl-cards">
+
+        <div class="dl-card">
+          <h3>Windows</h3>
+          <p>Extract the ZIP and run <code>MusicManager.exe</code> — Qt6 DLLs bundled.</p>
+          <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest" target="_blank" rel="noopener">⬇ Download for Windows</a>
+        </div>
+
+        <div class="dl-card">
+          <h3>AppImage</h3>
+          <p>Requires <code>qt6-qtbase</code> on the host system.</p>
+          <pre><code>chmod +x MusicManager.AppImage
+./MusicManager.AppImage</code></pre>
+          <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.AppImage" target="_blank" rel="noopener">⬇ Download AppImage</a>
+        </div>
+
+        <div class="dl-card">
+          <h3>Flatpak</h3>
+          <p>Self-contained — no system Qt6 required.</p>
+          <pre><code>flatpak install --user MusicManager.flatpak
+flatpak run com.musicmanager.MusicManager</code></pre>
+          <a class="btn dl-btn" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.flatpak" target="_blank" rel="noopener">⬇ Download Flatpak</a>
+        </div>
+
+      </div>
+      <p class="dl-note">Requires a free <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Spotify Developer account</a> for metadata access. Enter your Client ID and Secret in <strong>File → Settings</strong> after launching.</p>
+    </div>
+  </section>
+
+  <!-- Technical details -->
   <section class="section">
     <div class="container project-layout">
 
       <main class="project-main">
-
-        <div class="prose-block">
-          <h2>Overview</h2>
-          <p>Music Manager Ultimate is a cross-platform music library organiser available as both a <strong>Python</strong> desktop app and a compiled <strong>C++/Qt6</strong> application. It connects to the Spotify API to automatically detect artists, fetch album art, match your local audio files to the correct track names, and write clean embedded tags — all in one step.</p>
-        </div>
-
-        <div class="prose-block">
-          <h2>How It Works</h2>
-          <ol class="steps">
-            <li><strong>Browse</strong> — point the app at a folder containing artist sub-folders.</li>
-            <li><strong>Auto-detect</strong> — the app searches Spotify and populates the releases sidebar with album art thumbnails.</li>
-            <li><strong>Select a release</strong> — click any album or single to fetch its full track list and cover art.</li>
-            <li><strong>Match</strong> — the fuzzy matcher maps your local files to the correct track names using edit-distance scoring.</li>
-            <li><strong>Preview</strong> — the Preview tab shows exactly which files will be renamed, with per-track confidence scores.</li>
-            <li><strong>Execute</strong> — click <strong>Execute Rename + Tag</strong> to rename files, write all embedded tags, and embed cover art.</li>
-            <li><strong>Undo</strong> — every rename operation can be fully reversed.</li>
-          </ol>
-        </div>
-
-        <div class="prose-block">
-          <h2>Features</h2>
-          <div class="feature-list">
-            <div class="feature">
-              <span class="feature-icon">🎨</span>
-              <div>
-                <h4>9 Colour Themes</h4>
-                <p>Dark, Light, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Slate.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🔄</span>
-              <div>
-                <h4>Audio Conversion</h4>
-                <p>Convert between MP3, FLAC, M4A, OGG, and WAV with quality presets. M4A remuxing is lossless stream copy.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">📦</span>
-              <div>
-                <h4>Batch Mode</h4>
-                <p>Process all artist sub-folders in the root directory automatically in one pass.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🖼️</span>
-              <div>
-                <h4>Cover Art</h4>
-                <p>Downloads and embeds album art directly from Spotify into the audio file.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">💻</span>
-              <div>
-                <h4>Python &amp; C++/Qt6</h4>
-                <p>Available as a Python script or a compiled C++/Qt6 binary — Windows, Linux AppImage, and Flatpak.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="prose-block">
-          <h2>Downloads</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Package</th><th>Platform</th></tr>
-              </thead>
-              <tbody>
-                <tr><td><code>MusicManager-Windows.zip</code></td><td>Windows 10/11 — extract and run <code>MusicManager.exe</code></td></tr>
-                <tr><td><code>MusicManager.AppImage</code></td><td>Linux (any) — <code>chmod +x</code> then run</td></tr>
-                <tr><td><code>MusicManager.flatpak</code></td><td>Linux — install via <code>flatpak install</code></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>See the <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases" target="_blank" rel="noopener">Releases</a> page for the latest builds.</p>
-        </div>
 
         <div class="prose-block">
           <h2>Python — Getting Started</h2>
@@ -125,6 +302,8 @@ python music_organizer.py</code></pre>
           <h2>C++/Qt6 — Build from Source</h2>
           <h3>Install dependencies (Fedora)</h3>
           <pre><code>sudo dnf install cmake gcc-c++ qt6-qtbase-devel openssl-devel</code></pre>
+          <h3>Install dependencies (Ubuntu/Debian)</h3>
+          <pre><code>sudo apt install cmake g++ qt6-base-dev libssl-dev</code></pre>
           <h3>Build</h3>
           <pre><code>cd "c++ source code"
 cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -175,6 +354,16 @@ cmake --build build -j$(nproc)
             <li><code>remux_engine.py</code> — FFmpeg wrapper</li>
           </ul>
         </div>
+        <div class="sidebar-card">
+          <h4>C++ Modules</h4>
+          <ul class="sidebar-list">
+            <li><code>music_organizer.cpp</code> — main window</li>
+            <li><code>spotify_engine.cpp</code> — Spotify API</li>
+            <li><code>metadata_writer.cpp</code> — TagLib tags</li>
+            <li><code>remux_engine.cpp</code> — FFmpeg wrapper</li>
+            <li><code>fuzzy.cpp</code> — Levenshtein matching</li>
+          </ul>
+        </div>
         <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" class="btn sidebar-btn" target="_blank" rel="noopener">View on GitHub</a>
       </aside>
 
@@ -182,7 +371,7 @@ cmake --build build -j$(nproc)
   </section>
 
   <footer>
-    <p>&copy; 2026 Etienne Axiak</p>
+    <p>Music Manager Ultimate · MIT License · &copy; 2026 Etienne Axiak</p>
   </footer>
 
 </body>

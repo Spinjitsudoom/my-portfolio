@@ -116,9 +116,6 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   height: 60px;
   display: flex; align-items: center;
-  transition: background .3s, backdrop-filter .3s, border-color .3s;
-}
-nav.scrolled {
   background: rgba(10,10,15,.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -128,21 +125,18 @@ nav.scrolled {
   width: 100%;
   display: flex; align-items: center; justify-content: space-between;
 }
-.nav-brand {
-  display: flex; align-items: center; gap: .6rem;
-  font-weight: 700; font-size: 1rem;
-  color: var(--fg); text-decoration: none;
+.nav-back {
+  font-weight: 600; font-size: .9rem;
+  color: var(--fg2); text-decoration: none;
+  white-space: nowrap; flex-shrink: 0;
+  transition: color .2s;
 }
-.nav-logo {
-  width: 32px; height: 32px; border-radius: 8px;
-  object-fit: contain;
-}
+.nav-back:hover { color: var(--fg); text-decoration: none; }
 .nav-links { display: flex; align-items: center; gap: 1.75rem; }
 .nav-links a {
   color: var(--fg2); font-size: .9rem; transition: color .2s; text-decoration: none;
 }
 .nav-links a:hover { color: var(--fg); }
-.nav-cta { display: flex; gap: .75rem; }
 
 .hamburger {
   display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
@@ -762,23 +756,13 @@ nav.scrolled {
 <!-- ── Nav ── -->
 <nav id="nav">
   <div class="nav-inner">
-    <a href="index.html" style="color:var(--fg2);text-decoration:none;font-size:.9rem;font-weight:600;white-space:nowrap;transition:color .2s;flex-shrink:0;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg2)'">← Back</a>
-    <a class="nav-brand" href="#">
-      <img class="nav-logo" src="MusicManager.png" alt="Music Manager Ultimate logo">
-      Music Manager Ultimate
-    </a>
+    <a class="nav-back" href="index.html">← Etienne Axiak</a>
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#how-it-works">How it works</a>
       <a href="#download">Download</a>
       <a href="#faq">FAQ</a>
-      <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank">GitHub ↗</a>
-    </div>
-    <div class="nav-cta">
-      <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest">Download</a>
-    </div>
-    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
+      <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank">GitHub</a>
     </div>
   </div>
 </nav>

@@ -1,144 +1,780 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TMDB Media Manager — Etienne Axiak</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="project.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="TMDB Media Manager — automated TV show and movie renaming for Plex, Jellyfin, and Emby with local subtitle generation via faster-whisper.">
+<title>TMDB Media Manager — Etienne Axiak</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg:        #0a0a0f;
+  --bg2:       #0f0f18;
+  --surface:   #13131e;
+  --surface2:  #1a1a28;
+  --surface3:  #222235;
+  --border:    #252538;
+  --border2:   #2e2e48;
+  --accent:    #5b8dee;
+  --accent2:   #7c6ff7;
+  --accent-g:  linear-gradient(135deg, #5b8dee, #7c6ff7);
+  --green:     #3ddc84;
+  --amber:     #f5a623;
+  --red:       #ff5f57;
+  --fg:        #e8e8f0;
+  --fg2:       #9898b8;
+  --fg3:       #55556a;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --shadow:    0 8px 32px rgba(0,0,0,.5);
+  --shadow-lg: 0 24px 80px rgba(0,0,0,.6);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── Utility ──────────────────────────────────────────────────────────────── */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+.section    { padding: 6rem 0; }
+.section-sm { padding: 4rem 0; }
+
+.tag {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(91,141,238,.12);
+  color: var(--accent);
+  border: 1px solid rgba(91,141,238,.25);
+  border-radius: 20px;
+  padding: .2rem .85rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+h1, h2, h3, h4 { line-height: 1.2; }
+h2.section-title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  margin-bottom: .75rem;
+}
+h2.section-title span { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.section-sub { color: var(--fg2); font-size: 1.05rem; max-width: 560px; margin-bottom: 3rem; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  padding: .1rem .4rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: .85em;
+  color: #c8c8e8;
+}
+
+pre {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: .88rem;
+  color: #c8c8e8;
+  margin: .75rem 0;
+}
+pre code { background: none; border: none; padding: 0; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .7rem 1.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  border: none;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent-g);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(91,141,238,.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(91,141,238,.5); text-decoration: none; }
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--fg);
+  border: 1px solid var(--border2);
+}
+.btn-secondary:hover { background: var(--surface3); text-decoration: none; }
+.btn-sm { padding: .45rem 1rem; font-size: .85rem; }
+
+/* ── Nav ──────────────────────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 60px;
+  display: flex; align-items: center;
+  background: rgba(10,10,15,.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1140px; margin: 0 auto; padding: 0 1.5rem;
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-back {
+  font-weight: 600; font-size: .9rem;
+  color: var(--fg2); text-decoration: none;
+  white-space: nowrap; flex-shrink: 0;
+  transition: color .2s;
+}
+.nav-back:hover { color: var(--fg); text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 1.75rem; }
+.nav-links a {
+  color: var(--fg2); font-size: .9rem; transition: color .2s; text-decoration: none;
+}
+.nav-links a:hover { color: var(--fg); }
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 7rem 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
+}
+.hero-glow-1 { width: 600px; height: 600px; background: rgba(91,141,238,.08); top: -100px; left: 50%; transform: translateX(-50%); }
+.hero-glow-2 { width: 400px; height: 400px; background: rgba(124,111,247,.06); bottom: 0; right: -100px; }
+.hero-glow-3 { width: 350px; height: 350px; background: rgba(61,220,132,.05); bottom: 50px; left: -80px; }
+
+.hero-content { position: relative; z-index: 1; max-width: 780px; }
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -.03em;
+  margin-bottom: 1.25rem;
+}
+.hero h1 .grad { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { color: var(--fg2); font-size: clamp(1rem, 2vw, 1.2rem); max-width: 580px; margin: 0 auto 2.5rem; }
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.hero-badges {
+  margin-top: 3.5rem;
+  display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.hero-badge {
+  display: flex; align-items: center; gap: .5rem;
+  color: var(--fg3); font-size: .82rem;
+}
+.hero-badge span { color: var(--fg2); }
+
+/* ── App mockup ───────────────────────────────────────────────────────────── */
+.mockup-section { padding: 2rem 0 6rem; }
+.mockup-outer {
+  position: relative;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.mockup-outer::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: calc(var(--radius-lg) + 1px);
+  background: linear-gradient(135deg, rgba(91,141,238,.3), rgba(124,111,247,.15), transparent 60%);
+  z-index: 0;
+}
+.mockup-window {
+  position: relative; z-index: 1;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.win-bar {
+  background: #111120;
+  padding: .55rem 1rem;
+  display: flex; align-items: center; gap: .75rem;
+  border-bottom: 1px solid var(--border);
+}
+.win-dots { display: flex; gap: 6px; }
+.wd { width: 12px; height: 12px; border-radius: 50%; }
+.wd-r { background: #ff5f57; } .wd-y { background: #ffbd2e; } .wd-g { background: #28c941; }
+.win-title { color: var(--fg3); font-size: .82rem; margin-left: .5rem; }
+
+.win-layout { display: flex; height: 420px; }
+
+/* Sidebar */
+.wsb {
+  width: 220px; min-width: 220px;
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.wsb-hdr {
+  background: #161625;
+  color: var(--fg3);
+  font-size: .7rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: .45rem .75rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.wsb-badge { background: var(--accent); color: #fff; font-size: .66rem; padding: .05rem .38rem; border-radius: 10px; }
+.wsb-list { overflow-y: auto; flex: 1; }
+.show-row {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .4rem .65rem;
+  border-bottom: 1px solid #161625;
+  cursor: default;
+}
+.show-row.sel { background: rgba(91,141,238,.12); border-left: 2px solid var(--accent); }
+.show-icon { font-size: 1rem; flex-shrink: 0; }
+.show-info { overflow: hidden; flex: 1; }
+.show-name { font-size: .76rem; font-weight: 600; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.show-meta { font-size: .67rem; color: var(--fg3); }
+
+/* Season picker */
+.season-row {
+  padding: .28rem .65rem .28rem 2rem;
+  font-size: .72rem; color: var(--fg3); cursor: default;
+}
+.season-row.sel { color: var(--accent); font-weight: 600; }
+
+/* Main panel */
+.wc { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.wc-toolbar {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: .45rem .85rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.wt-btn {
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--fg2); padding: .26rem .75rem; border-radius: 5px; font-size: .75rem;
+}
+.wt-btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.wt-search {
+  flex: 1; background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--fg3); padding: .26rem .65rem; border-radius: 5px; font-size: .75rem;
+}
+.wc-tabs { display: flex; background: var(--surface2); border-bottom: 1px solid var(--border); }
+.wc-tab { padding: .42rem 1rem; font-size: .8rem; color: var(--fg3); border-bottom: 2px solid transparent; cursor: default; }
+.wc-tab.on { color: var(--fg); border-bottom-color: var(--accent); }
+.wc-body { flex: 1; overflow-y: auto; padding: .4rem; }
+
+.ep-row {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .32rem .5rem; border-radius: 4px; font-size: .73rem;
+}
+.ep-row:nth-child(odd) { background: rgba(255,255,255,.02); }
+.ep-num { width: 30px; color: var(--fg3); flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.ep-old { flex: 1; color: var(--fg3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ep-arrow { color: var(--fg3); flex-shrink: 0; }
+.ep-new { flex: 1.2; color: var(--green); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.ep-badge {
+  font-size: .64rem; padding: .05rem .38rem; border-radius: 10px;
+  flex-shrink: 0;
+}
+.ep-badge.ok { background: rgba(61,220,132,.15); color: var(--green); }
+.ep-badge.warn { background: rgba(245,166,35,.15); color: var(--amber); }
+
+/* Status bar */
+.win-status {
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  padding: .28rem .85rem;
+  display: flex; gap: 1.2rem;
+  font-size: .72rem; color: var(--fg3);
+  align-items: center;
+}
+.ws-dot { display: flex; align-items: center; gap: .35rem; }
+.ws-dot::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.ws-dot.amber::before { background: var(--amber); }
+
+/* ── Features grid ────────────────────────────────────────────────────────── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.feat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition: border-color .2s, transform .2s;
+}
+.feat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.feat-icon {
+  width: 44px; height: 44px;
+  background: rgba(91,141,238,.12);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+.feat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+.feat-card p { color: var(--fg2); font-size: .9rem; line-height: 1.55; }
+
+/* ── Tech stack ───────────────────────────────────────────────────────────── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.stack-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+}
+.stack-layer { font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--fg3); margin-bottom: .35rem; }
+.stack-val { font-size: .92rem; color: var(--fg); font-weight: 500; }
+
+/* ── Setup steps ──────────────────────────────────────────────────────────── */
+.steps-list {
+  counter-reset: step;
+  display: flex; flex-direction: column; gap: 2rem;
+}
+.step {
+  display: flex; gap: 1.25rem;
+}
+.step-num {
+  counter-increment: step;
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(91,141,238,.15);
+  border: 1px solid rgba(91,141,238,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .88rem; color: var(--accent);
+}
+.step-num::after { content: counter(step); }
+.step-body { flex: 1; }
+.step-body h3 { font-size: .98rem; font-weight: 700; margin-bottom: .4rem; }
+.step-body p, .step-body li { color: var(--fg2); font-size: .92rem; line-height: 1.55; }
+.step-body ol { padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+.note {
+  margin-top: .6rem;
+  padding: .6rem .9rem;
+  background: rgba(245,166,35,.07);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 6px 6px 0;
+  color: var(--fg2); font-size: .85rem;
+}
+
+/* ── Download table ───────────────────────────────────────────────────────── */
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.dl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: .9rem;
+}
+.dl-platform { display: flex; align-items: center; gap: .7rem; }
+.dl-icon { font-size: 1.6rem; }
+.dl-name { font-size: 1rem; font-weight: 700; }
+.dl-sub { font-size: .82rem; color: var(--fg3); margin-top: .1rem; }
+.dl-file { font-family: "SF Mono", monospace; font-size: .82rem; color: var(--fg2); background: var(--surface2); border: 1px solid var(--border2); border-radius: 6px; padding: .35rem .65rem; }
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--fg3);
+  font-size: .88rem;
+}
+footer a { color: var(--fg2); }
+footer a:hover { color: var(--fg); }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .wsb { width: 140px; min-width: 140px; }
+  .win-layout { height: 340px; }
+  .dl-grid { grid-template-columns: 1fr; }
+  .stack-grid { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <nav>
-      <a href="index.html" class="nav-name">← Etienne Axiak</a>
-      <ul>
-        <li><a href="index.html#projects">Projects</a></li>
-        <li><a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" target="_blank" rel="noopener">GitHub</a></li>
-      </ul>
-    </nav>
-  </header>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Etienne Axiak</a>
+    <div class="nav-links">
+      <a href="index.html#projects">Projects</a>
+      <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
 
-  <section class="project-hero">
-    <div class="container">
-      <div class="project-hero-icon">🎬</div>
-      <h1>TMDB Media Manager</h1>
-      <p class="project-subtitle">Automated TV show renaming for Plex, Jellyfin, and Emby — powered by The Movie Database.</p>
-      <div class="hero-actions">
-        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" class="btn" target="_blank" rel="noopener">View on GitHub</a>
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glow hero-glow-3"></div>
+  <div class="hero-content">
+    <div class="tag">Media Tools</div>
+    <h1>TMDB <span class="grad">Media Manager</span></h1>
+    <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no internet required.</p>
+    <div class="hero-btns">
+      <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager/releases" class="btn btn-primary" target="_blank" rel="noopener">Download</a>
+      <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+    <div class="hero-badges">
+      <div class="hero-badge">🐧 <span>Linux AppImage</span></div>
+      <div class="hero-badge">🪟 <span>Windows installer</span></div>
+      <div class="hero-badge">📺 <span>Plex · Jellyfin · Emby</span></div>
+      <div class="hero-badge">🔒 <span>MIT License</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── App mockup ── -->
+<section class="mockup-section">
+  <div class="container">
+    <div class="mockup-outer">
+      <div class="mockup-window">
+        <div class="win-bar">
+          <div class="win-dots">
+            <div class="wd wd-r"></div>
+            <div class="wd wd-y"></div>
+            <div class="wd wd-g"></div>
+          </div>
+          <span class="win-title">TMDB Media Manager</span>
+        </div>
+        <div class="win-layout">
+          <!-- Library sidebar -->
+          <div class="wsb">
+            <div class="wsb-hdr">Library <span class="wsb-badge">12</span></div>
+            <div class="wsb-list">
+              <div class="show-row sel">
+                <span class="show-icon">📺</span>
+                <div class="show-info">
+                  <div class="show-name">Arcane</div>
+                  <div class="show-meta">2 seasons · 18 eps</div>
+                </div>
+              </div>
+              <div class="season-row sel">Season 1</div>
+              <div class="season-row">Season 2</div>
+              <div class="show-row">
+                <span class="show-icon">📺</span>
+                <div class="show-info">
+                  <div class="show-name">Severance</div>
+                  <div class="show-meta">2 seasons · 19 eps</div>
+                </div>
+              </div>
+              <div class="show-row">
+                <span class="show-icon">🎬</span>
+                <div class="show-info">
+                  <div class="show-name">Dune Part Two</div>
+                  <div class="show-meta">Movie · 2024</div>
+                </div>
+              </div>
+              <div class="show-row">
+                <span class="show-icon">📺</span>
+                <div class="show-info">
+                  <div class="show-name">The Bear</div>
+                  <div class="show-meta">3 seasons · 28 eps</div>
+                </div>
+              </div>
+              <div class="show-row">
+                <span class="show-icon">📺</span>
+                <div class="show-info">
+                  <div class="show-name">Fallout</div>
+                  <div class="show-meta">1 season · 8 eps</div>
+                </div>
+              </div>
+              <div class="show-row">
+                <span class="show-icon">📺</span>
+                <div class="show-info">
+                  <div class="show-name">House of the Dragon</div>
+                  <div class="show-meta">2 seasons · 18 eps</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Main panel -->
+          <div class="wc">
+            <div class="wc-toolbar">
+              <button class="wt-btn">Numeric</button>
+              <button class="wt-btn">Fuzzy</button>
+              <input class="wt-search" value="Arcane · Season 1" readonly>
+              <button class="wt-btn">Undo</button>
+              <button class="wt-btn accent">Rename</button>
+            </div>
+            <div class="wc-tabs">
+              <div class="wc-tab on">Preview</div>
+              <div class="wc-tab">Files</div>
+              <div class="wc-tab">Subtitles</div>
+              <div class="wc-tab">Remux</div>
+            </div>
+            <div class="wc-body">
+              <div class="ep-row">
+                <span class="ep-num">01</span>
+                <span class="ep-old">arcane.s01e01.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E01 - Welcome to the Playground.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">02</span>
+                <span class="ep-old">arcane.s01e02.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E02 - Some Mysteries Are Better Left Unsolved.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">03</span>
+                <span class="ep-old">arcane.s01e03.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E03 - The Base Violence Necessary for Change.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">04</span>
+                <span class="ep-old">arcane.s01e04.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E04 - Happy Progress Day!.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">05</span>
+                <span class="ep-old">arcane.ep5.HEVC.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E05 - Everybody Wants to Be My Enemy.mkv</span>
+                <span class="ep-badge warn">~</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">06</span>
+                <span class="ep-old">arcane.s01e06.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E06 - When These Walls Come Tumbling Down.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">07</span>
+                <span class="ep-old">arcane.s01e07.BluRay.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E07 - The Boy Savior.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">08</span>
+                <span class="ep-old">arcane.s01e08.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E08 - Oil and Water.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+              <div class="ep-row">
+                <span class="ep-num">09</span>
+                <span class="ep-old">arcane.s01e09.1080p.mkv</span>
+                <span class="ep-arrow">→</span>
+                <span class="ep-new">Arcane - S01E09 - The Monster You Created.mkv</span>
+                <span class="ep-badge ok">✓</span>
+              </div>
+            </div>
+            <div class="win-status">
+              <div class="ws-dot">9 files matched</div>
+              <div class="ws-dot amber">1 fuzzy match</div>
+              <div style="margin-left:auto">Slate theme</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="container project-layout">
-
-      <main class="project-main">
-
-        <div class="prose-block">
-          <h2>Overview</h2>
-          <p>Media Manager Ultimate is a Python GUI utility that organizes your media library by syncing local files with <strong>The Movie Database (TMDb)</strong>. It ensures your shows are named perfectly so that media servers like Plex and Jellyfin can fetch metadata, posters, and episode summaries without errors.</p>
-        </div>
-
-        <div class="prose-block">
-          <h2>Features</h2>
-          <div class="feature-list">
-            <div class="feature">
-              <span class="feature-icon">🔍</span>
-              <div>
-                <h4>Fuzzy Title Matching</h4>
-                <p>Automatically pairs messy filenames with official episode titles using string similarity scoring.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🔢</span>
-              <div>
-                <h4>Sequential Numeric Matching</h4>
-                <p>Quickly renames files based on their directory order — perfect for new season rips.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🌐</span>
-              <div>
-                <h4>TMDb Integration</h4>
-                <p>Pulls real-time data from the official TMDb API for accurate episode titles and metadata.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🎨</span>
-              <div>
-                <h4>Dynamic Theme Engine</h4>
-                <p>Supports 9 visual styles (Slate, Emerald, Midnight, and more) with a zero-glare dark mode.</p>
-              </div>
-            </div>
-            <div class="feature">
-              <span class="feature-icon">🛡️</span>
-              <div>
-                <h4>Preview Mode</h4>
-                <p>See exactly what will happen before a single file is renamed. Nothing changes until you confirm.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="prose-block">
-          <h2>Getting Started</h2>
-          <h3>1. Install dependencies</h3>
-          <pre><code>pip install -r requirements.txt</code></pre>
-          <h3>2. Launch the app</h3>
-          <pre><code>python media_dashboard.py</code></pre>
-          <p class="note">Linux users: if the app fails to open, install Tkinter — <code>sudo apt install python3-tk</code> (Debian/Ubuntu) or <code>sudo dnf install python3-tkinter</code> (Fedora).</p>
-        </div>
-
-        <div class="prose-block">
-          <h2>TMDb API Setup</h2>
-          <ol class="steps">
-            <li>Sign up for a free account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TheMovieDB.org</a> and generate a <strong>v3 API key</strong>.</li>
-            <li>Launch the application and go to <strong>File → Settings</strong>.</li>
-            <li>Paste your key into the <strong>TMDb API Key</strong> field and click <strong>Save Settings</strong>.</li>
-          </ol>
-          <p class="note">Your key is stored locally in <code>config.json</code> and is never uploaded or hardcoded into the source.</p>
-        </div>
-
-      </main>
-
-      <aside class="project-sidebar">
-        <div class="sidebar-card">
-          <h4>Tech Stack</h4>
-          <div class="tag-list">
-            <span class="tag">Python</span>
-            <span class="tag">Tkinter</span>
-            <span class="tag">TMDb API</span>
-            <span class="tag">thefuzz</span>
-          </div>
-        </div>
-        <div class="sidebar-card">
-          <h4>Requirements</h4>
-          <ul class="sidebar-list">
-            <li>Python 3.x</li>
-            <li>tmdbv3api 1.7.7</li>
-            <li>thefuzz 0.20.0</li>
-            <li>python-Levenshtein 0.23.0</li>
-          </ul>
-        </div>
-        <div class="sidebar-card">
-          <h4>Project Files</h4>
-          <ul class="sidebar-list">
-            <li><code>media_dashboard.py</code> — GUI controller</li>
-            <li><code>tmdb_engine.py</code> — API &amp; fuzzy logic</li>
-            <li><code>themes.py</code> — theme engine</li>
-            <li><code>settings_manager.py</code> — config persistence</li>
-          </ul>
-        </div>
-        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" class="btn sidebar-btn" target="_blank" rel="noopener">View on GitHub</a>
-      </aside>
-
+<!-- ── Features ── -->
+<section class="section" id="features">
+  <div class="container">
+    <h2 class="section-title"><span>Features</span></h2>
+    <p class="section-sub">Everything you need to keep your media library clean, accurate, and ready for any media server.</p>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🔍</div>
+        <h3>Smart Renaming</h3>
+        <p>Two matching modes — numeric order for clean rips, fuzzy title matching for mixed or messy directories. Full undo support so nothing is permanent.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎬</div>
+        <h3>Movies &amp; TV Shows</h3>
+        <p>Renames both TV episodes (<code>S01E01</code> format) and movie files with title and release year, keeping Plex and Jellyfin metadata lookups reliable.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌐</div>
+        <h3>TMDB Integration</h3>
+        <p>Pulls real-time episode titles, air dates, and metadata from The Movie Database API — the same database Plex and Jellyfin use behind the scenes.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💬</div>
+        <h3>Local Subtitle Generation</h3>
+        <p>Generate <code>.srt</code> files offline using <strong>faster-whisper</strong>. Supports tiny to medium models, VAD filtering, and beam size control. No cloud service or API key required after the initial model download.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <h3>Remux</h3>
+        <p>Batch convert video files between containers (MKV, MP4, AVI…) using FFmpeg stream copy — fast, lossless, no re-encoding.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎨</div>
+        <h3>9 Themes</h3>
+        <p>Slate, Emerald, Midnight, and six more built-in colour themes. Preferences are saved across sessions.</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <p>&copy; 2026 Etienne Axiak</p>
-  </footer>
+<!-- ── Download ── -->
+<section class="section" id="download" style="background: var(--bg2);">
+  <div class="container">
+    <h2 class="section-title"><span>Download</span></h2>
+    <p class="section-sub">Grab the latest release from GitHub. No installation required for Linux — just mark the AppImage executable and run.</p>
+    <div class="dl-grid">
+      <div class="dl-card">
+        <div class="dl-platform">
+          <span class="dl-icon">🐧</span>
+          <div>
+            <div class="dl-name">Linux</div>
+            <div class="dl-sub">AppImage · runs on any distro</div>
+          </div>
+        </div>
+        <div class="dl-file">Media.Manager-x.x.x.AppImage</div>
+        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
+      </div>
+      <div class="dl-card">
+        <div class="dl-platform">
+          <span class="dl-icon">🪟</span>
+          <div>
+            <div class="dl-name">Windows</div>
+            <div class="dl-sub">NSIS installer · built via GitHub Actions</div>
+          </div>
+        </div>
+        <div class="dl-file">Media.Manager-Setup-x.x.x.exe</div>
+        <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Setup ── -->
+<section class="section" id="setup">
+  <div class="container">
+    <h2 class="section-title"><span>Getting Started</span></h2>
+    <p class="section-sub">Up and running in under two minutes.</p>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Get a TMDB API Key</h3>
+          <ol>
+            <li>Create a free account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">themoviedb.org</a></li>
+            <li>Go to <strong>Settings → API</strong> and generate a v3 key</li>
+            <li>Paste it into <strong>Settings</strong> inside the app</li>
+          </ol>
+          <div class="note">Your key is stored locally in <code>~/Documents/Media Manager/config.json</code> and is never uploaded or hardcoded into the source.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Set Your Library Path</h3>
+          <p>Open <strong>Settings</strong> and point the app at the root of your media library. The expected structure:</p>
+          <pre>
+/your/media/root/
+  Show Name/
+    Season 01/
+      episode files...
+  Another Show/
+  Movie Name (2024)/</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Rename Your Files</h3>
+          <p>Select a show and season from the sidebar. Choose <strong>Numeric</strong> (order-based) or <strong>Fuzzy</strong> (title-based) matching, review the preview, then click <strong>Rename</strong>. Use <strong>Undo</strong> to revert any batch instantly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Generate Subtitles (optional)</h3>
+          <p>Navigate to the <strong>Subtitles</strong> tab, select a model size (tiny is fastest, medium is most accurate), and click <strong>Generate</strong>. The Whisper model downloads automatically on first use and is cached locally. No internet required after that.</p>
+          <div class="note">FFmpeg must be installed for the <strong>Remux</strong> feature: <code>sudo apt install ffmpeg</code> (Debian/Ubuntu) or <code>sudo dnf install ffmpeg</code> (Fedora).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tech stack ── -->
+<section class="section" id="tech" style="background: var(--bg2);">
+  <div class="container">
+    <h2 class="section-title"><span>Tech Stack</span></h2>
+    <p class="section-sub">A modern desktop app with a clean separation between a React frontend and a FastAPI backend, packaged into a self-contained binary.</p>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-layer">UI</div>
+        <div class="stack-val">Electron · React · TypeScript · Tailwind CSS</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Backend</div>
+        <div class="stack-val">Python · FastAPI · uvicorn</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Metadata</div>
+        <div class="stack-val">TMDB API via tmdbv3api</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Subtitles</div>
+        <div class="stack-val">faster-whisper · CTranslate2</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Packaging</div>
+        <div class="stack-val">PyInstaller · electron-builder</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Build</div>
+        <div class="stack-val">AppImage · NSIS · GitHub Actions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built by <a href="index.html">Etienne Axiak</a> &mdash; MIT License &mdash; <a href="https://github.com/Spinjitsudoom/TMDB-Media-Manager" target="_blank" rel="noopener">GitHub</a></p>
+    <p style="margin-top:.4rem">&copy; 2026 Etienne Axiak</p>
+  </div>
+</footer>
 
 </body>
 </html>

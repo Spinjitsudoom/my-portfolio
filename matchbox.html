@@ -5,420 +5,347 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Matchbox — automated TV show and movie renaming for Plex, Jellyfin, and Emby with local subtitle generation via faster-whisper.">
 <title>Matchbox — Etienne Axiak</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & base ─────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 
-:root {
-  --bg:        #0a0a0f;
-  --bg2:       #0f0f18;
-  --surface:   #13131e;
-  --surface2:  #1a1a28;
-  --surface3:  #222235;
-  --border:    #252538;
-  --border2:   #2e2e48;
-  --accent:    #5b8dee;
-  --accent2:   #7c6ff7;
-  --accent-g:  linear-gradient(135deg, #5b8dee, #7c6ff7);
-  --green:     #3ddc84;
-  --amber:     #f5a623;
-  --red:       #ff5f57;
-  --fg:        #e8e8f0;
-  --fg2:       #9898b8;
-  --fg3:       #55556a;
-  --radius:    10px;
-  --radius-lg: 16px;
-  --shadow:    0 8px 32px rgba(0,0,0,.5);
-  --shadow-lg: 0 24px 80px rgba(0,0,0,.6);
+/* ── Page theme ────────────────────────────────────────────────────────────── */
+:root{
+  --pg-bg:#070a10;
+  --pg-bg2:#0c0f18;
+  --pg-surface:#111420;
+  --pg-surface2:#171b28;
+  --pg-border:rgba(255,255,255,.07);
+  --pg-border2:rgba(255,255,255,.12);
+  --pg-accent:#3b82f6;
+  --pg-accent2:#818cf8;
+  --pg-grad:linear-gradient(135deg,#3b82f6,#818cf8);
+  --pg-fg:#e2e8f0;
+  --pg-fg2:#94a3b8;
+  --pg-fg3:#475569;
+  --r:10px;--rlg:14px;
 }
 
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  line-height: 1.6;
-  overflow-x: hidden;
+body{
+  background:var(--pg-bg);
+  color:var(--pg-fg);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
 }
 
-/* ── Utility ──────────────────────────────────────────────────────────────── */
-.container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
-.section    { padding: 6rem 0; }
-.section-sm { padding: 4rem 0; }
-
-.tag {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: rgba(91,141,238,.12);
-  color: var(--accent);
-  border: 1px solid rgba(91,141,238,.25);
-  border-radius: 20px;
-  padding: .2rem .85rem;
-  font-size: .78rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
+/* ── App theme vars (Slate default) ────────────────────────────────────────── */
+.app-demo{
+  --bg-900:#0d0f14;--bg-800:#13161e;--bg-750:#181b24;
+  --bg-700:#1e2230;--bg-600:#252a3a;--bg-500:#2e3446;--bg-400:#3a4158;
+  --accent-400:#60a5fa;--accent-500:#3b82f6;--accent-600:#2563eb;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --border:rgba(255,255,255,.07);
+}
+.app-demo[data-theme="Dark"]{
+  --bg-900:#0a0a0a;--bg-800:#111;--bg-750:#161616;--bg-700:#1a1a1a;--bg-600:#222;--bg-500:#2a2a2a;--bg-400:#333;
+  --accent-400:#818cf8;--accent-500:#6366f1;--accent-600:#4f46e5;
+}
+.app-demo[data-theme="Midnight"]{
+  --bg-900:#050714;--bg-800:#0a0d1f;--bg-750:#0d1024;--bg-700:#0f1428;--bg-600:#141b33;--bg-500:#1a2340;--bg-400:#222c50;
+  --accent-400:#818cf8;--accent-500:#6366f1;--accent-600:#4f46e5;
+}
+.app-demo[data-theme="Emerald"]{
+  --bg-900:#040d0a;--bg-800:#091512;--bg-750:#0c1916;--bg-700:#0f1f1a;--bg-600:#152b24;--bg-500:#1c392f;--bg-400:#24473b;
+  --accent-400:#34d399;--accent-500:#10b981;--accent-600:#059669;
+}
+.app-demo[data-theme="Amethyst"]{
+  --bg-900:#0c0814;--bg-800:#130e1e;--bg-750:#171228;--bg-700:#1a1228;--bg-600:#221733;--bg-500:#2b1d40;--bg-400:#36254f;
+  --accent-400:#c084fc;--accent-500:#a855f7;--accent-600:#9333ea;
+}
+.app-demo[data-theme="Crimson"]{
+  --bg-900:#120808;--bg-800:#1c0d0d;--bg-750:#211111;--bg-700:#261212;--bg-600:#311818;--bg-500:#3d1f1f;--bg-400:#4a2626;
+  --accent-400:#f87171;--accent-500:#ef4444;--accent-600:#dc2626;
+}
+.app-demo[data-theme="Forest"]{
+  --bg-900:#060e06;--bg-800:#0a160a;--bg-750:#0c190c;--bg-700:#0f1f0f;--bg-600:#152915;--bg-500:#1b341b;--bg-400:#224022;
+  --accent-400:#86efac;--accent-500:#4ade80;--accent-600:#22c55e;
+}
+.app-demo[data-theme="Ocean"]{
+  --bg-900:#030d14;--bg-800:#05131e;--bg-750:#071828;--bg-700:#081c2a;--bg-600:#0c2537;--bg-500:#102f45;--bg-400:#153a55;
+  --accent-400:#38bdf8;--accent-500:#0ea5e9;--accent-600:#0284c7;
+}
+.app-demo[data-theme="Light"]{
+  --bg-900:#f8fafc;--bg-800:#f1f5f9;--bg-750:#edf2f7;--bg-700:#e2e8f0;--bg-600:#cbd5e1;--bg-500:#b0bec5;--bg-400:#94a3b8;
+  --accent-400:#3b82f6;--accent-500:#2563eb;--accent-600:#1d4ed8;
+  --text-primary:#0f172a;--text-secondary:#334155;--text-muted:#64748b;--border:rgba(0,0,0,.08);
 }
 
-h1, h2, h3, h4 { line-height: 1.2; }
-h2.section-title {
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 800;
-  margin-bottom: .75rem;
-}
-h2.section-title span { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.section-sub { color: var(--fg2); font-size: 1.05rem; max-width: 560px; margin-bottom: 3rem; }
+/* ── Utilities ─────────────────────────────────────────────────────────────── */
+.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}
+.section{padding:6rem 0}
+.tag{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:.2rem .85rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+h2.sh{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;margin-bottom:.6rem}
+h2.sh span{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--pg-fg2);font-size:1rem;max-width:540px;margin-bottom:2.5rem}
+a{color:var(--pg-accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:5px;padding:.1rem .4rem;font-family:"SF Mono","Fira Code",monospace;font-size:.84em;color:#c8d8f8}
+pre{background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:var(--r);padding:1rem 1.25rem;overflow-x:auto;font-family:"SF Mono","Fira Code",monospace;font-size:.87rem;color:#c8d8f8;margin:.5rem 0}
+pre code{background:none;border:none;padding:0}
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.6rem;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;text-decoration:none;border:none;white-space:nowrap}
+.btn-primary{background:var(--pg-grad);color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.5);text-decoration:none}
+.btn-secondary{background:var(--pg-surface2);color:var(--pg-fg);border:1px solid var(--pg-border2)}
+.btn-secondary:hover{background:#1e2338;text-decoration:none}
+.btn-sm{padding:.45rem 1rem;font-size:.85rem}
 
-code {
-  background: var(--surface3);
-  border: 1px solid var(--border2);
-  border-radius: 5px;
-  padding: .1rem .4rem;
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: .85em;
-  color: #c8c8e8;
-}
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;background:rgba(7,10,16,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--pg-border)}
+.nav-inner{max-width:1140px;margin:0 auto;padding:0 1.5rem;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-back{font-weight:600;font-size:.9rem;color:var(--pg-fg2);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--pg-fg);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:var(--pg-fg2);font-size:.9rem;transition:color .2s;text-decoration:none}
+.nav-links a:hover{color:var(--pg-fg)}
 
-pre {
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-  overflow-x: auto;
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: .88rem;
-  color: #c8c8e8;
-  margin: .75rem 0;
-}
-pre code { background: none; border: none; padding: 0; }
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 4rem;position:relative;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.g1{width:700px;height:700px;background:rgba(59,130,246,.07);top:-100px;left:50%;transform:translateX(-50%)}
+.g2{width:400px;height:400px;background:rgba(129,140,248,.05);bottom:0;right:-100px}
+.hero-content{position:relative;z-index:1;max-width:760px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero h1 .grad{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--pg-fg2);font-size:clamp(1rem,2vw,1.15rem);max-width:580px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
+.pill span{color:var(--pg-fg2)}
 
-/* ── Buttons ──────────────────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  padding: .7rem 1.6rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: .95rem;
-  cursor: pointer;
-  transition: all .2s;
-  text-decoration: none;
-  border: none;
-  white-space: nowrap;
-}
-.btn-primary {
-  background: var(--accent-g);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(91,141,238,.35);
-}
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(91,141,238,.5); text-decoration: none; }
-.btn-secondary {
-  background: var(--surface2);
-  color: var(--fg);
-  border: 1px solid var(--border2);
-}
-.btn-secondary:hover { background: var(--surface3); text-decoration: none; }
-.btn-sm { padding: .45rem 1rem; font-size: .85rem; }
+/* ── Demo section ──────────────────────────────────────────────────────────── */
+.demo-section{padding:0 0 5rem}
+.demo-wrap{max-width:1180px;margin:0 auto;padding:0 1rem;position:relative}
+.demo-wrap::before{content:'';position:absolute;inset:-1px;border-radius:15px;background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(129,140,248,.1),transparent 60%);z-index:0;pointer-events:none}
 
-/* ── Nav ──────────────────────────────────────────────────────────────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 60px;
-  display: flex; align-items: center;
-  background: rgba(10,10,15,.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-inner {
-  max-width: 1140px; margin: 0 auto; padding: 0 1.5rem;
-  width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-back {
-  font-weight: 600; font-size: .9rem;
-  color: var(--fg2); text-decoration: none;
-  white-space: nowrap; flex-shrink: 0;
-  transition: color .2s;
-}
-.nav-back:hover { color: var(--fg); text-decoration: none; }
-.nav-links { display: flex; align-items: center; gap: 1.75rem; }
-.nav-links a {
-  color: var(--fg2); font-size: .9rem; transition: color .2s; text-decoration: none;
-}
-.nav-links a:hover { color: var(--fg); }
+/* ── App window ────────────────────────────────────────────────────────────── */
+.app-window{position:relative;z-index:1;background:var(--bg-900);border-radius:14px;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,.7);font-size:13px}
 
-/* ── Hero ─────────────────────────────────────────────────────────────────── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center;
-  padding: 7rem 1.5rem 4rem;
-  position: relative;
-  overflow: hidden;
-}
-.hero-glow {
-  position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
-}
-.hero-glow-1 { width: 600px; height: 600px; background: rgba(91,141,238,.08); top: -100px; left: 50%; transform: translateX(-50%); }
-.hero-glow-2 { width: 400px; height: 400px; background: rgba(124,111,247,.06); bottom: 0; right: -100px; }
-.hero-glow-3 { width: 350px; height: 350px; background: rgba(61,220,132,.05); bottom: 50px; left: -80px; }
+/* Titlebar */
+.win-bar{background:var(--bg-800);border-bottom:1px solid var(--border);padding:0 12px;height:38px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.dots{display:flex;gap:5px}
+.dot{width:11px;height:11px;border-radius:50%}
+.win-title{color:var(--text-muted);font-size:.78rem;margin-left:8px;flex:1}
+.app-header{background:var(--bg-800);border-bottom:1px solid var(--border);padding:0 12px;height:40px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ah-icon{color:var(--accent-400);flex-shrink:0}
+.ah-name{font-size:.8rem;font-weight:600;color:var(--text-primary)}
+.mode-toggle{display:flex;align-items:center;gap:2px;background:var(--bg-700);border-radius:7px;padding:2px;margin-left:14px}
+.mt-btn{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:5px;font-size:.72rem;font-weight:500;border:none;cursor:pointer;transition:all .15s;color:var(--text-muted);background:transparent}
+.mt-btn.active{background:var(--accent-600);color:#fff}
+.ah-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.settings-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:500;border:none;cursor:pointer;background:transparent;color:var(--text-secondary);transition:background .15s}
+.settings-btn:hover{background:var(--bg-700)}
 
-.hero-content { position: relative; z-index: 1; max-width: 780px; }
-.hero h1 {
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 900;
-  letter-spacing: -.03em;
-  margin-bottom: 1.25rem;
-}
-.hero h1 .grad { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero p { color: var(--fg2); font-size: clamp(1rem, 2vw, 1.2rem); max-width: 580px; margin: 0 auto 2.5rem; }
-.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+/* 3-col layout */
+.app-body{display:flex;height:520px}
 
-.hero-badges {
-  margin-top: 3.5rem;
-  display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
-}
-.hero-badge {
-  display: flex; align-items: center; gap: .5rem;
-  color: var(--fg3); font-size: .82rem;
-}
-.hero-badge span { color: var(--fg2); }
+/* Left panel */
+.lib-panel{width:190px;min-width:190px;background:var(--bg-800);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.lib-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.lib-hdr-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.refresh-btn{color:var(--text-muted);background:none;border:none;cursor:pointer;padding:2px;display:flex;align-items:center;transition:color .15s}
+.refresh-btn:hover{color:var(--text-primary)}
+.lib-list{overflow-y:auto;flex:1}
+.show-row{width:100%;display:flex;align-items:center;gap:7px;padding:7px 10px;text-align:left;border:none;cursor:pointer;transition:background .12s;background:transparent}
+.show-row:hover{background:var(--bg-700)}
+.show-row.expanded{background:var(--bg-700)}
+.chevron{color:var(--text-muted);transition:transform .15s;flex-shrink:0}
+.chevron.open{transform:rotate(90deg)}
+.film-icon{color:var(--accent-400);flex-shrink:0}
+.show-name{font-size:.8rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.seasons-list{background:color-mix(in srgb,var(--bg-900) 50%,transparent)}
+.season-row{width:100%;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 28px;text-align:left;border:none;cursor:pointer;transition:all .12s;background:transparent;border-right:2px solid transparent}
+.season-row:hover{background:var(--bg-700)}
+.season-row.active{background:color-mix(in srgb,var(--accent-600) 15%,transparent);border-right-color:var(--accent-500)}
+.season-name{font-size:.75rem;color:var(--text-muted);flex:1;text-align:left}
+.season-row.active .season-name{color:var(--accent-400);font-weight:500}
+.season-count{font-size:.68rem;color:var(--bg-400);margin-left:auto}
 
-/* ── App mockup ───────────────────────────────────────────────────────────── */
-.mockup-section { padding: 2rem 0 6rem; }
-.mockup-outer {
-  position: relative;
-  max-width: 1060px;
-  margin: 0 auto;
-}
-.mockup-outer::before {
-  content: '';
-  position: absolute; inset: -1px;
-  border-radius: calc(var(--radius-lg) + 1px);
-  background: linear-gradient(135deg, rgba(91,141,238,.3), rgba(124,111,247,.15), transparent 60%);
-  z-index: 0;
-}
-.mockup-window {
-  position: relative; z-index: 1;
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-.win-bar {
-  background: #111120;
-  padding: .55rem 1rem;
-  display: flex; align-items: center; gap: .75rem;
-  border-bottom: 1px solid var(--border);
-}
-.win-dots { display: flex; gap: 6px; }
-.wd { width: 12px; height: 12px; border-radius: 50%; }
-.wd-r { background: #ff5f57; } .wd-y { background: #ffbd2e; } .wd-g { background: #28c941; }
-.win-title { color: var(--fg3); font-size: .82rem; margin-left: .5rem; }
+/* Center panel */
+.center-panel{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg-900);overflow:hidden}
+.season-header{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;min-height:80px;position:relative;overflow:hidden;background:var(--bg-800)}
+.sh-backdrop{position:absolute;inset:0;opacity:.08;background-size:cover;background-position:center;filter:blur(8px) scale(1.1)}
+.sh-poster{width:44px;flex-shrink:0;border-radius:5px;overflow:hidden;position:relative;z-index:1}
+.sh-poster img{width:100%;display:block;border-radius:5px}
+.sh-poster-placeholder{width:44px;height:66px;background:var(--bg-600);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.sh-info{flex:1;min-width:0;position:relative;z-index:1}
+.sh-sublabel{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.sh-title{font-size:.88rem;font-weight:600;color:var(--text-primary);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
+.badge-g{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(34,197,94,.15);color:#4ade80}
+.badge-y{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(234,179,8,.15);color:#facc15}
+.badge-r{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(239,68,68,.15);color:#f87171}
+.ep-meta{font-size:.72rem;color:var(--text-secondary)}
+.controls-bar{display:flex;align-items:center;gap:10px;padding:6px 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-800);flex-wrap:wrap}
+.ctrl-toggle{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text-secondary);background:none;border:none;cursor:pointer;padding:0}
+.ctrl-divider{width:1px;height:14px;background:var(--bg-400)}
+.ctrl-label{font-size:.72rem;color:var(--text-muted)}
+.ctrl-input{width:42px;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-primary);padding:2px 6px;border-radius:4px;font-size:.72rem;font-family:inherit}
+.ctrl-offset{display:flex;align-items:center;gap:2px}
+.offset-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;display:flex;align-items:center;font-size:12px}
+.offset-val{font-size:.72rem;width:16px;text-align:center;color:var(--text-primary)}
+.ep-table{flex:1;overflow-y:auto}
+.ep-row{display:flex;align-items:center;gap:10px;padding:6px 14px;border-bottom:1px solid var(--border);border-left:2px solid transparent;transition:background .1s}
+.ep-row:hover{background:rgba(255,255,255,.02)}
+.ep-row.green{border-left-color:rgba(34,197,94,.6);background:rgba(34,197,94,.04)}
+.ep-row.yellow{border-left-color:rgba(234,179,8,.6);background:rgba(234,179,8,.04)}
+.ep-row.red{border-left-color:rgba(239,68,68,.5);background:rgba(239,68,68,.04)}
+.ep-num{font-size:.72rem;color:var(--text-muted);width:20px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ep-files{flex:1;min-width:0;display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.ep-old{font-size:.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ep-arrow{font-size:10px;color:var(--accent-400);flex-shrink:0}
+.ep-new-g{font-size:.72rem;color:#4ade80;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.ep-new-y{font-size:.72rem;color:#facc15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.ep-nofile{font-size:.72rem;color:var(--text-muted);font-style:italic}
+.ep-score{font-size:.67rem;padding:1px 6px;border-radius:4px;flex-shrink:0;font-family:monospace}
+.ep-score.g{background:rgba(34,197,94,.15);color:#4ade80}
+.ep-score.y{background:rgba(234,179,8,.15);color:#facc15}
+.ep-score.r{background:rgba(239,68,68,.15);color:#f87171}
+.ep-score.na{background:var(--bg-600);color:var(--text-muted)}
+.action-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg-800)}
+.ab-info{font-size:.72rem;color:var(--accent-400)}
+.ab-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.ab-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;font-size:.72rem;font-weight:500;border:none;cursor:pointer;transition:all .15s;background:var(--bg-600);color:var(--text-secondary)}
+.ab-btn:hover{background:var(--bg-500)}
+.ab-btn.primary{background:var(--accent-600);color:#fff}
+.ab-btn.primary:hover{background:var(--accent-500)}
+.ab-btn.primary:disabled{opacity:.4;cursor:not-allowed}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text-muted);font-size:.82rem;padding:20px;text-align:center}
+.empty-icon{font-size:28px;opacity:.5}
 
-.win-layout { display: flex; height: 420px; }
+/* Right panel */
+.right-panel{width:330px;min-width:330px;background:var(--bg-800);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.rp-top{flex:1;border-bottom:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.rp-bot{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.panel-hdr{padding:7px 12px;border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);flex-shrink:0}
+.search-bar{display:flex;align-items:center;gap:7px;margin:8px 10px;background:var(--bg-700);border:1px solid var(--bg-400);border-radius:7px;padding:6px 10px}
+.search-icon{color:var(--text-muted);flex-shrink:0;font-size:13px}
+.search-input{flex:1;background:transparent;border:none;font-size:.8rem;color:var(--text-primary);font-family:inherit;outline:none}
+.search-input::placeholder{color:var(--text-muted)}
+.search-results{flex:1;overflow-y:auto}
+.result-row{display:flex;align-items:center;gap:9px;padding:7px 10px;cursor:pointer;transition:all .12s;border:none;background:transparent;width:100%;text-align:left;border-right:2px solid transparent}
+.result-row:hover{background:var(--bg-700)}
+.result-row.active{background:color-mix(in srgb,var(--accent-600) 15%,transparent);border-right-color:var(--accent-500)}
+.result-poster{width:32px;height:48px;border-radius:4px;object-fit:cover;background:var(--bg-600);flex-shrink:0}
+.result-poster-placeholder{width:32px;height:48px;border-radius:4px;background:var(--bg-600);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.result-title{font-size:.8rem;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.result-row.active .result-title{color:var(--accent-400)}
+.result-year{font-size:.7rem;color:var(--text-muted);margin-top:1px}
+.result-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-400);margin-left:auto;flex-shrink:0}
 
-/* Sidebar */
-.wsb {
-  width: 220px; min-width: 220px;
-  background: var(--surface2);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-.wsb-hdr {
-  background: #161625;
-  color: var(--fg3);
-  font-size: .7rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase;
-  padding: .45rem .75rem;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.wsb-badge { background: var(--accent); color: #fff; font-size: .66rem; padding: .05rem .38rem; border-radius: 10px; }
-.wsb-list { overflow-y: auto; flex: 1; }
-.show-row {
-  display: flex; align-items: center; gap: .5rem;
-  padding: .4rem .65rem;
-  border-bottom: 1px solid #161625;
-  cursor: default;
-}
-.show-row.sel { background: rgba(91,141,238,.12); border-left: 2px solid var(--accent); }
-.show-icon { font-size: 1rem; flex-shrink: 0; }
-.show-info { overflow: hidden; flex: 1; }
-.show-name { font-size: .76rem; font-weight: 600; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.show-meta { font-size: .67rem; color: var(--fg3); }
+/* Show info panel */
+.show-info{flex:1;overflow-y:auto;padding:10px}
+.si-top{display:flex;gap:10px;margin-bottom:10px}
+.si-poster{width:56px;flex-shrink:0;border-radius:6px;overflow:hidden}
+.si-poster img{width:100%;display:block}
+.si-poster-ph{width:56px;height:84px;background:var(--bg-600);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.si-title{font-size:.85rem;font-weight:600;color:var(--text-primary);line-height:1.3}
+.si-year{font-size:.72rem;color:var(--text-muted);margin-top:3px}
+.si-rating{display:flex;align-items:center;gap:3px;margin-top:3px}
+.si-star{color:#facc15;font-size:11px}
+.si-score{font-size:.72rem;color:#facc15;font-weight:500}
+.si-overview{font-size:.72rem;color:var(--text-secondary);line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.season-card{border-radius:8px;overflow:hidden;margin-bottom:8px;position:relative;cursor:pointer}
+.season-card img{width:100%;display:block;border-radius:8px}
+.season-card-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.5),transparent);padding:10px 10px 8px;border-radius:0 0 8px 8px}
+.sc-title{font-size:.78rem;font-weight:600;color:#fff}
+.sc-meta{font-size:.67rem;color:rgba(255,255,255,.65);margin-top:1px}
+.seasons-header{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:6px 0 4px}
+.season-list-row{display:flex;align-items:center;gap:8px;padding:6px 6px;border-radius:6px;cursor:pointer;transition:background .12s;border-right:2px solid transparent}
+.season-list-row:hover{background:var(--bg-700)}
+.season-list-row.active{background:color-mix(in srgb,var(--accent-600) 15%,transparent);border-right-color:var(--accent-500)}
+.slr-poster{width:26px;height:39px;border-radius:3px;object-fit:cover;flex-shrink:0;background:var(--bg-600)}
+.slr-name{font-size:.75rem;color:var(--text-secondary);transition:color .12s}
+.season-list-row.active .slr-name{color:var(--accent-400);font-weight:500}
+.slr-meta{font-size:.67rem;color:var(--text-muted)}
+.slr-dot{width:5px;height:5px;border-radius:50%;background:var(--accent-400);margin-left:auto;flex-shrink:0}
+.si-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);font-size:.8rem;text-align:center;padding:16px}
+.si-empty-icon{font-size:26px;opacity:.4}
 
-/* Season picker */
-.season-row {
-  padding: .28rem .65rem .28rem 2rem;
-  font-size: .72rem; color: var(--fg3); cursor: default;
-}
-.season-row.sel { color: var(--accent); font-weight: 600; }
+/* Settings modal */
+.settings-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;border-radius:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.settings-overlay.open{opacity:1;pointer-events:all}
+.settings-modal{background:var(--bg-800);border:1px solid var(--border);border-radius:12px;padding:18px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.settings-title{font-size:.9rem;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.close-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;line-height:1;padding:0}
+.close-btn:hover{color:var(--text-primary)}
+.settings-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:6px;display:block}
+.settings-input{width:100%;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-primary);padding:7px 10px;border-radius:6px;font-size:.8rem;font-family:inherit;margin-bottom:12px}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:14px}
+.theme-btn{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:6px;border:1px solid var(--bg-400);cursor:pointer;font-size:.72rem;font-family:inherit;background:var(--bg-700);color:var(--text-secondary);transition:all .15s}
+.theme-btn:hover{background:var(--bg-600)}
+.theme-btn.active{background:var(--bg-500);border-color:var(--accent-500);color:var(--accent-400)}
+.theme-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.settings-footer{display:flex;gap:8px;margin-top:4px}
+.settings-footer button{flex:1;padding:7px;border-radius:7px;font-size:.8rem;font-weight:500;cursor:pointer;font-family:inherit;border:none;transition:all .15s}
+.sf-cancel{background:var(--bg-700);color:var(--text-secondary);border:1px solid var(--bg-400)!important}
+.sf-cancel:hover{background:var(--bg-600)}
+.sf-save{background:var(--accent-600);color:#fff}
+.sf-save:hover{background:var(--accent-500)}
 
-/* Main panel */
-.wc { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.wc-toolbar {
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  padding: .45rem .85rem;
-  display: flex; align-items: center; gap: .5rem;
-}
-.wt-btn {
-  background: var(--surface3); border: 1px solid var(--border2);
-  color: var(--fg2); padding: .26rem .75rem; border-radius: 5px; font-size: .75rem;
-}
-.wt-btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
-.wt-search {
-  flex: 1; background: var(--surface3); border: 1px solid var(--border2);
-  color: var(--fg3); padding: .26rem .65rem; border-radius: 5px; font-size: .75rem;
-}
-.wc-tabs { display: flex; background: var(--surface2); border-bottom: 1px solid var(--border); }
-.wc-tab { padding: .42rem 1rem; font-size: .8rem; color: var(--fg3); border-bottom: 2px solid transparent; cursor: default; }
-.wc-tab.on { color: var(--fg); border-bottom-color: var(--accent); }
-.wc-body { flex: 1; overflow-y: auto; padding: .4rem; }
+/* Scrollbars in demo */
+.app-window ::-webkit-scrollbar{width:5px;height:5px}
+.app-window ::-webkit-scrollbar-track{background:transparent}
+.app-window ::-webkit-scrollbar-thumb{background:var(--bg-400);border-radius:3px}
 
-.ep-row {
-  display: flex; align-items: center; gap: .6rem;
-  padding: .32rem .5rem; border-radius: 4px; font-size: .73rem;
-}
-.ep-row:nth-child(odd) { background: rgba(255,255,255,.02); }
-.ep-num { width: 30px; color: var(--fg3); flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
-.ep-old { flex: 1; color: var(--fg3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ep-arrow { color: var(--fg3); flex-shrink: 0; }
-.ep-new { flex: 1.2; color: var(--green); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-.ep-badge {
-  font-size: .64rem; padding: .05rem .38rem; border-radius: 10px;
-  flex-shrink: 0;
-}
-.ep-badge.ok { background: rgba(61,220,132,.15); color: var(--green); }
-.ep-badge.warn { background: rgba(245,166,35,.15); color: var(--amber); }
+/* ── Features grid ─────────────────────────────────────────────────────────── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
+.feat{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:1.5rem;transition:border-color .2s,transform .2s}
+.feat:hover{border-color:var(--pg-border2);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;background:rgba(59,130,246,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.85rem}
+.feat h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.feat p{color:var(--pg-fg2);font-size:.88rem;line-height:1.55}
 
-/* Status bar */
-.win-status {
-  background: var(--surface2);
-  border-top: 1px solid var(--border);
-  padding: .28rem .85rem;
-  display: flex; gap: 1.2rem;
-  font-size: .72rem; color: var(--fg3);
-  align-items: center;
-}
-.ws-dot { display: flex; align-items: center; gap: .35rem; }
-.ws-dot::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-.ws-dot.amber::before { background: var(--amber); }
+/* ── Download ──────────────────────────────────────────────────────────────── */
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:1.5rem}
+.dl-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:1.25rem;display:flex;flex-direction:column;gap:.8rem}
+.dl-plat{display:flex;align-items:center;gap:.65rem}
+.dl-ic{font-size:1.5rem}
+.dl-name{font-size:.95rem;font-weight:700}
+.dl-sub{font-size:.78rem;color:var(--pg-fg3);margin-top:.1rem}
+.dl-file{font-family:"SF Mono",monospace;font-size:.78rem;color:var(--pg-fg2);background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:5px;padding:.3rem .6rem}
 
-/* ── Features grid ────────────────────────────────────────────────────────── */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-.feat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  transition: border-color .2s, transform .2s;
-}
-.feat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.feat-icon {
-  width: 44px; height: 44px;
-  background: rgba(91,141,238,.12);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-.feat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
-.feat-card p { color: var(--fg2); font-size: .9rem; line-height: 1.55; }
+/* ── Setup ─────────────────────────────────────────────────────────────────── */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1.1rem}
+.step-n{counter-increment:step;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#60a5fa}
+.step-n::after{content:counter(step)}
+.step-body h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.step-body p,.step-body li{color:var(--pg-fg2);font-size:.9rem;line-height:1.55}
+.step-body ol{padding-left:1.2rem;display:flex;flex-direction:column;gap:.25rem}
+.note{margin-top:.5rem;padding:.55rem .85rem;background:rgba(234,179,8,.07);border-left:3px solid #ca8a04;border-radius:0 5px 5px 0;color:var(--pg-fg2);font-size:.83rem}
 
-/* ── Tech stack ───────────────────────────────────────────────────────────── */
-.stack-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
-}
-.stack-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.1rem 1.25rem;
-}
-.stack-layer { font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--fg3); margin-bottom: .35rem; }
-.stack-val { font-size: .92rem; color: var(--fg); font-weight: 500; }
+/* ── Tech ──────────────────────────────────────────────────────────────────── */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.85rem}
+.stack-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--r);padding:1rem 1.1rem}
+.stack-layer{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--pg-fg3);margin-bottom:.3rem}
+.stack-val{font-size:.9rem;color:var(--pg-fg);font-weight:500}
 
-/* ── Setup steps ──────────────────────────────────────────────────────────── */
-.steps-list {
-  counter-reset: step;
-  display: flex; flex-direction: column; gap: 2rem;
-}
-.step {
-  display: flex; gap: 1.25rem;
-}
-.step-num {
-  counter-increment: step;
-  flex-shrink: 0;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(91,141,238,.15);
-  border: 1px solid rgba(91,141,238,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: .88rem; color: var(--accent);
-}
-.step-num::after { content: counter(step); }
-.step-body { flex: 1; }
-.step-body h3 { font-size: .98rem; font-weight: 700; margin-bottom: .4rem; }
-.step-body p, .step-body li { color: var(--fg2); font-size: .92rem; line-height: 1.55; }
-.step-body ol { padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
-.note {
-  margin-top: .6rem;
-  padding: .6rem .9rem;
-  background: rgba(245,166,35,.07);
-  border-left: 3px solid var(--amber);
-  border-radius: 0 6px 6px 0;
-  color: var(--fg2); font-size: .85rem;
-}
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--pg-border);padding:2.5rem 0;text-align:center;color:var(--pg-fg3);font-size:.88rem}
+footer a{color:var(--pg-fg2)}
 
-/* ── Download table ───────────────────────────────────────────────────────── */
-.dl-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-top: 2rem;
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:900px){
+  .lib-panel{width:150px;min-width:150px}
+  .right-panel{width:260px;min-width:260px}
+  .app-body{height:460px}
 }
-.dl-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  display: flex; flex-direction: column; gap: .9rem;
-}
-.dl-platform { display: flex; align-items: center; gap: .7rem; }
-.dl-icon { font-size: 1.6rem; }
-.dl-name { font-size: 1rem; font-weight: 700; }
-.dl-sub { font-size: .82rem; color: var(--fg3); margin-top: .1rem; }
-.dl-file { font-family: "SF Mono", monospace; font-size: .82rem; color: var(--fg2); background: var(--surface2); border: 1px solid var(--border2); border-radius: 6px; padding: .35rem .65rem; }
-
-/* ── Footer ───────────────────────────────────────────────────────────────── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 2.5rem 0;
-  text-align: center;
-  color: var(--fg3);
-  font-size: .88rem;
-}
-footer a { color: var(--fg2); }
-footer a:hover { color: var(--fg); }
-
-/* ── Responsive ───────────────────────────────────────────────────────────── */
-@media (max-width: 700px) {
-  .wsb { width: 140px; min-width: 140px; }
-  .win-layout { height: 340px; }
-  .dl-grid { grid-template-columns: 1fr; }
-  .stack-grid { grid-template-columns: 1fr 1fr; }
-  .features-grid { grid-template-columns: 1fr; }
+@media(max-width:700px){
+  .right-panel{display:none}
+  .app-body{height:400px}
+  .dl-grid,.stack-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -428,343 +355,326 @@ footer a:hover { color: var(--fg); }
   <div class="nav-inner">
     <a href="index.html" class="nav-back">← Etienne Axiak</a>
     <div class="nav-links">
-      <a href="index.html#projects">Projects</a>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
       <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </nav>
 
-<!-- ── Hero ── -->
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-glow hero-glow-1"></div>
-  <div class="hero-glow hero-glow-2"></div>
-  <div class="hero-glow hero-glow-3"></div>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
   <div class="hero-content">
     <div class="tag">Media Tools</div>
     <h1><span class="grad">Matchbox</span></h1>
-    <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no internet required.</p>
+    <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no cloud required.</p>
     <div class="hero-btns">
       <a href="https://github.com/Spinjitsudoom/Matchbox/releases" class="btn btn-primary" target="_blank" rel="noopener">Download</a>
       <a href="https://github.com/Spinjitsudoom/Matchbox" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
     </div>
-    <div class="hero-badges">
-      <div class="hero-badge">🐧 <span>Linux AppImage</span></div>
-      <div class="hero-badge">🪟 <span>Windows installer</span></div>
-      <div class="hero-badge">📺 <span>Plex · Jellyfin · Emby</span></div>
-      <div class="hero-badge">🔒 <span>MIT License</span></div>
+    <div class="hero-pills">
+      <div class="pill">🐧 <span>Linux AppImage + Flatpak</span></div>
+      <div class="pill">🪟 <span>Windows Installer + Portable</span></div>
+      <div class="pill">📺 <span>Plex · Jellyfin · Emby</span></div>
+      <div class="pill">🔒 <span>MIT License</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── App mockup ── -->
-<section class="mockup-section">
-  <div class="container">
-    <div class="mockup-outer">
-      <div class="mockup-window">
-        <div class="win-bar">
-          <div class="win-dots">
-            <div class="wd wd-r"></div>
-            <div class="wd wd-y"></div>
-            <div class="wd wd-g"></div>
-          </div>
-          <span class="win-title">Matchbox</span>
+<!-- Interactive app demo -->
+<section class="demo-section">
+  <div class="demo-wrap">
+    <div class="app-window app-demo" id="appDemo">
+
+      <!-- Window chrome -->
+      <div class="win-bar">
+        <div class="dots">
+          <div class="dot" style="background:#ff5f57"></div>
+          <div class="dot" style="background:#ffbd2e"></div>
+          <div class="dot" style="background:#28c941"></div>
         </div>
-        <div class="win-layout">
-          <!-- Library sidebar -->
-          <div class="wsb">
-            <div class="wsb-hdr">Library <span class="wsb-badge">12</span></div>
-            <div class="wsb-list">
-              <div class="show-row sel">
-                <span class="show-icon">📺</span>
-                <div class="show-info">
-                  <div class="show-name">Arcane</div>
-                  <div class="show-meta">2 seasons · 18 eps</div>
-                </div>
-              </div>
-              <div class="season-row sel">Season 1</div>
-              <div class="season-row">Season 2</div>
-              <div class="show-row">
-                <span class="show-icon">📺</span>
-                <div class="show-info">
-                  <div class="show-name">Severance</div>
-                  <div class="show-meta">2 seasons · 19 eps</div>
-                </div>
-              </div>
-              <div class="show-row">
-                <span class="show-icon">🎬</span>
-                <div class="show-info">
-                  <div class="show-name">Dune Part Two</div>
-                  <div class="show-meta">Movie · 2024</div>
-                </div>
-              </div>
-              <div class="show-row">
-                <span class="show-icon">📺</span>
-                <div class="show-info">
-                  <div class="show-name">The Bear</div>
-                  <div class="show-meta">3 seasons · 28 eps</div>
-                </div>
-              </div>
-              <div class="show-row">
-                <span class="show-icon">📺</span>
-                <div class="show-info">
-                  <div class="show-name">Fallout</div>
-                  <div class="show-meta">1 season · 8 eps</div>
-                </div>
-              </div>
-              <div class="show-row">
-                <span class="show-icon">📺</span>
-                <div class="show-info">
-                  <div class="show-name">House of the Dragon</div>
-                  <div class="show-meta">2 seasons · 18 eps</div>
-                </div>
+        <span class="win-title">Matchbox</span>
+      </div>
+
+      <!-- App header -->
+      <div class="app-header">
+        <svg class="ah-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+        <span class="ah-name">Matchbox</span>
+        <div class="mode-toggle">
+          <button class="mt-btn active" id="tvBtn" onclick="setMode('tv')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+            TV Shows
+          </button>
+          <button class="mt-btn" id="movieBtn" onclick="setMode('movie')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+            Movies
+          </button>
+        </div>
+        <div class="ah-right">
+          <button class="settings-btn" onclick="toggleSettings()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-col body -->
+      <div class="app-body">
+
+        <!-- Library -->
+        <div class="lib-panel">
+          <div class="lib-hdr">
+            <span class="lib-hdr-label">Library</span>
+            <button class="refresh-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            </button>
+          </div>
+          <div class="lib-list" id="libList"></div>
+        </div>
+
+        <!-- Center rename panel -->
+        <div class="center-panel">
+          <div id="seasonHeader" class="season-header" style="display:none">
+            <div class="sh-backdrop" id="shBackdrop"></div>
+            <div class="sh-poster-placeholder" id="shPoster">🎬</div>
+            <div class="sh-info">
+              <div class="sh-sublabel">Now Renaming</div>
+              <div class="sh-title" id="shTitle">—</div>
+              <div class="sh-meta">
+                <span class="ep-meta" id="shEpCount"></span>
+                <span id="matchBadges"></span>
               </div>
             </div>
           </div>
-          <!-- Main panel -->
-          <div class="wc">
-            <div class="wc-toolbar">
-              <button class="wt-btn">Numeric</button>
-              <button class="wt-btn">Fuzzy</button>
-              <input class="wt-search" value="Arcane · Season 1" readonly>
-              <button class="wt-btn">Undo</button>
-              <button class="wt-btn accent">Rename</button>
+
+          <div class="controls-bar" id="controlsBar" style="display:none">
+            <button class="ctrl-toggle" id="modeToggle" onclick="toggleMatchMode()">
+              <svg id="modeIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="8" cy="12" r="3"/></svg>
+              <span id="modeLabel">Numeric</span>
+            </button>
+            <div class="ctrl-divider"></div>
+            <span class="ctrl-label">Pattern</span>
+            <input class="ctrl-input" value=" - " readonly>
+            <div class="ctrl-divider"></div>
+            <span class="ctrl-label">Offset</span>
+            <div class="ctrl-offset">
+              <button class="offset-btn" onclick="changeOffset(-1)">▼</button>
+              <span class="offset-val" id="offsetVal">0</span>
+              <button class="offset-btn" onclick="changeOffset(1)">▲</button>
             </div>
-            <div class="wc-tabs">
-              <div class="wc-tab on">Preview</div>
-              <div class="wc-tab">Files</div>
-              <div class="wc-tab">Subtitles</div>
-              <div class="wc-tab">Remux</div>
+          </div>
+
+          <div class="ep-table" id="epTable">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">✏️</div>
+              <div>Select a show, season, and folder<br>to preview the rename</div>
             </div>
-            <div class="wc-body">
-              <div class="ep-row">
-                <span class="ep-num">01</span>
-                <span class="ep-old">arcane.s01e01.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E01 - Welcome to the Playground.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">02</span>
-                <span class="ep-old">arcane.s01e02.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E02 - Some Mysteries Are Better Left Unsolved.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">03</span>
-                <span class="ep-old">arcane.s01e03.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E03 - The Base Violence Necessary for Change.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">04</span>
-                <span class="ep-old">arcane.s01e04.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E04 - Happy Progress Day!.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">05</span>
-                <span class="ep-old">arcane.ep5.HEVC.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E05 - Everybody Wants to Be My Enemy.mkv</span>
-                <span class="ep-badge warn">~</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">06</span>
-                <span class="ep-old">arcane.s01e06.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E06 - When These Walls Come Tumbling Down.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">07</span>
-                <span class="ep-old">arcane.s01e07.BluRay.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E07 - The Boy Savior.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">08</span>
-                <span class="ep-old">arcane.s01e08.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E08 - Oil and Water.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
-              <div class="ep-row">
-                <span class="ep-num">09</span>
-                <span class="ep-old">arcane.s01e09.1080p.mkv</span>
-                <span class="ep-arrow">→</span>
-                <span class="ep-new">Arcane - S01E09 - The Monster You Created.mkv</span>
-                <span class="ep-badge ok">✓</span>
-              </div>
+          </div>
+
+          <div class="action-bar" id="actionBar" style="display:none">
+            <span class="ab-info" id="abInfo"></span>
+            <div class="ab-right">
+              <button class="ab-btn" id="undoBtn" onclick="doUndo()" style="display:none">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+                Undo
+              </button>
+              <button class="ab-btn" onclick="openSubModal()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                Generate
+              </button>
+              <button class="ab-btn" onclick="openRemuxModal()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                Remux
+              </button>
+              <button class="ab-btn primary" id="renameBtn" onclick="doRename()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <span id="renameBtnText">Rename Files</span>
+              </button>
             </div>
-            <div class="win-status">
-              <div class="ws-dot">9 files matched</div>
-              <div class="ws-dot amber">1 fuzzy match</div>
-              <div style="margin-left:auto">Slate theme</div>
+          </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="right-panel">
+          <div class="rp-top">
+            <div class="panel-hdr" id="searchHdr">TV Show Search</div>
+            <div class="search-bar">
+              <span class="search-icon">🔍</span>
+              <input class="search-input" id="searchInput" placeholder="Search TV shows…" oninput="onSearch(this.value)">
+            </div>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+          <div class="rp-bot">
+            <div class="panel-hdr">Show Info</div>
+            <div id="showInfoContent">
+              <div class="si-empty">
+                <div class="si-empty-icon">🎬</div>
+                Search for a show and select it to see details
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Settings overlay -->
+      <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-modal">
+          <div class="settings-title">
+            Settings
+            <button class="close-btn" onclick="toggleSettings()">✕</button>
+          </div>
+          <label class="settings-label">TMDB API Key</label>
+          <input class="settings-input" type="password" value="••••••••••••••••••••••••••••••••" readonly>
+          <label class="settings-label">Media Library Path</label>
+          <input class="settings-input" type="text" value="/home/user/Media" readonly>
+          <label class="settings-label">Theme</label>
+          <div class="theme-grid" id="themeGrid"></div>
+          <div class="settings-footer">
+            <button class="sf-cancel" onclick="toggleSettings()">Cancel</button>
+            <button class="sf-save" onclick="toggleSettings()">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .app-window -->
   </div>
 </section>
 
-<!-- ── Features ── -->
+<!-- Features -->
 <section class="section" id="features">
   <div class="container">
-    <h2 class="section-title"><span>Features</span></h2>
-    <p class="section-sub">Everything you need to keep your media library clean, accurate, and ready for any media server.</p>
+    <h2 class="sh"><span>Features</span></h2>
+    <p class="sub">Everything you need to keep a clean, accurate media library.</p>
     <div class="features-grid">
-      <div class="feat-card">
+      <div class="feat">
         <div class="feat-icon">🔍</div>
-        <h3>Smart Renaming</h3>
-        <p>Two matching modes — numeric order for clean rips, fuzzy title matching for mixed or messy directories. Full undo support so nothing is permanent.</p>
+        <h3>Smart Renaming — Two Modes</h3>
+        <p><strong>Numeric</strong> matches files to TMDB episodes by their position in the folder. <strong>Title Match</strong> uses fuzzy string matching to align filenames to episode titles — useful for mixed or out-of-order directories. Full undo support on every rename.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">🎬</div>
-        <h3>Movies &amp; TV Shows</h3>
-        <p>Renames both TV episodes (<code>S01E01</code> format) and movie files with title and release year, keeping Plex and Jellyfin metadata lookups reliable.</p>
+      <div class="feat">
+        <div class="feat-icon">📺</div>
+        <h3>TV Shows &amp; Movies</h3>
+        <p>Renames TV episodes to <code>Show - S01E01 - Title.mkv</code> format and movie files to <code>Title (Year).mkv</code> — exactly what Plex and Jellyfin expect for automatic metadata matching.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat">
         <div class="feat-icon">🌐</div>
         <h3>TMDB Integration</h3>
-        <p>Pulls real-time episode titles, air dates, and metadata from The Movie Database API — the same database Plex and Jellyfin use behind the scenes.</p>
+        <p>Pulls real-time episode titles, air dates, season posters, and ratings from The Movie Database API — the same database Plex, Jellyfin, and Emby use behind the scenes. Shows auto-match from your folder names.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat">
         <div class="feat-icon">💬</div>
         <h3>Local Subtitle Generation</h3>
-        <p>Generate <code>.srt</code> files offline using <strong>faster-whisper</strong>. Supports tiny to medium models, VAD filtering, and beam size control. No cloud service or API key required after the initial model download.</p>
+        <p>Generate <code>.srt</code> files fully offline using <strong>faster-whisper</strong> (CTranslate2). Supports tiny → medium model sizes, VAD silence filtering, configurable beam size, and an initial prompt for better accuracy. No API key or cloud service required after the first model download.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat">
         <div class="feat-icon">⚡</div>
         <h3>Remux</h3>
-        <p>Batch convert video files between containers (MKV, MP4, AVI…) using FFmpeg stream copy — fast, lossless, no re-encoding.</p>
+        <p>Batch convert video containers (MKV ↔ MP4 ↔ AVI…) using FFmpeg stream copy — no re-encoding, no quality loss, typically finishes in seconds per file.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat">
         <div class="feat-icon">🎨</div>
         <h3>9 Themes</h3>
-        <p>Slate, Emerald, Midnight, and six more built-in colour themes. Preferences are saved across sessions.</p>
+        <p>Slate, Dark, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Light. Click <strong>Settings</strong> in the demo above to try them live.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Download ── -->
-<section class="section" id="download" style="background: var(--bg2);">
+<!-- Download -->
+<section class="section" id="download" style="background:var(--pg-bg2)">
   <div class="container">
-    <h2 class="section-title"><span>Download</span></h2>
-    <p class="section-sub">Grab the latest release from GitHub. No installation required for Linux — just mark the AppImage executable and run.</p>
+    <h2 class="sh"><span>Download</span></h2>
+    <p class="sub">All builds are on the GitHub Releases page. Linux AppImage needs no installation — just mark it executable and run.</p>
     <div class="dl-grid">
       <div class="dl-card">
-        <div class="dl-platform">
-          <span class="dl-icon">🐧</span>
-          <div>
-            <div class="dl-name">Linux</div>
-            <div class="dl-sub">AppImage · runs on any distro</div>
-          </div>
-        </div>
-        <div class="dl-file">Media.Manager-x.x.x.AppImage</div>
+        <div class="dl-plat"><span class="dl-ic">🐧</span><div><div class="dl-name">Linux AppImage</div><div class="dl-sub">Runs on any distro, no install</div></div></div>
+        <div class="dl-file">Matchbox-1.0.0.AppImage</div>
         <a href="https://github.com/Spinjitsudoom/Matchbox/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
       </div>
       <div class="dl-card">
-        <div class="dl-platform">
-          <span class="dl-icon">🪟</span>
-          <div>
-            <div class="dl-name">Windows</div>
-            <div class="dl-sub">NSIS installer · built via GitHub Actions</div>
-          </div>
-        </div>
-        <div class="dl-file">Media.Manager-Setup-x.x.x.exe</div>
+        <div class="dl-plat"><span class="dl-ic">🐧</span><div><div class="dl-name">Linux Flatpak</div><div class="dl-sub">Sandboxed Flatpak bundle</div></div></div>
+        <div class="dl-file">Matchbox-1.0.0-x86_64.flatpak</div>
+        <a href="https://github.com/Spinjitsudoom/Matchbox/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
+      </div>
+      <div class="dl-card">
+        <div class="dl-plat"><span class="dl-ic">🪟</span><div><div class="dl-name">Windows Installer</div><div class="dl-sub">NSIS installer, adds to Start Menu</div></div></div>
+        <div class="dl-file">Matchbox.Setup.1.0.0.exe</div>
+        <a href="https://github.com/Spinjitsudoom/Matchbox/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
+      </div>
+      <div class="dl-card">
+        <div class="dl-plat"><span class="dl-ic">🪟</span><div><div class="dl-name">Windows Portable</div><div class="dl-sub">Extract and run, no install</div></div></div>
+        <div class="dl-file">Matchbox-1.0.0-win.zip</div>
         <a href="https://github.com/Spinjitsudoom/Matchbox/releases" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Releases →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Setup ── -->
+<!-- Setup -->
 <section class="section" id="setup">
   <div class="container">
-    <h2 class="section-title"><span>Getting Started</span></h2>
-    <p class="section-sub">Up and running in under two minutes.</p>
-    <div class="steps-list">
+    <h2 class="sh"><span>Getting Started</span></h2>
+    <p class="sub">Up and running in under two minutes.</p>
+    <div class="steps">
       <div class="step">
-        <div class="step-num"></div>
+        <div class="step-n"></div>
         <div class="step-body">
-          <h3>Get a TMDB API Key</h3>
+          <h3>Get a free TMDB API Key</h3>
           <ol>
-            <li>Create a free account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">themoviedb.org</a></li>
-            <li>Go to <strong>Settings → API</strong> and generate a v3 key</li>
-            <li>Paste it into <strong>Settings</strong> inside the app</li>
+            <li>Create an account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">themoviedb.org</a></li>
+            <li>Go to <strong>Settings → API</strong> and request a v3 key</li>
+            <li>Paste it into <strong>Settings</strong> inside Matchbox</li>
           </ol>
-          <div class="note">Your key is stored locally in <code>~/Documents/Media Manager/config.json</code> and is never uploaded or hardcoded into the source.</div>
+          <div class="note">Your key is stored locally in <code>~/Documents/Matchbox/config.json</code> and is never uploaded anywhere.</div>
         </div>
       </div>
       <div class="step">
-        <div class="step-num"></div>
+        <div class="step-n"></div>
         <div class="step-body">
-          <h3>Set Your Library Path</h3>
-          <p>Open <strong>Settings</strong> and point the app at the root of your media library. The expected structure:</p>
+          <h3>Set your library path</h3>
+          <p>Open <strong>Settings</strong> and point Matchbox at the root of your media library. Expected folder structure:</p>
           <pre>
 /your/media/root/
   Show Name/
     Season 01/
-      episode files...
-  Another Show/
-  Movie Name (2024)/</pre>
+      episode.files...
+  Movie Name (2024)/
+    movie.file...</pre>
         </div>
       </div>
       <div class="step">
-        <div class="step-num"></div>
+        <div class="step-n"></div>
         <div class="step-body">
-          <h3>Rename Your Files</h3>
-          <p>Select a show and season from the sidebar. Choose <strong>Numeric</strong> (order-based) or <strong>Fuzzy</strong> (title-based) matching, review the preview, then click <strong>Rename</strong>. Use <strong>Undo</strong> to revert any batch instantly.</p>
+          <h3>Rename your files</h3>
+          <p>Select a show in the left panel — it auto-searches TMDB. Select a season and a local folder. The rename preview populates instantly. Choose <strong>Numeric</strong> (position-based) or <strong>Title Match</strong> (fuzzy), review the colour-coded preview, then click <strong>Rename Files</strong>. Use <strong>Undo</strong> to revert any batch.</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-num"></div>
+        <div class="step-n"></div>
         <div class="step-body">
-          <h3>Generate Subtitles (optional)</h3>
-          <p>Navigate to the <strong>Subtitles</strong> tab, select a model size (tiny is fastest, medium is most accurate), and click <strong>Generate</strong>. The Whisper model downloads automatically on first use and is cached locally. No internet required after that.</p>
-          <div class="note">FFmpeg must be installed for the <strong>Remux</strong> feature: <code>sudo apt install ffmpeg</code> (Debian/Ubuntu) or <code>sudo dnf install ffmpeg</code> (Fedora).</div>
+          <h3>Generate subtitles (optional)</h3>
+          <p>Click <strong>Generate</strong> in the action bar. Select a model size — <em>tiny</em> is fastest, <em>medium</em> is most accurate. The Whisper model downloads automatically on first use and is cached in <code>~/.cache/huggingface/</code>. No internet required after that.</p>
+          <div class="note">The <strong>Remux</strong> feature requires FFmpeg: <code>sudo apt install ffmpeg</code> or <code>sudo dnf install ffmpeg</code>.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Tech stack ── -->
-<section class="section" id="tech" style="background: var(--bg2);">
+<!-- Tech stack -->
+<section class="section" style="background:var(--pg-bg2)">
   <div class="container">
-    <h2 class="section-title"><span>Tech Stack</span></h2>
-    <p class="section-sub">A modern desktop app with a clean separation between a React frontend and a FastAPI backend, packaged into a self-contained binary.</p>
+    <h2 class="sh"><span>Tech Stack</span></h2>
+    <p class="sub">A clean split between a React/TypeScript frontend and a Python/FastAPI backend, packaged into a self-contained binary.</p>
     <div class="stack-grid">
-      <div class="stack-card">
-        <div class="stack-layer">UI</div>
-        <div class="stack-val">Electron · React · TypeScript · Tailwind CSS</div>
-      </div>
-      <div class="stack-card">
-        <div class="stack-layer">Backend</div>
-        <div class="stack-val">Python · FastAPI · uvicorn</div>
-      </div>
-      <div class="stack-card">
-        <div class="stack-layer">Metadata</div>
-        <div class="stack-val">TMDB API via tmdbv3api</div>
-      </div>
-      <div class="stack-card">
-        <div class="stack-layer">Subtitles</div>
-        <div class="stack-val">faster-whisper · CTranslate2</div>
-      </div>
-      <div class="stack-card">
-        <div class="stack-layer">Packaging</div>
-        <div class="stack-val">PyInstaller · electron-builder</div>
-      </div>
-      <div class="stack-card">
-        <div class="stack-layer">Build</div>
-        <div class="stack-val">AppImage · NSIS · GitHub Actions</div>
-      </div>
+      <div class="stack-card"><div class="stack-layer">UI</div><div class="stack-val">Electron · React · TypeScript · Tailwind CSS</div></div>
+      <div class="stack-card"><div class="stack-layer">Backend</div><div class="stack-val">Python · FastAPI · uvicorn</div></div>
+      <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">TMDB API via tmdbv3api</div></div>
+      <div class="stack-card"><div class="stack-layer">Subtitles</div><div class="stack-val">faster-whisper · CTranslate2</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · electron-builder</div></div>
+      <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions · AppImage · NSIS</div></div>
     </div>
   </div>
 </section>
@@ -776,5 +686,478 @@ footer a:hover { color: var(--fg); }
   </div>
 </footer>
 
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────────
+const LIBRARY = [
+  { name: 'Arcane', seasons: [
+    { name: 'Season 01', files: 9 },
+    { name: 'Season 02', files: 6 },
+  ]},
+  { name: 'Severance', seasons: [
+    { name: 'Season 01', files: 9 },
+    { name: 'Season 02', files: 10 },
+  ]},
+  { name: 'The Bear', seasons: [
+    { name: 'Season 01', files: 8 },
+    { name: 'Season 02', files: 10 },
+    { name: 'Season 03', files: 10 },
+  ]},
+  { name: 'Fallout', seasons: [
+    { name: 'Season 01', files: 8 },
+  ]},
+  { name: 'House of the Dragon', seasons: [
+    { name: 'Season 01', files: 10 },
+    { name: 'Season 02', files: 8 },
+  ]},
+];
+
+const EPISODES = {
+  'Arcane|1': [
+    { n:1, old:'arcane.s01e01.1080p.mkv',        title:'Welcome to the Playground',               score:100 },
+    { n:2, old:'arcane.s01e02.1080p.mkv',        title:'Some Mysteries Are Better Left Unsolved', score:100 },
+    { n:3, old:'arcane.s01e03.1080p.mkv',        title:'The Base Violence Necessary for Change',  score:100 },
+    { n:4, old:'arcane.s01e04.1080p.mkv',        title:'Happy Progress Day!',                     score:100 },
+    { n:5, old:'arcane.ep5.HEVC.mkv',            title:"Everybody Wants to Be My Enemy",          score:72  },
+    { n:6, old:'arcane.s01e06.1080p.mkv',        title:'When These Walls Come Tumbling Down',     score:100 },
+    { n:7, old:'arcane.s01e07.BluRay.mkv',       title:'The Boy Savior',                          score:100 },
+    { n:8, old:'arcane.s01e08.1080p.mkv',        title:'Oil and Water',                           score:100 },
+    { n:9, old:'arcane.s01e09.1080p.mkv',        title:'The Monster You Created',                 score:100 },
+  ],
+  'Arcane|2': [
+    { n:1, old:'arcane.s02e01.2160p.mkv',        title:'Heavy is the Crown',                      score:100 },
+    { n:2, old:'arcane.s02e02.2160p.mkv',        title:'Unforgivable',                            score:100 },
+    { n:3, old:'arcane.s02e03.2160p.mkv',        title:'Eccentric or Great',                      score:100 },
+    { n:4, old:'arcane.2024.e04.mkv',            title:'Rectangles',                              score:68  },
+    { n:5, old:null,                             title:'The Dirt Under Your Nails',               score:0   },
+    { n:6, old:'arcane.s02e06.2160p.mkv',        title:"The Message",                             score:100 },
+  ],
+  'Severance|1': [
+    { n:1, old:'severance.s01e01.mkv',           title:'Good News About Hell',                    score:100 },
+    { n:2, old:'severance.s01e02.mkv',           title:'Half Loop',                               score:100 },
+    { n:3, old:'severance.s01e03.mkv',           title:'In Perpetuity',                           score:100 },
+    { n:4, old:'severance.s01e04.WEB.mkv',       title:'The You You Are',                         score:100 },
+    { n:5, old:'severance.s01e05.mkv',           title:'The Grim Barbarity of Optics and Design', score:100 },
+    { n:6, old:'severance.s01e06.mkv',           title:'Hide and Seek',                           score:100 },
+    { n:7, old:'severance.s01e07.mkv',           title:'Defiant Jazz',                            score:100 },
+    { n:8, old:'severance.s01e08.WEB.mkv',       title:'What Is The Chicken?',                   score:100 },
+    { n:9, old:'severance.s01e09.mkv',           title:'The We We Are',                           score:100 },
+  ],
+  'The Bear|1': [
+    { n:1, old:'the.bear.s01e01.mkv',            title:'System',                                  score:100 },
+    { n:2, old:'the.bear.s01e02.mkv',            title:'Hands',                                   score:100 },
+    { n:3, old:'the.bear.s01e03.mkv',            title:'Brigade',                                 score:100 },
+    { n:4, old:'thebear.ep4.mkv',                title:'Dogs',                                    score:74  },
+    { n:5, old:'the.bear.s01e05.mkv',            title:'Sheridan',                                score:100 },
+    { n:6, old:'the.bear.s01e06.1080p.mkv',      title:'Ceres',                                   score:100 },
+    { n:7, old:'the.bear.s01e07.mkv',            title:'Review',                                  score:100 },
+    { n:8, old:'the.bear.s01e08.mkv',            title:'Braciole',                                score:100 },
+  ],
+  'Fallout|1': [
+    { n:1, old:'fallout.s01e01.4k.mkv',          title:'The End',                                 score:100 },
+    { n:2, old:'fallout.s01e02.4k.mkv',          title:'The Target',                              score:100 },
+    { n:3, old:'fallout.s01e03.4k.mkv',          title:'The Head',                                score:100 },
+    { n:4, old:'fallout.s01e04.4k.mkv',          title:'The Ghouls',                              score:100 },
+    { n:5, old:'fallout.s01e05.4k.mkv',          title:'The Past',                                score:100 },
+    { n:6, old:'fallout.episode6.HEVC.mkv',      title:'The Trap',                                score:65  },
+    { n:7, old:'fallout.s01e07.4k.mkv',          title:'The Radio',                               score:100 },
+    { n:8, old:'fallout.s01e08.4k.mkv',          title:'The Beginning',                           score:100 },
+  ],
+};
+
+const MOVIE_EPISODES = {
+  'Dune: Part Two': [
+    { n:1, old:'dune.part.two.2024.2160p.mkv', title:'Dune: Part Two', score:100 },
+  ],
+  'Interstellar': [
+    { n:1, old:'interstellar.2014.1080p.mkv', title:'Interstellar', score:100 },
+  ],
+};
+
+const SEARCH_DATA = {
+  tv: [
+    { id:1, title:'Arcane', year:'2021', seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:6}],
+      overview:'The utopian Piltover and the oppressed underground of Zaun are in conflict over the ideology of Hextech technology.',
+      rating:9.0 },
+    { id:2, title:'Severance', year:'2022', seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:10}],
+      overview:'Mark leads a team of office workers whose memories have been surgically divided between their work and personal lives.',
+      rating:8.7 },
+    { id:3, title:'The Bear', year:'2022', seasons:[{n:1,title:'Season 1',eps:8},{n:2,title:'Season 2',eps:10},{n:3,title:'Season 3',eps:10}],
+      overview:'A young chef from the fine dining world comes home to Chicago to run his family\'s sandwich shop.',
+      rating:8.8 },
+    { id:4, title:'Fallout', year:'2024', seasons:[{n:1,title:'Season 1',eps:8}],
+      overview:'In a future, post-apocalyptic Los Angeles, a young woman emerges from her bunker 200 years after nuclear war.',
+      rating:8.5 },
+    { id:5, title:'House of the Dragon', year:'2022', seasons:[{n:1,title:'Season 1',eps:10},{n:2,title:'Season 2',eps:8}],
+      overview:'The story of House Targaryen, set 200 years before the events of Game of Thrones.',
+      rating:8.4 },
+  ],
+  movie: [
+    { id:10, title:'Dune: Part Two', year:'2024', overview:'Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.', rating:8.5 },
+    { id:11, title:'Interstellar', year:'2014', overview:'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.', rating:8.7 },
+    { id:12, title:'Oppenheimer', year:'2023', overview:'The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.', rating:8.9 },
+    { id:13, title:'Inception', year:'2010', overview:'A thief who steals corporate secrets through dream-sharing technology is given the inverse task.', rating:8.8 },
+  ],
+};
+
+const THEMES = [
+  { name:'Slate', color:'#3b82f6' },
+  { name:'Dark', color:'#6366f1' },
+  { name:'Midnight', color:'#6366f1' },
+  { name:'Emerald', color:'#10b981' },
+  { name:'Amethyst', color:'#a855f7' },
+  { name:'Crimson', color:'#ef4444' },
+  { name:'Forest', color:'#4ade80' },
+  { name:'Ocean', color:'#0ea5e9' },
+  { name:'Light', color:'#2563eb' },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let state = {
+  mode: 'tv',
+  expanded: null,
+  activeSeason: null,
+  activeShow: null,
+  activeSeasonNum: null,
+  searchQ: '',
+  selectedResult: null,
+  selectedShowData: null,
+  matchMode: 'numeric',
+  offset: 0,
+  renamed: false,
+  theme: 'Slate',
+};
+
+// ── Build library ─────────────────────────────────────────────────────────────
+function buildLibrary() {
+  const list = document.getElementById('libList');
+  list.innerHTML = '';
+  const items = state.mode === 'tv' ? LIBRARY :
+    [{ name:'Dune: Part Two', seasons:[{name:'Dune: Part Two (2024)', files:1}] },
+     { name:'Interstellar',   seasons:[{name:'Interstellar (2014)',   files:1}] },
+     { name:'Oppenheimer',    seasons:[{name:'Oppenheimer (2023)',    files:1}] }];
+
+  items.forEach(show => {
+    const showRow = document.createElement('button');
+    showRow.className = 'show-row' + (state.expanded === show.name ? ' expanded' : '');
+    showRow.innerHTML = `
+      <svg class="chevron${state.expanded===show.name?' open':''}" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <svg class="film-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+      <span class="show-name">${show.name}</span>`;
+    showRow.onclick = () => toggleShow(show.name);
+    list.appendChild(showRow);
+
+    if (state.expanded === show.name) {
+      const sub = document.createElement('div');
+      sub.className = 'seasons-list';
+      show.seasons.forEach((s, i) => {
+        const sRow = document.createElement('button');
+        const key = show.name + '|' + (i+1);
+        sRow.className = 'season-row' + (state.activeSeason === key ? ' active' : '');
+        sRow.innerHTML = `<span class="season-name">${s.name}</span><span class="season-count">${s.files}</span>`;
+        sRow.onclick = (e) => { e.stopPropagation(); selectSeason(show.name, i+1, s.name); };
+        sub.appendChild(sRow);
+      });
+      list.appendChild(sub);
+    }
+  });
+}
+
+function toggleShow(name) {
+  state.expanded = state.expanded === name ? null : name;
+  if (state.expanded === name) {
+    // auto-select in search
+    const found = SEARCH_DATA[state.mode].find(r => r.title === name);
+    if (found) selectResult(found);
+  }
+  buildLibrary();
+}
+
+function selectSeason(showName, num, seasonName) {
+  const key = showName + '|' + num;
+  state.activeSeason = key;
+  state.activeShow = showName;
+  state.activeSeasonNum = num;
+  state.renamed = false;
+  state.offset = 0;
+  document.getElementById('offsetVal').textContent = '0';
+  buildLibrary();
+  buildRenamePanel(showName, num, seasonName);
+}
+
+// ── Rename panel ──────────────────────────────────────────────────────────────
+function buildRenamePanel(showName, num, seasonName) {
+  const episodes = EPISODES[showName + '|' + num];
+  if (!episodes) return;
+
+  document.getElementById('seasonHeader').style.display = 'flex';
+  document.getElementById('controlsBar').style.display = state.mode === 'tv' ? 'flex' : 'none';
+  document.getElementById('actionBar').style.display = 'flex';
+  document.getElementById('emptyState').style.display = 'none';
+
+  document.getElementById('shTitle').textContent = seasonName;
+
+  const green = episodes.filter(e => e.old && e.score > 90).length;
+  const yellow = episodes.filter(e => e.old && e.score > 50 && e.score <= 90).length;
+  const red = episodes.filter(e => !e.old || e.score <= 50).length;
+  document.getElementById('shEpCount').textContent = `${episodes.length} episodes on TMDB`;
+  document.getElementById('matchBadges').innerHTML =
+    `<span class="badge-g">${green} ✓</span>` +
+    (yellow ? `<span class="badge-y ml-1">${yellow} ~</span>` : '') +
+    (red ? `<span class="badge-r ml-1">${red} ✗</span>` : '');
+
+  const changed = episodes.filter(e => e.old).length;
+  document.getElementById('abInfo').textContent = state.renamed
+    ? 'All files renamed ✓'
+    : changed > 0 ? `${changed} file${changed!==1?'s':''} will be renamed` : '';
+  document.getElementById('renameBtnText').textContent = state.renamed ? 'Renamed' : `Rename ${changed} File${changed!==1?'s':''}`;
+  document.getElementById('renameBtn').disabled = state.renamed;
+  document.getElementById('undoBtn').style.display = state.renamed ? 'flex' : 'none';
+
+  const table = document.getElementById('epTable');
+  table.innerHTML = '';
+  const offset = state.offset;
+
+  episodes.forEach((ep, i) => {
+    const effectiveN = ep.n + offset;
+    const rowClass = !ep.old || ep.score <= 50 ? 'red' : ep.score <= 90 ? 'yellow' : 'green';
+    const scoreClass = !ep.old ? 'na' : ep.score > 90 ? 'g' : ep.score > 50 ? 'y' : 'r';
+    const sn = String(num).padStart(2,'0');
+    const en = String(effectiveN).padStart(2,'0');
+    const newName = ep.old ? `${showName} - S${sn}E${en} - ${ep.title}${ep.old.slice(ep.old.lastIndexOf('.'))}` : null;
+
+    const row = document.createElement('div');
+    row.className = `ep-row ${rowClass}`;
+    row.innerHTML = `
+      <span class="ep-num">${String(ep.n).padStart(2,'0')}</span>
+      <div class="ep-files">
+        ${ep.old
+          ? `<span class="ep-old">${state.renamed ? newName : ep.old}</span>
+             <span class="ep-arrow">→</span>
+             <span class="${ep.score>90?'ep-new-g':'ep-new-y'}">${newName}</span>`
+          : `<span class="ep-nofile">${ep.title} — no local file</span><span></span><span></span>`}
+      </div>
+      <span class="ep-score ${scoreClass}">${ep.old ? ep.score+'%' : '—'}</span>`;
+    table.appendChild(row);
+  });
+}
+
+// ── Mode toggle ───────────────────────────────────────────────────────────────
+function setMode(m) {
+  state.mode = m;
+  state.expanded = null;
+  state.activeSeason = null;
+  state.activeShow = null;
+  state.activeSeasonNum = null;
+  state.selectedResult = null;
+  state.selectedShowData = null;
+  document.getElementById('tvBtn').className = 'mt-btn' + (m==='tv'?' active':'');
+  document.getElementById('movieBtn').className = 'mt-btn' + (m==='movie'?' active':'');
+  document.getElementById('searchHdr').textContent = m === 'movie' ? 'Movie Search' : 'TV Show Search';
+  document.getElementById('searchInput').placeholder = m === 'movie' ? 'Search movies…' : 'Search TV shows…';
+  document.getElementById('seasonHeader').style.display = 'none';
+  document.getElementById('controlsBar').style.display = 'none';
+  document.getElementById('actionBar').style.display = 'none';
+  document.getElementById('epTable').innerHTML = '<div class="empty-state"><div class="empty-icon">✏️</div><div>Select a ' + (m==='movie'?'folder and search for a movie':'show, season, and folder') + ' to preview the rename</div></div>';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+  document.getElementById('showInfoContent').innerHTML = '<div class="si-empty"><div class="si-empty-icon">🎬</div>' + (m==='movie'?'Search for a movie to see details':'Search for a show and select it to see details') + '</div>';
+  buildLibrary();
+  // Pre-populate search for movie mode
+  if (m === 'movie') onSearch('');
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+let searchTimer;
+function onSearch(q) {
+  state.searchQ = q;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => buildSearchResults(q), 200);
+}
+
+function buildSearchResults(q) {
+  const all = SEARCH_DATA[state.mode];
+  const filtered = q.trim()
+    ? all.filter(r => r.title.toLowerCase().includes(q.toLowerCase()))
+    : state.mode === 'movie' ? all.slice(0,4) : [];
+  const container = document.getElementById('searchResults');
+  container.innerHTML = '';
+  filtered.forEach(r => {
+    const row = document.createElement('button');
+    row.className = 'result-row' + (state.selectedResult === r.id ? ' active' : '');
+    row.innerHTML = `
+      <div class="result-poster-placeholder">🎬</div>
+      <div style="flex:1;min-width:0">
+        <div class="result-title">${r.title}</div>
+        <div class="result-year">📅 ${r.year}</div>
+      </div>
+      ${state.selectedResult===r.id ? '<div class="result-dot"></div>' : ''}`;
+    row.onclick = () => selectResult(r);
+    container.appendChild(row);
+  });
+  if (!q.trim() && state.mode === 'tv') {
+    container.innerHTML = '<div class="si-empty" style="height:60px;font-size:.75rem">Type to search shows…</div>';
+  }
+}
+
+function selectResult(r) {
+  state.selectedResult = r.id;
+  state.selectedShowData = r;
+  buildSearchResults(state.searchQ);
+  buildShowInfo(r);
+}
+
+function buildShowInfo(r) {
+  const el = document.getElementById('showInfoContent');
+  if (state.mode === 'movie') {
+    el.innerHTML = `
+      <div class="show-info">
+        <div class="si-top">
+          <div class="si-poster-ph">🎬</div>
+          <div style="flex:1;min-width:0">
+            <div class="si-title">${r.title}</div>
+            <div class="si-year">📅 ${r.year}</div>
+            ${r.rating ? `<div class="si-rating"><span class="si-star">★</span><span class="si-score">${r.rating.toFixed(1)}</span></div>` : ''}
+          </div>
+        </div>
+        <p class="si-overview">${r.overview}</p>
+        <div style="padding:4px 0 8px">
+          <span class="badge-g" style="font-size:.72rem;padding:2px 9px;border-radius:20px">Movie · ${r.year}</span>
+        </div>
+      </div>`;
+    return;
+  }
+  const seasons = r.seasons || [];
+  const current = seasons.find(s => s.n === state.activeSeasonNum);
+  el.innerHTML = `
+    <div class="show-info">
+      <div class="si-top">
+        <div class="si-poster-ph">📺</div>
+        <div style="flex:1;min-width:0">
+          <div class="si-title">${r.title}</div>
+          <div class="si-year">📅 ${r.year}</div>
+          ${r.rating ? `<div class="si-rating"><span class="si-star">★</span><span class="si-score">${r.rating.toFixed(1)}</span></div>` : ''}
+        </div>
+      </div>
+      <p class="si-overview">${r.overview}</p>
+      <div class="seasons-header">Seasons</div>
+      ${seasons.map(s => `
+        <div class="season-list-row${state.activeSeasonNum===s.n?' active':''}" onclick="selectSeasonFromInfo('${r.title}',${s.n},'${s.title}')">
+          <div class="slr-poster">📺</div>
+          <div style="flex:1;min-width:0">
+            <div class="slr-name">${s.title}</div>
+            <div class="slr-meta">${s.eps} eps</div>
+          </div>
+          ${state.activeSeasonNum===s.n ? '<div class="slr-dot"></div>' : ''}
+        </div>`).join('')}
+    </div>`;
+}
+
+function selectSeasonFromInfo(showName, num, seasonTitle) {
+  state.activeSeasonNum = num;
+  // Also select matching library folder
+  if (state.expanded !== showName) {
+    state.expanded = showName;
+  }
+  const key = showName + '|' + num;
+  state.activeSeason = key;
+  state.activeShow = showName;
+  state.renamed = false;
+  buildLibrary();
+  buildRenamePanel(showName, num, seasonTitle);
+  buildShowInfo(state.selectedShowData);
+}
+
+// ── Match mode toggle ─────────────────────────────────────────────────────────
+function toggleMatchMode() {
+  state.matchMode = state.matchMode === 'numeric' ? 'title' : 'numeric';
+  document.getElementById('modeLabel').textContent = state.matchMode === 'numeric' ? 'Numeric' : 'Title Match';
+  const icon = document.getElementById('modeIcon');
+  icon.style.color = state.matchMode === 'title' ? 'var(--accent-400)' : '';
+  if (state.activeSeason) {
+    buildRenamePanel(state.activeShow, state.activeSeasonNum,
+      'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
+  }
+}
+
+function changeOffset(delta) {
+  state.offset += delta;
+  document.getElementById('offsetVal').textContent = state.offset;
+  if (state.activeSeason) {
+    buildRenamePanel(state.activeShow, state.activeSeasonNum,
+      'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
+  }
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+function doRename() {
+  if (!state.activeSeason || state.renamed) return;
+  state.renamed = true;
+  buildRenamePanel(state.activeShow, state.activeSeasonNum,
+    'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
+  showToast('Files renamed successfully ✓', 'green');
+}
+
+function doUndo() {
+  state.renamed = false;
+  buildRenamePanel(state.activeShow, state.activeSeasonNum,
+    'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
+  showToast('Rename undone', 'gray');
+}
+
+function openSubModal() {
+  showToast('Subtitle generation — select a model size in the full app', 'blue');
+}
+function openRemuxModal() {
+  showToast('Remux — convert containers with FFmpeg in the full app', 'blue');
+}
+
+function showToast(msg, color) {
+  const toast = document.createElement('div');
+  const colors = { green:'#22c55e', blue:'#3b82f6', gray:'#64748b' };
+  toast.style.cssText = `position:absolute;bottom:52px;left:50%;transform:translateX(-50%);background:var(--bg-700);border:1px solid var(--border);border-left:3px solid ${colors[color]||colors.gray};color:var(--text-primary);padding:8px 16px;border-radius:8px;font-size:.78rem;white-space:nowrap;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .3s`;
+  toast.textContent = msg;
+  document.getElementById('appDemo').appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(),300); }, 2200);
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+function buildThemeGrid() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = '';
+  THEMES.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'theme-btn' + (state.theme===t.name?' active':'');
+    btn.innerHTML = `<span class="theme-dot" style="background:${t.color}"></span>${t.name}`;
+    btn.onclick = () => applyTheme(t.name);
+    grid.appendChild(btn);
+  });
+}
+
+function applyTheme(name) {
+  state.theme = name;
+  document.getElementById('appDemo').setAttribute('data-theme', name);
+  buildThemeGrid();
+}
+
+function toggleSettings() {
+  const overlay = document.getElementById('settingsOverlay');
+  const isOpen = overlay.classList.contains('open');
+  if (!isOpen) buildThemeGrid();
+  overlay.classList.toggle('open');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+buildLibrary();
+
+// Pre-expand Arcane and select Season 1 after a short delay for a live-feel intro
+setTimeout(() => {
+  toggleShow('Arcane');
+  setTimeout(() => {
+    selectSeason('Arcane', 1, 'Season 01');
+    const arcane = SEARCH_DATA.tv.find(r => r.title === 'Arcane');
+    selectResult(arcane);
+  }, 180);
+}, 400);
+</script>
 </body>
 </html>

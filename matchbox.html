@@ -670,8 +670,12 @@ footer a{color:var(--pg-fg2)}
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
-          <div class="dl-cb"><pre>flatpak install --user Matchbox-1.0.0-x86_64.flatpak
-flatpak run com.matchbox.app</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <p>Install for your user only (no password needed):</p>
+          <div class="dl-cb"><pre>flatpak install --user Matchbox-1.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <p>Or system-wide (requires sudo):</p>
+          <div class="dl-cb"><pre>sudo flatpak install Matchbox-1.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <p>Then launch:</p>
+          <div class="dl-cb"><pre>flatpak run io.github.Spinjitsudoom.Matchbox</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
       </div>
 

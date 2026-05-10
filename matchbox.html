@@ -119,6 +119,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .hero h1 .grad{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--pg-fg2);font-size:clamp(1rem,2vw,1.15rem);max-width:580px;margin:0 auto 2.5rem}
 .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-logo{width:96px;height:96px;border-radius:22px;margin:0 auto 1.5rem;display:block;box-shadow:0 8px 40px rgba(59,130,246,.3)}
 .hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
 .pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
 .pill span{color:var(--pg-fg2)}
@@ -367,6 +368,7 @@ footer a{color:var(--pg-fg2)}
   <div class="glow g1"></div>
   <div class="glow g2"></div>
   <div class="hero-content">
+    <img src="matchbox-logo.svg" alt="Matchbox logo" class="hero-logo">
     <div class="tag">Media Tools</div>
     <h1><span class="grad">Matchbox</span></h1>
     <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no cloud required.</p>

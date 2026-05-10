@@ -619,7 +619,7 @@ footer a{color:var(--pg-fg2)}
           <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox.Setup.1.0.0.exe" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>1. Run <code>Matchbox.Setup.1.0.0.exe</code> and follow the wizard.</p>
           <p>2. Launch Matchbox from the Start Menu.</p>
           <p>3. Point it at your media folder and connect your TMDB API key in Settings.</p>
@@ -636,7 +636,7 @@ footer a{color:var(--pg-fg2)}
           <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0-win.zip" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>1. Extract <code>Matchbox-1.0.0-win.zip</code> to any folder.</p>
           <p>2. Run <code>Matchbox.exe</code> inside the extracted folder.</p>
         </div>
@@ -652,7 +652,7 @@ footer a{color:var(--pg-fg2)}
           <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0.AppImage" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>Make it executable and run:</p>
           <div class="dl-cb"><pre>chmod +x Matchbox-1.0.0.AppImage
 ./Matchbox-1.0.0.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
@@ -669,7 +669,7 @@ footer a{color:var(--pg-fg2)}
           <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <div class="dl-cb"><pre>flatpak install --user Matchbox-1.0.0-x86_64.flatpak
 flatpak run com.matchbox.app</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
@@ -682,7 +682,7 @@ flatpak run com.matchbox.app</pre><button class="dl-cb-copy" onclick="dlCopy(thi
         <span>⚙ Build from Source</span>
         <span class="dl-src-arrow">▼</span>
       </div>
-      <div class="dl-source-body" hidden>
+      <div class="dl-source-body" style="display:none">
         <p>Requires Node.js 20+, Python 3.12+, and <code>uv</code>.</p>
         <div class="dl-cb"><pre>git clone https://github.com/Spinjitsudoom/Matchbox
 cd Matchbox
@@ -1247,16 +1247,16 @@ setTimeout(() => {
 
 function toggleInstall(btn) {
   const box = btn.closest('.dl-card').querySelector('.dl-install');
-  const open = !box.hidden;
-  box.hidden = open;
-  btn.classList.toggle('open', !open);
-  btn.textContent = open ? '▼ Install guide' : '▲ Install guide';
+  const show = box.style.display === 'none' || box.style.display === '';
+  box.style.display = show ? 'flex' : 'none';
+  btn.classList.toggle('open', show);
+  btn.textContent = show ? '▲ Install guide' : '▼ Install guide';
 }
 function toggleSource(hdr) {
   const body = hdr.nextElementSibling;
-  const open = !body.hidden;
-  body.hidden = open;
-  hdr.querySelector('.dl-src-arrow').textContent = open ? '▼' : '▲';
+  const show = body.style.display === 'none' || body.style.display === '';
+  body.style.display = show ? 'flex' : 'none';
+  hdr.querySelector('.dl-src-arrow').textContent = show ? '▲' : '▼';
 }
 function dlCopy(btn) {
   const text = btn.previousElementSibling.textContent;

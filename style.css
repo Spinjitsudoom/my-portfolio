@@ -193,12 +193,12 @@ nav ul a:hover {
   font-size: 2rem;
   width: 48px;
   height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
 .card-icon img {
+  display: block;
   width: 48px;
   height: 48px;
   object-fit: contain;

@@ -16,18 +16,18 @@ html{scroll-behavior:smooth}
 
 /* ── Page theme ────────────────────────────────────────────────────────────── */
 :root{
-  --pg-bg:#070a10;
-  --pg-bg2:#0c0f18;
-  --pg-surface:#111420;
-  --pg-surface2:#171b28;
+  --pg-bg:#0a0a0f;
+  --pg-bg2:#0f0f18;
+  --pg-surface:#13131e;
+  --pg-surface2:#1a1a28;
   --pg-border:rgba(255,255,255,.07);
   --pg-border2:rgba(255,255,255,.12);
-  --pg-accent:#3b82f6;
-  --pg-accent2:#818cf8;
-  --pg-grad:linear-gradient(135deg,#3b82f6,#818cf8);
-  --pg-fg:#e2e8f0;
-  --pg-fg2:#94a3b8;
-  --pg-fg3:#475569;
+  --pg-accent:#5b8dee;
+  --pg-accent2:#7c6ff7;
+  --pg-grad:linear-gradient(135deg,#5b8dee,#7c6ff7);
+  --pg-fg:#e8e8f0;
+  --pg-fg2:#9898b8;
+  --pg-fg3:#55556a;
   --r:10px;--rlg:14px;
 }
 
@@ -209,6 +209,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .ep-arrow{font-size:10px;color:var(--accent-400);flex-shrink:0}
 .ep-new-g{font-size:.72rem;color:#4ade80;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .ep-new-y{font-size:.72rem;color:#facc15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.ep-new-r{font-size:.72rem;color:#f87171;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .ep-nofile{font-size:.72rem;color:var(--text-muted);font-style:italic}
 .ep-score{font-size:.67rem;padding:1px 6px;border-radius:4px;flex-shrink:0;font-family:monospace}
 .ep-score.g{background:rgba(34,197,94,.15);color:#4ade80}
@@ -274,6 +275,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .slr-dot{width:5px;height:5px;border-radius:50%;background:var(--accent-400);margin-left:auto;flex-shrink:0}
 .si-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);font-size:.8rem;text-align:center;padding:16px}
 .si-empty-icon{font-size:26px;opacity:.4}
+.rename-preview-box{background:var(--bg-700);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-top:4px}
+.rpb-label{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px}
+.rpb-value{font-size:.75rem;color:#4ade80;font-family:'SF Mono','Fira Code',monospace;word-break:break-all}
 
 /* Settings modal */
 .settings-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;border-radius:14px;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -352,7 +356,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 footer{border-top:1px solid var(--pg-border);padding:2.5rem 0;text-align:center;color:var(--pg-fg3);font-size:.88rem}
 footer a{color:var(--pg-fg2)}
 
+/* ── Hamburger / mobile menu ───────────────────────────────────────────────── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--pg-fg2);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(10,10,15,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--pg-border);padding:1.5rem;flex-direction:column;gap:1rem;z-index:199}
+.mobile-menu a{color:var(--pg-fg2);font-size:1rem;padding:.4rem 0;text-decoration:none}
+.mobile-menu.open{display:flex}
+
 /* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
 @media(max-width:900px){
   .lib-panel{width:150px;min-width:150px}
   .right-panel{width:260px;min-width:260px}
@@ -376,8 +391,14 @@ footer a{color:var(--pg-fg2)}
       <a href="#download">Download</a>
       <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>
     </div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#download" onclick="closeMenu()">Download</a>
+  <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener" onclick="closeMenu()">GitHub ↗</a>
+</div>
 
 <!-- Hero -->
 <section class="hero">
@@ -548,6 +569,9 @@ footer a{color:var(--pg-fg2)}
           <input class="settings-input" type="password" value="••••••••••••••••••••••••••••••••" readonly>
           <label class="settings-label">Media Library Path</label>
           <input class="settings-input" type="text" value="/home/user/Media" readonly>
+          <label class="settings-label">Rename Pattern</label>
+          <input class="settings-input" type="text" id="patternInput" value=" - " oninput="onPatternChange(this.value)" style="font-family:'SF Mono','Fira Code',monospace">
+          <div style="font-size:.74rem;color:var(--text-muted);margin-top:.2rem;margin-bottom:.75rem">Preview: <code id="patternPreview">01 - Episode Title.mkv</code></div>
           <label class="settings-label">Theme</label>
           <div class="theme-grid" id="themeGrid"></div>
           <div class="settings-footer">
@@ -777,6 +801,20 @@ cd frontend && npm ci && npm run build
 </footer>
 
 <script>
+// ── Mobile menu ───────────────────────────────────────────────────────────────
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ── TMDB image helper ─────────────────────────────────────────────────────────
+const TMDB_IMG = 'https://image.tmdb.org/t/p/';
+function tmdbImg(path, size) { return path ? `${TMDB_IMG}${size}${path}` : null; }
+function posterEl(path, size, fallback, cls) {
+  const url = tmdbImg(path, size);
+  return url
+    ? `<img class="${cls}" src="${url}" loading="lazy" onerror="this.parentNode.innerHTML='${fallback}'">`
+    : fallback;
+}
+
 // ── Data ──────────────────────────────────────────────────────────────────────
 const LIBRARY = [
   { name: 'Arcane', seasons: [
@@ -852,40 +890,112 @@ const EPISODES = {
     { n:7, old:'fallout.s01e07.4k.mkv',          title:'The Radio',                               score:100 },
     { n:8, old:'fallout.s01e08.4k.mkv',          title:'The Beginning',                           score:100 },
   ],
+  'Severance|2': [
+    { n:1,  old:'Severance.S02E01.1080p.WEB.mkv',      title:'Hello, Ms. Cobel',     score:100 },
+    { n:2,  old:'Severance.S02E02.1080p.WEB.mkv',      title:'Goodbye, Mrs. Selvig', score:100 },
+    { n:3,  old:'Severance.S02E03.1080p.WEB.mkv',      title:'Who Is Alive?',        score:100 },
+    { n:4,  old:'severance.ep4.WEBRip.mkv',            title:"Woe's Hollow",         score:71  },
+    { n:5,  old:'Severance.S02E05.1080p.WEB.mkv',      title:"Trojan's Horse",       score:100 },
+    { n:6,  old:'Severance.S02E06.1080p.WEB.mkv',      title:'Attila',               score:100 },
+    { n:7,  old:'Severance.S02E07.1080p.WEB.mkv',      title:'Chikhai Bardo',        score:100 },
+    { n:8,  old:'severance.season2.episode8.mkv',      title:'Sweet Vitriol',        score:58  },
+    { n:9,  old:'Severance.S02E09.1080p.WEB.mkv',      title:'The After Hours',      score:100 },
+    { n:10, old:null,                                  title:'Cold Harbor',          score:0   },
+  ],
+  'The Bear|2': [
+    { n:1,  old:'the.bear.s02e01.1080p.mkv',           title:'Beef',      score:100 },
+    { n:2,  old:'the.bear.s02e02.1080p.mkv',           title:'Pasta',     score:100 },
+    { n:3,  old:'the.bear.s02e03.1080p.mkv',           title:'Sundae',    score:100 },
+    { n:4,  old:'the.bear.s02e04.1080p.mkv',           title:'Honeydew',  score:100 },
+    { n:5,  old:'thebear.2x05.mkv',                    title:'Pop',       score:63  },
+    { n:6,  old:'the.bear.s02e06.1080p.mkv',           title:'Fishes',    score:100 },
+    { n:7,  old:'the.bear.s02e07.1080p.mkv',           title:'Forks',     score:100 },
+    { n:8,  old:'the.bear.s02e08.1080p.mkv',           title:'Bolognese', score:100 },
+    { n:9,  old:'the.bear.s02e09.1080p.mkv',           title:'Omelette',  score:100 },
+    { n:10, old:'the.bear.s02e10.1080p.mkv',           title:'The Bear',  score:100 },
+  ],
+  'The Bear|3': [
+    { n:1,  old:'the.bear.s03e01.1080p.mkv',           title:'Tomorrow',  score:100 },
+    { n:2,  old:'the.bear.s03e02.1080p.mkv',           title:'Next',      score:100 },
+    { n:3,  old:'the.bear.s03e03.1080p.mkv',           title:'Doors',     score:100 },
+    { n:4,  old:'the.bear.s03e04.1080p.mkv',           title:'Violet',    score:100 },
+    { n:5,  old:'thebear.s3e5.HDR.mkv',                title:'Children',  score:74  },
+    { n:6,  old:'the.bear.s03e06.1080p.mkv',           title:'Napkins',   score:100 },
+    { n:7,  old:'the.bear.s03e07.1080p.mkv',           title:'Legacy',    score:100 },
+    { n:8,  old:'the.bear.s03e08.1080p.mkv',           title:'Ice Chips', score:100 },
+    { n:9,  old:'the.bear.s03e09.1080p.mkv',           title:'Apologies', score:100 },
+    { n:10, old:'the.bear.s03e10.1080p.mkv',           title:'Forever',   score:100 },
+  ],
+  'House of the Dragon|1': [
+    { n:1,  old:'house.of.the.dragon.s01e01.4k.mkv',   title:'The Heirs of the Dragon',    score:100 },
+    { n:2,  old:'house.of.the.dragon.s01e02.4k.mkv',   title:'The Rogue Prince',           score:100 },
+    { n:3,  old:'house.of.the.dragon.s01e03.4k.mkv',   title:'Second of His Name',         score:100 },
+    { n:4,  old:'house.of.the.dragon.s01e04.4k.mkv',   title:'King of the Narrow Sea',     score:100 },
+    { n:5,  old:'hotd.s01e05.1080p.mkv',               title:'We Light the Way',           score:100 },
+    { n:6,  old:'house.of.the.dragon.s01e06.4k.mkv',   title:'The Princess and the Queen', score:100 },
+    { n:7,  old:'house.of.the.dragon.s01e07.4k.mkv',   title:'Driftmark',                  score:100 },
+    { n:8,  old:'HOTD.Episode.8.mkv',                  title:'The Lord of the Tides',      score:67  },
+    { n:9,  old:'house.of.the.dragon.s01e09.4k.mkv',   title:'The Green Council',          score:100 },
+    { n:10, old:'house.of.the.dragon.s01e10.4k.mkv',   title:'The Black Queen',            score:100 },
+  ],
+  'House of the Dragon|2': [
+    { n:1, old:'house.of.the.dragon.s02e01.4k.mkv',    title:'A Son for a Son',             score:100 },
+    { n:2, old:'house.of.the.dragon.s02e02.4k.mkv',    title:'Rhaenyra the Cruel',          score:100 },
+    { n:3, old:'house.of.the.dragon.s02e03.4k.mkv',    title:'The Burning Mill',            score:100 },
+    { n:4, old:'hotd.s2e4.HDR.mkv',                    title:'The Red Dragon and the Gold', score:69  },
+    { n:5, old:'house.of.the.dragon.s02e05.4k.mkv',    title:'Regent',                      score:100 },
+    { n:6, old:'house.of.the.dragon.s02e06.4k.mkv',    title:'Smallfolk',                   score:100 },
+    { n:7, old:'house.of.the.dragon.s02e07.4k.mkv',    title:'The Red Sowing',              score:100 },
+    { n:8, old:'house.of.the.dragon.s02e08.4k.mkv',    title:'The Queen Who Ever Was',      score:100 },
+  ],
 };
 
-const MOVIE_EPISODES = {
-  'Dune: Part Two': [
-    { n:1, old:'dune.part.two.2024.2160p.mkv', title:'Dune: Part Two', score:100 },
-  ],
-  'Interstellar': [
-    { n:1, old:'interstellar.2014.1080p.mkv', title:'Interstellar', score:100 },
+// Title-match result for Arcane S1 — filenames are SxxExx style so fuzzy title matching
+// scrambles assignments and scores drop to 27–42 (realistic for non-title filenames)
+const EPISODES_TITLE = {
+  'Arcane|1': [
+    { n:1, old:'arcane.s01e03.1080p.mkv',  title:'Welcome to the Playground',               score:31 },
+    { n:2, old:'arcane.s01e04.1080p.mkv',  title:'Some Mysteries Are Better Left Unsolved', score:28 },
+    { n:3, old:'arcane.s01e02.1080p.mkv',  title:'The Base Violence Necessary for Change',  score:29 },
+    { n:4, old:'arcane.s01e01.1080p.mkv',  title:'Happy Progress Day!',                     score:35 },
+    { n:5, old:'arcane.ep5.HEVC.mkv',      title:"Everybody Wants to Be My Enemy",          score:42 },
+    { n:6, old:'arcane.s01e08.1080p.mkv',  title:'When These Walls Come Tumbling Down',     score:36 },
+    { n:7, old:'arcane.s01e07.BluRay.mkv', title:'The Boy Savior',                          score:27 },
+    { n:8, old:'arcane.s01e06.1080p.mkv',  title:'Oil and Water',                           score:33 },
+    { n:9, old:'arcane.s01e09.1080p.mkv',  title:'The Monster You Created',                 score:30 },
   ],
 };
+
+// Flat movie library — each entry is one folder with one video file
+const MOVIES = [
+  { folder:'Dune Part Two',  id:10, year:'2024', poster:'/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg', old:'dune.part.two.2024.2160p.mkv',    renamed:'Dune Part Two - 2024.mkv',  overview:'Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.', rating:8.5 },
+  { folder:'Interstellar',   id:11, year:'2014', poster:'/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg', old:'interstellar.2014.1080p.mkv',     renamed:'Interstellar - 2014.mkv',   overview:'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.', rating:8.7 },
+  { folder:'Oppenheimer',    id:12, year:'2023', poster:'/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg', old:'oppenheimer.2023.imax.1080p.mkv', renamed:'Oppenheimer - 2023.mkv',    overview:'The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.', rating:8.9 },
+  { folder:'Inception',      id:13, year:'2010', poster:'/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg', old:'Inception.2010.BluRay.mkv',       renamed:'Inception - 2010.mkv',      overview:'A thief who steals corporate secrets through dream-sharing technology is given the inverse task.', rating:8.8 },
+];
 
 const SEARCH_DATA = {
   tv: [
-    { id:1, title:'Arcane', year:'2021', seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:6}],
+    { id:1, title:'Arcane', year:'2021', poster:'/abf8tHznhSvl9BAElD2cQeRr7do.jpg',
+      seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:6}],
       overview:'The utopian Piltover and the oppressed underground of Zaun are in conflict over the ideology of Hextech technology.',
       rating:9.0 },
-    { id:2, title:'Severance', year:'2022', seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:10}],
+    { id:2, title:'Severance', year:'2022', poster:'/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg',
+      seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:10}],
       overview:'Mark leads a team of office workers whose memories have been surgically divided between their work and personal lives.',
       rating:8.7 },
-    { id:3, title:'The Bear', year:'2022', seasons:[{n:1,title:'Season 1',eps:8},{n:2,title:'Season 2',eps:10},{n:3,title:'Season 3',eps:10}],
+    { id:3, title:'The Bear', year:'2022', poster:'/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg',
+      seasons:[{n:1,title:'Season 1',eps:8},{n:2,title:'Season 2',eps:10},{n:3,title:'Season 3',eps:10}],
       overview:'A young chef from the fine dining world comes home to Chicago to run his family\'s sandwich shop.',
       rating:8.8 },
-    { id:4, title:'Fallout', year:'2024', seasons:[{n:1,title:'Season 1',eps:8}],
+    { id:4, title:'Fallout', year:'2024', poster:'/7TBfMjYvAuSVHw1B7E5GZT3I4GG.jpg',
+      seasons:[{n:1,title:'Season 1',eps:8}],
       overview:'In a future, post-apocalyptic Los Angeles, a young woman emerges from her bunker 200 years after nuclear war.',
       rating:8.5 },
-    { id:5, title:'House of the Dragon', year:'2022', seasons:[{n:1,title:'Season 1',eps:10},{n:2,title:'Season 2',eps:8}],
+    { id:5, title:'House of the Dragon', year:'2022', poster:'/elwO2VlWzvUWsGGeeypZzpa61Jm.jpg',
+      seasons:[{n:1,title:'Season 1',eps:10},{n:2,title:'Season 2',eps:8}],
       overview:'The story of House Targaryen, set 200 years before the events of Game of Thrones.',
       rating:8.4 },
-  ],
-  movie: [
-    { id:10, title:'Dune: Part Two', year:'2024', overview:'Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.', rating:8.5 },
-    { id:11, title:'Interstellar', year:'2014', overview:'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.', rating:8.7 },
-    { id:12, title:'Oppenheimer', year:'2023', overview:'The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.', rating:8.9 },
-    { id:13, title:'Inception', year:'2010', overview:'A thief who steals corporate secrets through dream-sharing technology is given the inverse task.', rating:8.8 },
   ],
 };
 
@@ -908,30 +1018,41 @@ let state = {
   activeSeason: null,
   activeShow: null,
   activeSeasonNum: null,
+  activeMovie: null,
   searchQ: '',
   selectedResult: null,
   selectedShowData: null,
   matchMode: 'numeric',
+  pattern: ' - ',
   offset: 0,
   renamed: false,
   theme: 'Slate',
 };
 
 // ── Build library ─────────────────────────────────────────────────────────────
+const FILM_ICON = `<svg class="film-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>`;
+
 function buildLibrary() {
   const list = document.getElementById('libList');
   list.innerHTML = '';
-  const items = state.mode === 'tv' ? LIBRARY :
-    [{ name:'Dune: Part Two', seasons:[{name:'Dune: Part Two (2024)', files:1}] },
-     { name:'Interstellar',   seasons:[{name:'Interstellar (2014)',   files:1}] },
-     { name:'Oppenheimer',    seasons:[{name:'Oppenheimer (2023)',    files:1}] }];
 
-  items.forEach(show => {
+  if (state.mode === 'movie') {
+    MOVIES.forEach(movie => {
+      const row = document.createElement('button');
+      row.className = 'show-row' + (state.activeMovie === movie.folder ? ' expanded' : '');
+      row.innerHTML = FILM_ICON + `<span class="show-name">${movie.folder}</span>`;
+      row.onclick = () => selectMovie(movie.folder);
+      list.appendChild(row);
+    });
+    return;
+  }
+
+  LIBRARY.forEach(show => {
     const showRow = document.createElement('button');
     showRow.className = 'show-row' + (state.expanded === show.name ? ' expanded' : '');
     showRow.innerHTML = `
       <svg class="chevron${state.expanded===show.name?' open':''}" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg class="film-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+      ${FILM_ICON}
       <span class="show-name">${show.name}</span>`;
     showRow.onclick = () => toggleShow(show.name);
     list.appendChild(showRow);
@@ -955,9 +1076,14 @@ function buildLibrary() {
 function toggleShow(name) {
   state.expanded = state.expanded === name ? null : name;
   if (state.expanded === name) {
-    // auto-select in search
-    const found = SEARCH_DATA[state.mode].find(r => r.title === name);
+    const found = SEARCH_DATA.tv.find(r => r.title === name);
     if (found) selectResult(found);
+    // Auto-load season 1 so the center panel updates immediately
+    const show = LIBRARY.find(s => s.name === name);
+    if (show && show.seasons.length > 0) {
+      selectSeason(name, 1, show.seasons[0].name); // selectSeason calls buildLibrary
+      return;
+    }
   }
   buildLibrary();
 }
@@ -974,17 +1100,94 @@ function selectSeason(showName, num, seasonName) {
   buildRenamePanel(showName, num, seasonName);
 }
 
+function selectMovie(folder) {
+  const movie = MOVIES.find(m => m.folder === folder);
+  if (!movie) return;
+  state.activeMovie = folder;
+  state.renamed = false;
+  buildLibrary();
+  buildMoviePanel(movie);
+  // Auto-select in search + show info
+  state.selectedResult = movie.id;
+  buildSearchResults(state.searchQ);
+  buildShowInfo(movie);
+}
+
+function buildMoviePanel(movie) {
+  document.getElementById('seasonHeader').style.display = 'flex';
+  document.getElementById('controlsBar').style.display = 'none';
+  document.getElementById('actionBar').style.display = 'flex';
+  const _es1 = document.getElementById('emptyState'); if (_es1) _es1.style.display = 'none';
+
+  document.getElementById('shTitle').textContent = `${movie.folder} (${movie.year})`;
+  document.getElementById('shEpCount').textContent = '1 file';
+  document.getElementById('matchBadges').innerHTML = '<span class="badge-g">1 ✓</span>';
+
+  // Poster / backdrop for movie header
+  const mPosterUrl = tmdbImg(movie.poster, 'w342');
+  const mSmallUrl  = tmdbImg(movie.poster, 'w92');
+  document.getElementById('shBackdrop').style.backgroundImage = mPosterUrl ? `url(${mPosterUrl})` : '';
+  const mPosterEl = document.getElementById('shPoster');
+  if (mSmallUrl) {
+    mPosterEl.className = 'sh-poster';
+    mPosterEl.innerHTML = `<img src="${mSmallUrl}" loading="lazy">`;
+  } else {
+    mPosterEl.className = 'sh-poster-placeholder';
+    mPosterEl.textContent = '🎬';
+  }
+
+  const info = document.getElementById('abInfo');
+  const btn  = document.getElementById('renameBtn');
+  const btnTxt = document.getElementById('renameBtnText');
+  const undoBtn = document.getElementById('undoBtn');
+  info.textContent = state.renamed ? 'File renamed ✓' : '1 file will be renamed';
+  btnTxt.textContent = state.renamed ? 'Renamed' : 'Rename 1 File';
+  btn.disabled = state.renamed;
+  undoBtn.style.display = state.renamed ? 'flex' : 'none';
+
+  const table = document.getElementById('epTable');
+  table.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'ep-row green';
+  row.innerHTML = `
+    <span class="ep-num" style="font-size:1rem">🎬</span>
+    <div class="ep-files">
+      <span class="ep-old">${state.renamed ? movie.renamed : movie.old}</span>
+      <span class="ep-arrow">→</span>
+      <span class="ep-new-g">${movie.renamed}</span>
+    </div>
+    <span class="ep-score g">100%</span>`;
+  table.appendChild(row);
+}
+
 // ── Rename panel ──────────────────────────────────────────────────────────────
 function buildRenamePanel(showName, num, seasonName) {
-  const episodes = EPISODES[showName + '|' + num];
+  const key = showName + '|' + num;
+  const titleData = EPISODES_TITLE[key];
+  const episodes = (state.matchMode === 'title' && titleData) ? titleData : EPISODES[key];
   if (!episodes) return;
 
   document.getElementById('seasonHeader').style.display = 'flex';
   document.getElementById('controlsBar').style.display = state.mode === 'tv' ? 'flex' : 'none';
   document.getElementById('actionBar').style.display = 'flex';
-  document.getElementById('emptyState').style.display = 'none';
+  const _es2 = document.getElementById('emptyState'); if (_es2) _es2.style.display = 'none';
 
   document.getElementById('shTitle').textContent = seasonName;
+
+  // Poster / backdrop for season header
+  const showData = SEARCH_DATA.tv.find(r => r.title === showName);
+  const posterUrl = showData ? tmdbImg(showData.poster, 'w342') : null;
+  const smallUrl  = showData ? tmdbImg(showData.poster, 'w92')  : null;
+  const backdrop = document.getElementById('shBackdrop');
+  backdrop.style.backgroundImage = posterUrl ? `url(${posterUrl})` : '';
+  const posterEl2 = document.getElementById('shPoster');
+  if (smallUrl) {
+    posterEl2.className = 'sh-poster';
+    posterEl2.innerHTML = `<img src="${smallUrl}" loading="lazy">`;
+  } else {
+    posterEl2.className = 'sh-poster-placeholder';
+    posterEl2.textContent = '🎬';
+  }
 
   const green = episodes.filter(e => e.old && e.score > 90).length;
   const yellow = episodes.filter(e => e.old && e.score > 50 && e.score <= 90).length;
@@ -1007,13 +1210,14 @@ function buildRenamePanel(showName, num, seasonName) {
   table.innerHTML = '';
   const offset = state.offset;
 
-  episodes.forEach((ep, i) => {
+  episodes.forEach((ep) => {
     const effectiveN = ep.n + offset;
     const rowClass = !ep.old || ep.score <= 50 ? 'red' : ep.score <= 90 ? 'yellow' : 'green';
     const scoreClass = !ep.old ? 'na' : ep.score > 90 ? 'g' : ep.score > 50 ? 'y' : 'r';
-    const sn = String(num).padStart(2,'0');
     const en = String(effectiveN).padStart(2,'0');
-    const newName = ep.old ? `${showName} - S${sn}E${en} - ${ep.title}${ep.old.slice(ep.old.lastIndexOf('.'))}` : null;
+    const ext = ep.old ? ep.old.slice(ep.old.lastIndexOf('.')) : '';
+    const newName = ep.old ? `${en}${state.pattern}${ep.title}${ext}` : null;
+    const newClass = ep.score > 90 ? 'ep-new-g' : ep.score > 50 ? 'ep-new-y' : 'ep-new-r';
 
     const row = document.createElement('div');
     row.className = `ep-row ${rowClass}`;
@@ -1023,7 +1227,7 @@ function buildRenamePanel(showName, num, seasonName) {
         ${ep.old
           ? `<span class="ep-old">${state.renamed ? newName : ep.old}</span>
              <span class="ep-arrow">→</span>
-             <span class="${ep.score>90?'ep-new-g':'ep-new-y'}">${newName}</span>`
+             <span class="${newClass}">${newName}</span>`
           : `<span class="ep-nofile">${ep.title} — no local file</span><span></span><span></span>`}
       </div>
       <span class="ep-score ${scoreClass}">${ep.old ? ep.score+'%' : '—'}</span>`;
@@ -1038,6 +1242,7 @@ function setMode(m) {
   state.activeSeason = null;
   state.activeShow = null;
   state.activeSeasonNum = null;
+  state.activeMovie = null;
   state.selectedResult = null;
   state.selectedShowData = null;
   document.getElementById('tvBtn').className = 'mt-btn' + (m==='tv'?' active':'');
@@ -1052,8 +1257,7 @@ function setMode(m) {
   document.getElementById('searchResults').innerHTML = '';
   document.getElementById('showInfoContent').innerHTML = '<div class="si-empty"><div class="si-empty-icon">🎬</div>' + (m==='movie'?'Search for a movie to see details':'Search for a show and select it to see details') + '</div>';
   buildLibrary();
-  // Pre-populate search for movie mode
-  if (m === 'movie') onSearch('');
+  buildSearchResults(state.searchQ);
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────
@@ -1065,17 +1269,38 @@ function onSearch(q) {
 }
 
 function buildSearchResults(q) {
-  const all = SEARCH_DATA[state.mode];
-  const filtered = q.trim()
-    ? all.filter(r => r.title.toLowerCase().includes(q.toLowerCase()))
-    : state.mode === 'movie' ? all.slice(0,4) : [];
   const container = document.getElementById('searchResults');
   container.innerHTML = '';
+
+  if (state.mode === 'movie') {
+    const filtered = q.trim()
+      ? MOVIES.filter(m => m.folder.toLowerCase().includes(q.toLowerCase()))
+      : MOVIES;
+    filtered.forEach(m => {
+      const row = document.createElement('button');
+      row.className = 'result-row' + (state.selectedResult === m.id ? ' active' : '');
+      const img = tmdbImg(m.poster, 'w92');
+      row.innerHTML = `
+        ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">🎬</div>`}
+        <div style="flex:1;min-width:0">
+          <div class="result-title">${m.folder}</div>
+          <div class="result-year">📅 ${m.year}</div>
+        </div>
+        ${state.selectedResult===m.id ? '<div class="result-dot"></div>' : ''}`;
+      row.onclick = () => { state.selectedResult = m.id; buildSearchResults(q); buildShowInfo(m); };
+      container.appendChild(row);
+    });
+    return;
+  }
+
+  const all = SEARCH_DATA.tv;
+  const filtered = q.trim() ? all.filter(r => r.title.toLowerCase().includes(q.toLowerCase())) : [];
   filtered.forEach(r => {
     const row = document.createElement('button');
     row.className = 'result-row' + (state.selectedResult === r.id ? ' active' : '');
+    const img = tmdbImg(r.poster, 'w92');
     row.innerHTML = `
-      <div class="result-poster-placeholder">🎬</div>
+      ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">📺</div>`}
       <div style="flex:1;min-width:0">
         <div class="result-title">${r.title}</div>
         <div class="result-year">📅 ${r.year}</div>
@@ -1084,7 +1309,7 @@ function buildSearchResults(q) {
     row.onclick = () => selectResult(r);
     container.appendChild(row);
   });
-  if (!q.trim() && state.mode === 'tv') {
+  if (!q.trim()) {
     container.innerHTML = '<div class="si-empty" style="height:60px;font-size:.75rem">Type to search shows…</div>';
   }
 }
@@ -1099,29 +1324,31 @@ function selectResult(r) {
 function buildShowInfo(r) {
   const el = document.getElementById('showInfoContent');
   if (state.mode === 'movie') {
+    const pUrl = tmdbImg(r.poster, 'w185');
     el.innerHTML = `
       <div class="show-info">
         <div class="si-top">
-          <div class="si-poster-ph">🎬</div>
+          ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">🎬</div>`}
           <div style="flex:1;min-width:0">
-            <div class="si-title">${r.title}</div>
+            <div class="si-title">${r.folder}</div>
             <div class="si-year">📅 ${r.year}</div>
             ${r.rating ? `<div class="si-rating"><span class="si-star">★</span><span class="si-score">${r.rating.toFixed(1)}</span></div>` : ''}
           </div>
         </div>
         <p class="si-overview">${r.overview}</p>
-        <div style="padding:4px 0 8px">
-          <span class="badge-g" style="font-size:.72rem;padding:2px 9px;border-radius:20px">Movie · ${r.year}</span>
+        <div class="rename-preview-box">
+          <div class="rpb-label">Will rename to</div>
+          <div class="rpb-value">${r.renamed}</div>
         </div>
       </div>`;
     return;
   }
+  const pUrl = tmdbImg(r.poster, 'w185');
   const seasons = r.seasons || [];
-  const current = seasons.find(s => s.n === state.activeSeasonNum);
   el.innerHTML = `
     <div class="show-info">
       <div class="si-top">
-        <div class="si-poster-ph">📺</div>
+        ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">📺</div>`}
         <div style="flex:1;min-width:0">
           <div class="si-title">${r.title}</div>
           <div class="si-year">📅 ${r.year}</div>
@@ -1132,7 +1359,7 @@ function buildShowInfo(r) {
       <div class="seasons-header">Seasons</div>
       ${seasons.map(s => `
         <div class="season-list-row${state.activeSeasonNum===s.n?' active':''}" onclick="selectSeasonFromInfo('${r.title}',${s.n},'${s.title}')">
-          <div class="slr-poster">📺</div>
+          <div class="slr-poster">${pUrl ? `<img src="${tmdbImg(r.poster,'w92')}" style="width:100%;height:100%;object-fit:cover;border-radius:3px" loading="lazy">` : '📺'}</div>
           <div style="flex:1;min-width:0">
             <div class="slr-name">${s.title}</div>
             <div class="slr-meta">${s.eps} eps</div>
@@ -1160,9 +1387,20 @@ function selectSeasonFromInfo(showName, num, seasonTitle) {
 // ── Match mode toggle ─────────────────────────────────────────────────────────
 function toggleMatchMode() {
   state.matchMode = state.matchMode === 'numeric' ? 'title' : 'numeric';
-  document.getElementById('modeLabel').textContent = state.matchMode === 'numeric' ? 'Numeric' : 'Title Match';
-  const icon = document.getElementById('modeIcon');
-  icon.style.color = state.matchMode === 'title' ? 'var(--accent-400)' : '';
+  const isTitle = state.matchMode === 'title';
+  document.getElementById('modeLabel').textContent = isTitle ? 'Title Match' : 'Numeric';
+  document.getElementById('modeIcon').style.color = isTitle ? 'var(--accent-400)' : '';
+  if (state.activeSeason) {
+    buildRenamePanel(state.activeShow, state.activeSeasonNum,
+      'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
+  }
+}
+
+// ── Pattern change ────────────────────────────────────────────────────────────
+function onPatternChange(val) {
+  state.pattern = val;
+  const preview = document.getElementById('patternPreview');
+  if (preview) preview.textContent = `01${val}Episode Title.mkv`;
   if (state.activeSeason) {
     buildRenamePanel(state.activeShow, state.activeSeasonNum,
       'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
@@ -1180,7 +1418,15 @@ function changeOffset(delta) {
 
 // ── Actions ───────────────────────────────────────────────────────────────────
 function doRename() {
-  if (!state.activeSeason || state.renamed) return;
+  if (state.renamed) return;
+  if (state.mode === 'movie') {
+    if (!state.activeMovie) return;
+    state.renamed = true;
+    buildMoviePanel(MOVIES.find(m => m.folder === state.activeMovie));
+    showToast('File renamed successfully ✓', 'green');
+    return;
+  }
+  if (!state.activeSeason) return;
   state.renamed = true;
   buildRenamePanel(state.activeShow, state.activeSeasonNum,
     'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
@@ -1189,6 +1435,11 @@ function doRename() {
 
 function doUndo() {
   state.renamed = false;
+  if (state.mode === 'movie') {
+    buildMoviePanel(MOVIES.find(m => m.folder === state.activeMovie));
+    showToast('Rename undone', 'gray');
+    return;
+  }
   buildRenamePanel(state.activeShow, state.activeSeasonNum,
     'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
   showToast('Rename undone', 'gray');
@@ -1232,7 +1483,11 @@ function applyTheme(name) {
 function toggleSettings() {
   const overlay = document.getElementById('settingsOverlay');
   const isOpen = overlay.classList.contains('open');
-  if (!isOpen) buildThemeGrid();
+  if (!isOpen) {
+    buildThemeGrid();
+    const pi = document.getElementById('patternInput');
+    if (pi) { pi.value = state.pattern; onPatternChange(state.pattern); }
+  }
   overlay.classList.toggle('open');
 }
 

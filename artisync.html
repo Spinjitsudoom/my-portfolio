@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Music Manager Ultimate — organise your music library with Spotify metadata, fuzzy file matching, tag writing, cover art, and audio conversion.">
-<title>Music Manager Ultimate</title>
-<link rel="icon" type="image/png" href="MusicManager.png">
-<link rel="apple-touch-icon" href="MusicManager.png">
+<meta name="description" content="ArtiSync — organise your music library with Spotify metadata, fuzzy file matching, tag writing, cover art, and audio conversion.">
+<title>ArtiSync</title>
+<link rel="icon" type="image/png" href="ArtiSync.png">
+<link rel="apple-touch-icon" href="ArtiSync.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -763,8 +763,8 @@ nav {
   <div class="nav-inner">
     <a class="nav-back" href="index.html">← Etienne Axiak</a>
     <div class="nav-brand">
-      <img src="MusicManager.png" alt="Music Manager Ultimate logo">
-      <span>Music Manager Ultimate</span>
+      <img src="ArtiSync.png" alt="ArtiSync logo">
+      <span>ArtiSync</span>
     </div>
     <div class="nav-links">
       <a href="#features">Features</a>
@@ -794,7 +794,7 @@ nav {
     <h1>Your music library,<br><span class="grad">perfectly organised</span></h1>
     <p>Fetches metadata from Spotify, renames your files, writes embedded tags, downloads cover art, and converts audio formats — all in one desktop app.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager-Windows.zip">⬇ Windows</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync-Windows.zip">⬇ Windows</a>
       <a class="btn btn-primary" href="#download">⬇ Linux</a>
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate" target="_blank">View Source</a>
     </div>
@@ -816,7 +816,7 @@ nav {
 
         <div class="win-bar">
           <div class="win-dots"><div class="wd wd-r"></div><div class="wd wd-y"></div><div class="wd wd-g"></div></div>
-          <span class="win-title">Music Manager Ultimate v2.1.0</span>
+          <span class="win-title">ArtiSync v2.1.0</span>
           <div class="win-menu-wrap">
             <span class="win-menu" id="mk-file-btn" onclick="mockFileMenu()">File ▾</span>
             <div class="win-dropdown" id="mk-file-dd">
@@ -1124,7 +1124,7 @@ nav {
         <div class="sp-num">3</div>
         <div class="sp-body">
           <h3>Paste into Settings</h3>
-          <p>In Music Manager: open <strong>File → Settings</strong>, paste both values, and click <strong>Save</strong>.</p>
+          <p>In ArtiSync: open <strong>File → Settings</strong>, paste both values, and click <strong>Save</strong>.</p>
         </div>
       </div>
       <div class="spotify-step">
@@ -1182,7 +1182,7 @@ nav {
 <section class="section" id="download">
   <div class="container">
     <div class="tag reveal">Download</div>
-    <h2 class="section-title reveal">Get <span>Music Manager Ultimate</span></h2>
+    <h2 class="section-title reveal">Get <span>ArtiSync</span></h2>
     <p class="section-sub reveal">Download and install in seconds — pick your platform.</p>
     <div class="dl-grid">
 
@@ -1191,14 +1191,14 @@ nav {
           <div class="dl-badge">Windows 10 / 11</div>
           <h3>Windows</h3>
         </div>
-        <p>Extract the zip and run <code>MusicManager.exe</code>. Qt6 DLLs are bundled — no install required.</p>
+        <p>Extract the zip and run <code>ArtiSync.exe</code>. Qt6 DLLs are bundled — no install required.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager-Windows.zip">⬇ Download</a>
+          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync-Windows.zip">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" hidden>
           <p>1. Download and extract the zip.</p>
-          <p>2. Run <code>MusicManager.exe</code> — no installer needed, Qt6 is bundled.</p>
+          <p>2. Run <code>ArtiSync.exe</code> — no installer needed, Qt6 is bundled.</p>
           <p>3. For audio conversion, add <a href="https://ffmpeg.org/download.html" target="_blank">FFmpeg</a> to your <code>PATH</code>.</p>
         </div>
       </div>
@@ -1210,7 +1210,7 @@ nav {
         </div>
         <p>Single executable, no install needed. Requires Qt6 runtime on the host system (<code>qt6-qtbase</code>).</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.AppImage">⬇ Download</a>
+          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync.AppImage">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" hidden>
@@ -1219,8 +1219,8 @@ nav {
           <p>On Ubuntu/Debian:</p>
           <div class="code-block"><pre>sudo apt install qt6-base qt6-base-gui</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
           <p>Then run:</p>
-          <div class="code-block"><pre>chmod +x MusicManager.AppImage
-./MusicManager.AppImage</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <div class="code-block"><pre>chmod +x ArtiSync.AppImage
+./ArtiSync.AppImage</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
         </div>
       </div>
 
@@ -1231,12 +1231,12 @@ nav {
         </div>
         <p>Fully sandboxed, self-contained bundle. No system Qt6 required — everything is included.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.flatpak">⬇ Download</a>
+          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync.flatpak">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" hidden>
-          <div class="code-block"><pre>flatpak install --user MusicManager.flatpak
-flatpak run com.musicmanager.MusicManager</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <div class="code-block"><pre>flatpak install --user ArtiSync.flatpak
+flatpak run com.artisync.ArtiSync</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
         </div>
       </div>
 
@@ -1256,7 +1256,7 @@ flatpak run com.musicmanager.MusicManager</pre><button class="copy-btn" onclick=
 cd MusicManagerUltimate/"c++ source code"
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
-./build/MusicManager</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+./build/ArtiSync</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
       </div>
     </div>
 
@@ -1331,8 +1331,8 @@ cmake --build build -j$(nproc)
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="nav-brand" style="color:var(--fg);">
-          <img class="nav-logo" src="MusicManager.png" alt="Music Manager Ultimate logo">
-          Music Manager Ultimate
+          <img class="nav-logo" src="ArtiSync.png" alt="ArtiSync logo">
+          ArtiSync
         </div>
         <p>A free, open-source music library organiser for Linux. Powered by Spotify, TagLib, and Qt6.</p>
         <div class="social-links">
@@ -1359,9 +1359,9 @@ cmake --build build -j$(nproc)
       </div>
       <div class="footer-col">
         <h4>Install</h4>
-        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager-Windows.zip">Windows</a>
-        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.AppImage">AppImage</a>
-        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/MusicManager.flatpak">Flatpak</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync-Windows.zip">Windows</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync.AppImage">AppImage</a>
+        <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate/releases/latest/download/ArtiSync.flatpak">Flatpak</a>
         <a href="https://github.com/Spinjitsudoom/MusicManagerUltimate">Source Code</a>
       </div>
       <div class="footer-col">
@@ -1372,7 +1372,7 @@ cmake --build build -j$(nproc)
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Music Manager Ultimate · MIT License</p>
+      <p>© 2025 ArtiSync · MIT License</p>
       <div class="footer-badge">● v2.1.0</div>
     </div>
   </div>

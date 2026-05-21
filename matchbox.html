@@ -410,8 +410,8 @@ footer a{color:var(--pg-fg2)}
     <h1><span class="grad">Matchbox</span></h1>
     <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no cloud required.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox.Setup.1.0.0.exe" target="_blank" rel="noopener">⬇ Windows</a>
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0.AppImage" target="_blank" rel="noopener">⬇ Linux</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.0.0.exe" target="_blank" rel="noopener">⬇ Windows</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0.AppImage" target="_blank" rel="noopener">⬇ Linux</a>
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">View Source</a>
     </div>
     <div class="hero-pills">
@@ -435,7 +435,7 @@ footer a{color:var(--pg-fg2)}
           <div class="dot" style="background:#ffbd2e"></div>
           <div class="dot" style="background:#28c941"></div>
         </div>
-        <span class="win-title">Matchbox</span>
+        <span class="win-title">Matchbox <span style="font-size:.75em;opacity:.5;font-weight:400">v2.0.0</span></span>
       </div>
 
       <!-- App header -->
@@ -528,6 +528,10 @@ footer a{color:var(--pg-fg2)}
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
                 Remux
               </button>
+              <button class="ab-btn" onclick="openSplitModal()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Split
+              </button>
               <button class="ab-btn primary" id="renameBtn" onclick="doRename()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 <span id="renameBtnText">Rename Files</span>
@@ -567,8 +571,10 @@ footer a{color:var(--pg-fg2)}
           </div>
           <label class="settings-label">TMDB API Key</label>
           <input class="settings-input" type="password" value="••••••••••••••••••••••••••••••••" readonly>
-          <label class="settings-label">Media Library Path</label>
-          <input class="settings-input" type="text" value="/home/user/Media" readonly>
+          <label class="settings-label">TV Library Path</label>
+          <input class="settings-input" type="text" value="/home/user/TV" readonly>
+          <label class="settings-label">Movie Library Path</label>
+          <input class="settings-input" type="text" value="/home/user/Movies" readonly>
           <label class="settings-label">Rename Pattern</label>
           <input class="settings-input" type="text" id="patternInput" value=" - " oninput="onPatternChange(this.value)" style="font-family:'SF Mono','Fira Code',monospace">
           <div style="font-size:.74rem;color:var(--text-muted);margin-top:.2rem;margin-bottom:.75rem">Preview: <code id="patternPreview">01 - Episode Title.mkv</code></div>
@@ -577,6 +583,55 @@ footer a{color:var(--pg-fg2)}
           <div class="settings-footer">
             <button class="sf-cancel" onclick="toggleSettings()">Cancel</button>
             <button class="sf-save" onclick="toggleSettings()">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Split modal overlay -->
+      <div class="settings-overlay" id="splitOverlay">
+        <div class="settings-modal" style="width:480px;max-width:96%">
+          <div class="settings-title">
+            Split File
+            <button class="close-btn" onclick="closeSplitModal()">✕</button>
+          </div>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem">
+            <span style="color:var(--text-secondary);font-weight:500">09 - Part A - Part B.mkv</span>
+          </div>
+          <!-- Fake video area -->
+          <div style="background:var(--bg-900);border-radius:8px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;position:relative;overflow:hidden;border:1px solid var(--border)">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted);opacity:.4"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <!-- playhead -->
+            <div style="position:absolute;top:0;bottom:0;left:38%;width:2px;background:var(--accent-400);pointer-events:none">
+              <div style="position:absolute;top:0;left:-4px;width:10px;height:10px;background:var(--accent-400);border-radius:50%"></div>
+            </div>
+          </div>
+          <!-- Timeline -->
+          <div style="background:var(--bg-700);border-radius:6px;height:32px;position:relative;margin-bottom:.5rem;overflow:hidden;border:1px solid var(--border)">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 39px,rgba(255,255,255,.04) 40px)"></div>
+            <div style="position:absolute;top:0;bottom:0;left:38%;width:2px;background:var(--accent-400)"></div>
+            <div style="position:absolute;top:50%;left:38%;transform:translate(-50%,-50%) translateY(-16px);font-size:.65rem;color:var(--accent-400);white-space:nowrap;font-family:monospace">00:22:14</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);font-family:monospace;margin-bottom:1rem">
+            <span>00:00:00</span><span>00:22:14 ← split point</span><span>00:44:28</span>
+          </div>
+          <!-- Segment names -->
+          <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.4rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase">Output segments</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem">
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <span style="font-size:.7rem;color:var(--text-muted);width:1.2rem">1</span>
+              <input class="settings-input" value="09 - Part A.mkv" readonly style="flex:1;font-size:.78rem;font-family:monospace">
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <span style="font-size:.7rem;color:var(--text-muted);width:1.2rem">2</span>
+              <input class="settings-input" value="Part B.mkv" readonly style="flex:1;font-size:.78rem;font-family:monospace">
+            </div>
+          </div>
+          <div class="settings-footer">
+            <button class="sf-cancel" onclick="closeSplitModal()">Cancel</button>
+            <button class="sf-save" onclick="closeSplitModal();showToast('Split complete — 2 segments written ✓','green')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Split &amp; Write
+            </button>
           </div>
         </div>
       </div>
@@ -599,7 +654,12 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon">📺</div>
         <h3>TV Shows &amp; Movies</h3>
-        <p>Renames TV episodes to <code>Show - S01E01 - Title.mkv</code> format and movie files to <code>Title (Year).mkv</code> — exactly what Plex and Jellyfin expect for automatic metadata matching.</p>
+        <p>Renames TV episodes to <code>01 - Episode Title.mkv</code> and movie files to <code>Title (Year).mkv</code>. Configure separate root paths for your TV and movie libraries — switch between them instantly with the mode toggle.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">✂️</div>
+        <h3>Frame-Accurate Splitting</h3>
+        <p>Split any video at an exact frame with a visual timeline editor. Stream-copies when the cut lands on a keyframe — lossless and instant. Re-encodes only the unaligned head/tail when it doesn't. Auto-names segments from the source filename.</p>
       </div>
       <div class="feat">
         <div class="feat-icon">🌐</div>
@@ -609,17 +669,17 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon">💬</div>
         <h3>Local Subtitle Generation</h3>
-        <p>Generate <code>.srt</code> files fully offline using <strong>faster-whisper</strong> (CTranslate2). Supports tiny → medium model sizes, VAD silence filtering, configurable beam size, and an initial prompt for better accuracy. No API key or cloud service required after the first model download.</p>
+        <p>Generate <code>.srt</code> files fully offline using <strong>faster-whisper</strong> (CTranslate2). Supports tiny → large model sizes, VAD silence filtering, configurable beam size, language, and initial prompt. No cloud required after the first model download.</p>
       </div>
       <div class="feat">
         <div class="feat-icon">⚡</div>
         <h3>Remux</h3>
-        <p>Batch convert video containers (MKV ↔ MP4 ↔ AVI…) using FFmpeg stream copy — no re-encoding, no quality loss, typically finishes in seconds per file.</p>
+        <p>Batch convert video containers (MKV ↔ MP4 ↔ AVI…) using FFmpeg stream copy — no re-encoding, no quality loss, typically finishes in seconds per file. Set default audio and subtitle tracks per conversion.</p>
       </div>
       <div class="feat">
         <div class="feat-icon">🎨</div>
-        <h3>9 Themes</h3>
-        <p>Slate, Dark, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Light. Click <strong>Settings</strong> in the demo above to try them live.</p>
+        <h3>9 Themes + 3 Custom</h3>
+        <p>Slate, Dark, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Light — plus three fully customisable colour slots. Click <strong>Settings</strong> in the demo above to try them live.</p>
       </div>
     </div>
   </div>
@@ -638,15 +698,15 @@ footer a{color:var(--pg-fg2)}
           <div class="dl-badge win">Windows 10 / 11</div>
           <h3>Windows Installer</h3>
         </div>
-        <p>Runs the NSIS setup wizard and adds Matchbox to your Start Menu and Programs list.</p>
+        <p>Runs the Inno Setup wizard and adds Matchbox to your Start Menu with an optional desktop shortcut and a clean uninstaller.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox.Setup.1.0.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.0.0.exe" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
-          <p>1. Run <code>Matchbox.Setup.1.0.0.exe</code> and follow the wizard.</p>
+          <p>1. Run <code>Matchbox-Setup-2.0.0.exe</code> and follow the wizard.</p>
           <p>2. Launch Matchbox from the Start Menu.</p>
-          <p>3. Point it at your media folder and connect your TMDB API key in Settings.</p>
+          <p>3. The first-run wizard will ask for your TMDB API key and library paths.</p>
         </div>
       </div>
 
@@ -657,12 +717,12 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Extract the zip anywhere and run — no installer, no admin rights, no registry entries.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0-win.zip" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0-portable-win.zip" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
-          <p>1. Extract <code>Matchbox-1.0.0-win.zip</code> to any folder.</p>
-          <p>2. Run <code>Matchbox.exe</code> inside the extracted folder.</p>
+          <p>1. Extract <code>Matchbox-2.0.0-portable-win.zip</code> to any folder.</p>
+          <p>2. Run <code>Matchbox.exe</code> — no install, no registry changes.</p>
         </div>
       </div>
 
@@ -673,13 +733,13 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Single executable — no install needed. Works on any modern Linux distro with FUSE support.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0.AppImage" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0.AppImage" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
           <p>Make it executable and run:</p>
-          <div class="dl-cb"><pre>chmod +x Matchbox-1.0.0.AppImage
-./Matchbox-1.0.0.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>chmod +x Matchbox-2.0.0.AppImage
+./Matchbox-2.0.0.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
       </div>
 
@@ -690,14 +750,14 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Fully sandboxed, self-contained bundle. No system dependencies required — everything is included.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-1.0.0-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
           <p>Install for your user only (no password needed):</p>
-          <div class="dl-cb"><pre>flatpak install --user Matchbox-1.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>flatpak install --user Matchbox-2.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>Or system-wide (requires sudo):</p>
-          <div class="dl-cb"><pre>sudo flatpak install Matchbox-1.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>sudo flatpak install Matchbox-2.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>Then launch:</p>
           <div class="dl-cb"><pre>flatpak run io.github.Spinjitsudoom.Matchbox</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
@@ -711,7 +771,7 @@ footer a{color:var(--pg-fg2)}
         <span class="dl-src-arrow">▼</span>
       </div>
       <div class="dl-source-body" style="display:none">
-        <p>Requires Node.js 20+, Python 3.12+, and <code>uv</code>.</p>
+        <p>Requires Node.js 20+, Python 3.14+, and <code>uv</code>.</p>
         <div class="dl-cb"><pre>git clone https://github.com/Spinjitsudoom/Matchbox
 cd Matchbox
 uv sync --group dev
@@ -722,55 +782,45 @@ cd frontend && npm ci && npm run build
       </div>
     </div>
 
-    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--pg-fg3);">All builds are v1.0.0. Source code available on <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>.</p>
+    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--pg-fg3);">All builds are v2.0.0. Source code available on <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 </section>
 
-<!-- Setup -->
+<!-- How it Works -->
 <section class="section" id="setup">
   <div class="container">
-    <h2 class="sh"><span>Getting Started</span></h2>
-    <p class="sub">Up and running in under two minutes.</p>
+    <div class="tag">How it Works</div>
+    <h2 class="sh"><span>Clean library in four steps</span></h2>
+    <p class="sub">Matchbox handles everything from initial setup to frame-accurate splits.</p>
     <div class="steps">
       <div class="step">
         <div class="step-n"></div>
         <div class="step-body">
-          <h3>Get a free TMDB API Key</h3>
-          <ol>
-            <li>Create an account at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">themoviedb.org</a></li>
-            <li>Go to <strong>Settings → API</strong> and request a v3 key</li>
-            <li>Paste it into <strong>Settings</strong> inside Matchbox</li>
-          </ol>
-          <div class="note">Your key is stored locally in <code>~/Documents/Matchbox/config.json</code> and is never uploaded anywhere.</div>
+          <h3>First-run setup wizard</h3>
+          <p>On first launch, a guided wizard collects your <strong>TMDB API key</strong> (free at <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">themoviedb.org</a>) and your separate <strong>TV</strong> and <strong>Movie</strong> library root paths. Everything is stored locally in <code>~/Documents/Matchbox/config.json</code> — nothing is uploaded.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-n"></div>
         <div class="step-body">
-          <h3>Set your library path</h3>
-          <p>Open <strong>Settings</strong> and point Matchbox at the root of your media library. Expected folder structure:</p>
-          <pre>
-/your/media/root/
-  Show Name/
-    Season 01/
-      episode.files...
-  Movie Name (2024)/
-    movie.file...</pre>
+          <h3>Browse your library and match to TMDB</h3>
+          <p>The left panel lists every show or movie folder in your library. Expand a show to reveal its season folders. As you select a folder, Matchbox auto-searches TMDB — pick the right result in the right panel and the rename preview populates instantly.</p>
+          <div class="note">Expected structure: <code>Show Name / Season 01 / episode.files</code> for TV and <code>Movie Title (Year) / movie.file</code> for movies.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-n"></div>
         <div class="step-body">
-          <h3>Rename your files</h3>
-          <p>Select a show in the left panel — it auto-searches TMDB. Select a season and a local folder. The rename preview populates instantly. Choose <strong>Numeric</strong> (position-based) or <strong>Title Match</strong> (fuzzy), review the colour-coded preview, then click <strong>Rename Files</strong>. Use <strong>Undo</strong> to revert any batch.</p>
+          <h3>Review and rename</h3>
+          <p>Every file is colour-coded: <span style="color:#4ade80">green</span> = confident match, <span style="color:#facc15">yellow</span> = fuzzy match, <span style="color:#f87171">red</span> = no match. Switch between <strong>Numeric</strong> (position-based) and <strong>Title Match</strong> (fuzzy string) modes, adjust the file offset if needed, then click <strong>Rename Files</strong>. One click undoes the entire batch.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-n"></div>
         <div class="step-body">
-          <h3>Generate subtitles (optional)</h3>
-          <p>Click <strong>Generate</strong> in the action bar. Select a model size — <em>tiny</em> is fastest, <em>medium</em> is most accurate. The Whisper model downloads automatically on first use and is cached in <code>~/.cache/huggingface/</code>. No internet required after that.</p>
-          <div class="note">The <strong>Remux</strong> feature requires FFmpeg: <code>sudo apt install ffmpeg</code> or <code>sudo dnf install ffmpeg</code>.</div>
+          <h3>Split, subtitle, or remux (optional)</h3>
+          <p><strong>Split</strong> opens a frame-accurate timeline editor — set a split point, and Matchbox stream-copies from the keyframe with a lossless smart re-encode only where needed. Auto-names the segments from the source filename. <strong>Generate</strong> produces offline <code>.srt</code> subtitles via faster-whisper. <strong>Remux</strong> converts containers with FFmpeg stream copy.</p>
+          <div class="note">Splitting and Remux require FFmpeg. If it isn't on your system, Matchbox offers a one-click download from Settings.</div>
         </div>
       </div>
     </div>
@@ -787,7 +837,7 @@ cd frontend && npm ci && npm run build
       <div class="stack-card"><div class="stack-layer">Backend</div><div class="stack-val">Python · FastAPI · uvicorn</div></div>
       <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">TMDB API via tmdbv3api</div></div>
       <div class="stack-card"><div class="stack-layer">Subtitles</div><div class="stack-val">faster-whisper · CTranslate2</div></div>
-      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · electron-builder</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · electron-builder · Inno Setup</div></div>
       <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions · AppImage · NSIS</div></div>
     </div>
   </div>
@@ -1450,6 +1500,15 @@ function openSubModal() {
 }
 function openRemuxModal() {
   showToast('Remux — convert containers with FFmpeg in the full app', 'blue');
+}
+function openSplitModal() {
+  if (!state.activeSeason && !state.activeMovie) {
+    showToast('Select a season or file first', 'blue'); return;
+  }
+  document.getElementById('splitOverlay').classList.add('open');
+}
+function closeSplitModal() {
+  document.getElementById('splitOverlay').classList.remove('open');
 }
 
 function showToast(msg, color) {

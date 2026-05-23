@@ -788,6 +788,10 @@ footer a{color:var(--pg-fg2)}
           <div style="display:flex;align-items:center;gap:8px;padding:10px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg-700)">
             <span style="font-size:.75rem;color:#4ade80;display:none" id="remuxDoneMsg"></span>
             <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+              <button id="remuxSplitBtn" onclick="openSplitFromRemux()" class="modal-action-btn" style="display:none" title="Split this file into multiple parts">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><line x1="6" y1="15" x2="18" y2="9"/></svg>
+                Split
+              </button>
               <button id="remuxValidateBtn" onclick="remuxValidate()" class="modal-action-btn">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
                 Validate
@@ -1861,6 +1865,7 @@ function openRemuxModal() {
   document.getElementById('remuxProgressArea').style.display = 'none';
   document.getElementById('remuxDeleteOrig').checked = false;
   document.getElementById('remuxDoneMsg').style.display = 'none';
+  document.getElementById('remuxSplitBtn').style.display = 'none'; // updated by buildRemuxBody
   document.getElementById('remuxValidateBtn').style.display = '';
   document.getElementById('remuxValidateBtn').disabled = false;
   document.getElementById('remuxValidateBtn').innerHTML = IC.shield + ' Validate';
@@ -1897,9 +1902,15 @@ function buildRemuxBody() {
   const allSel = n === files.length && n > 0;
   document.getElementById('remuxRunBtn').disabled = n === 0;
   document.getElementById('remuxRunTxt').textContent = 'Remux ' + n + ' File' + (n !== 1 ? 's' : '');
+  // Show Split only when exactly one file is selected (matches real app)
+  document.getElementById('remuxSplitBtn').style.display = n === 1 ? '' : 'none';
   document.getElementById('remuxBody').innerHTML =
     selectAllRowHtml(allSel, n, files.length, 'toggleAllRemux') +
     files.map(f => fileRowHtml(f, remuxSelected.has(f), 'toggleRemuxFile')).join('');
+}
+function openSplitFromRemux() {
+  closeRemuxModal();
+  openSplitModal();
 }
 function buildRemuxRunList() {
   document.getElementById('remuxBody').innerHTML = '<div style="padding:14px 4px">' +
@@ -1927,6 +1938,7 @@ function remuxStart() {
   remuxItems = files.map(f => ({ file: f, status: 'pending' }));
   document.getElementById('remuxConfig').style.display = 'none';
   document.getElementById('remuxProgressArea').style.display = 'block';
+  document.getElementById('remuxSplitBtn').style.display = 'none';
   document.getElementById('remuxValidateBtn').style.display = 'none';
   document.getElementById('remuxRunBtn').disabled = true;
   document.getElementById('remuxRunBtn').innerHTML = IC.spinner + ' <span>Remuxing…</span>';

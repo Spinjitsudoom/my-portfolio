@@ -319,6 +319,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .sf-save{background:var(--accent-600);color:#fff}
 .sf-save:hover{background:var(--accent-500)}
 
+/* Remux / Subtitle modals */
+.fmt-btn{padding:3px 10px;background:var(--bg-500);color:var(--text-secondary);border:none;border-radius:5px;cursor:pointer;font-size:.75rem;font-family:inherit;font-weight:500;transition:all .15s}
+.fmt-btn.active{background:var(--accent-600);color:#fff}
+.modal-file-row{display:flex;align-items:center;gap:8px;width:100%;padding:7px 20px;border-bottom:1px solid var(--border);border-left:none;border-right:none;border-top:none;background:transparent;cursor:pointer;text-align:left;transition:background .1s}
+.modal-file-row:hover{background:rgba(255,255,255,.025)}
+.modal-cfg-row{display:flex;align-items:center;gap:10px;padding:8px 20px;flex-wrap:wrap}
+.modal-select{background:var(--bg-600);border:1px solid var(--bg-400);color:var(--text-primary);border-radius:5px;padding:3px 8px;font-size:.75rem;font-family:inherit;outline:none;cursor:pointer}
+.modal-text-input{flex:1;background:var(--bg-600);border:1px solid var(--bg-400);color:var(--text-primary);border-radius:5px;padding:4px 10px;font-size:.75rem;font-family:inherit;outline:none}
+.modal-text-input::placeholder{color:var(--text-muted)}
+
 /* Scrollbars in demo */
 .app-window ::-webkit-scrollbar{width:5px;height:5px}
 .app-window ::-webkit-scrollbar-track{background:transparent}
@@ -692,6 +702,138 @@ footer a{color:var(--pg-fg2)}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               Split &amp; Write
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Remux modal overlay -->
+      <div class="settings-overlay" id="remuxOverlay">
+        <div class="settings-modal" style="width:460px;max-width:96%;padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:88%">
+          <!-- Header -->
+          <div style="display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+            <div style="flex:1">
+              <div style="font-size:.85rem;font-weight:600;color:var(--text-primary)">Remux Files</div>
+              <div style="font-size:.72rem;color:var(--text-muted)">change container, no re-encoding</div>
+            </div>
+            <button class="close-btn" onclick="closeRemuxModal()">✕</button>
+          </div>
+          <!-- Config -->
+          <div style="background:var(--bg-700);border-bottom:1px solid var(--border);padding:10px 20px;flex-shrink:0">
+            <div class="modal-cfg-row" style="padding:0 0 8px 0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Output</span>
+              <div style="display:flex;gap:5px" id="remuxFmtBtns">
+                <button class="fmt-btn active" onclick="setRemuxFmt('.mkv')">MKV</button>
+                <button class="fmt-btn" onclick="setRemuxFmt('.mp4')">MP4</button>
+                <button class="fmt-btn" onclick="setRemuxFmt('.m4v')">M4V</button>
+              </div>
+            </div>
+            <div class="modal-cfg-row" style="padding:0 0 8px 0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Audio</span>
+              <select class="modal-select">
+                <option>Keep all tracks</option>
+                <option>First track only</option>
+                <option>English only</option>
+              </select>
+            </div>
+            <div class="modal-cfg-row" style="padding:0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">After</span>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.75rem;color:var(--text-secondary)">
+                <input type="checkbox" id="remuxDeleteOrig" style="accent-color:var(--accent-500)">
+                Delete original files
+              </label>
+            </div>
+          </div>
+          <!-- File list header -->
+          <div style="display:flex;align-items:center;padding:6px 20px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-800)">
+            <button onclick="toggleAllRemux()" style="background:none;border:none;cursor:pointer;padding:0;color:var(--text-muted);display:flex;align-items:center" id="remuxToggleAll">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+            </button>
+            <span style="font-size:.72rem;color:var(--text-muted);margin-left:8px" id="remuxSelCount">0 selected</span>
+          </div>
+          <!-- File list -->
+          <div style="flex:1;overflow-y:auto" id="remuxFileList"></div>
+          <!-- Footer -->
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg-800)">
+            <button class="sf-cancel" onclick="closeRemuxModal()">Cancel</button>
+            <button class="sf-save" id="remuxRunBtn" onclick="remuxStart()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              <span id="remuxRunTxt">Remux 0 Files</span>
+            </button>
+          </div>
+          <!-- Progress bar (hidden until run) -->
+          <div id="remuxProgress" style="display:none;padding:0 20px 14px;flex-shrink:0">
+            <div style="height:4px;background:var(--bg-600);border-radius:2px;overflow:hidden">
+              <div id="remuxBar" style="height:100%;width:0%;background:var(--accent-500);transition:width .4s"></div>
+            </div>
+            <div style="font-size:.72rem;color:var(--text-muted);margin-top:4px" id="remuxProgressTxt">Processing…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtitle modal overlay -->
+      <div class="settings-overlay" id="subOverlay">
+        <div class="settings-modal" style="width:460px;max-width:96%;padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:88%">
+          <!-- Header -->
+          <div style="display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/></svg>
+            <div style="flex:1">
+              <div style="font-size:.85rem;font-weight:600;color:var(--text-primary)">Generate Subtitles</div>
+              <div style="font-size:.72rem;color:var(--text-muted)">AI via Whisper → .srt</div>
+            </div>
+            <button class="close-btn" onclick="closeSubModal()">✕</button>
+          </div>
+          <!-- Config -->
+          <div style="background:var(--bg-700);border-bottom:1px solid var(--border);padding:10px 20px;flex-shrink:0">
+            <div class="modal-cfg-row" style="padding:0 0 8px 0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Model</span>
+              <span id="subModelSummary" style="font-size:.75rem;color:var(--text-secondary)">base · beam 5 · VAD on</span>
+            </div>
+            <div class="modal-cfg-row" style="padding:0 0 8px 0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Audio</span>
+              <select class="modal-select">
+                <option>Track 1 (default)</option>
+                <option>Track 2</option>
+                <option>Track 3 (commentary)</option>
+              </select>
+            </div>
+            <div class="modal-cfg-row" style="padding:0 0 8px 0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Prompt</span>
+              <input class="modal-text-input" type="text" placeholder="Optional context for Whisper…" id="subPromptInput">
+            </div>
+            <div class="modal-cfg-row" style="padding:0">
+              <span style="font-size:.75rem;color:var(--text-muted);width:80px;flex-shrink:0">Preset</span>
+              <select class="modal-select" id="subPreset" onchange="applySubPreset(this.value)">
+                <option value="">None</option>
+                <option value="movie">Movie (English)</option>
+                <option value="anime">Anime (Japanese)</option>
+                <option value="foreign">Foreign film</option>
+              </select>
+            </div>
+          </div>
+          <!-- File list header -->
+          <div style="display:flex;align-items:center;padding:6px 20px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-800)">
+            <button onclick="toggleAllSub()" style="background:none;border:none;cursor:pointer;padding:0;color:var(--text-muted);display:flex;align-items:center" id="subToggleAll">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+            </button>
+            <span style="font-size:.72rem;color:var(--text-muted);margin-left:8px" id="subSelCount">0 selected</span>
+          </div>
+          <!-- File list -->
+          <div style="flex:1;overflow-y:auto" id="subFileList"></div>
+          <!-- Footer -->
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg-800)">
+            <button class="sf-cancel" onclick="closeSubModal()">Cancel</button>
+            <button class="sf-save" id="subRunBtn" onclick="subStart()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg>
+              <span id="subRunTxt">Generate for 0 Files</span>
+            </button>
+          </div>
+          <!-- Progress bar (hidden until run) -->
+          <div id="subProgress" style="display:none;padding:0 20px 14px;flex-shrink:0">
+            <div style="height:4px;background:var(--bg-600);border-radius:2px;overflow:hidden">
+              <div id="subBar" style="height:100%;width:0%;background:var(--accent-500);transition:width .4s"></div>
+            </div>
+            <div style="font-size:.72rem;color:var(--text-muted);margin-top:4px" id="subProgressTxt">Processing…</div>
           </div>
         </div>
       </div>
@@ -1625,11 +1767,202 @@ function doUndo() {
   showToast('Rename undone', 'gray');
 }
 
-function openSubModal() {
-  showToast('Subtitle generation — select a model size in the full app', 'blue');
+// ── Remux modal ───────────────────────────────────────────────────────────────
+let remuxSelected = new Set();
+let remuxFmt = '.mkv';
+
+function getActiveFiles() {
+  if (!state.activeSeason) return [];
+  const episodes = EPISODES[state.activeSeason] || [];
+  return episodes.filter(ep => ep.old).map(ep => ep.old);
 }
+
 function openRemuxModal() {
-  showToast('Remux — convert containers with FFmpeg in the full app', 'blue');
+  if (!state.activeSeason) { showToast('Select a season first', 'blue'); return; }
+  const files = getActiveFiles();
+  remuxSelected = new Set(files);
+  remuxFmt = '.mkv';
+  document.getElementById('remuxFmtBtns').querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('remuxFmtBtns').querySelector('.fmt-btn').classList.add('active');
+  document.getElementById('remuxProgress').style.display = 'none';
+  document.getElementById('remuxDeleteOrig').checked = false;
+  buildRemuxFileList();
+  document.getElementById('remuxOverlay').classList.add('open');
+}
+function closeRemuxModal() {
+  document.getElementById('remuxOverlay').classList.remove('open');
+}
+function setRemuxFmt(fmt) {
+  remuxFmt = fmt;
+  document.getElementById('remuxFmtBtns').querySelectorAll('.fmt-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === fmt.replace('.',''));
+  });
+}
+function toggleAllRemux() {
+  const files = getActiveFiles();
+  if (remuxSelected.size === files.length) {
+    remuxSelected.clear();
+  } else {
+    files.forEach(f => remuxSelected.add(f));
+  }
+  buildRemuxFileList();
+}
+function toggleRemuxFile(filename) {
+  if (remuxSelected.has(filename)) remuxSelected.delete(filename);
+  else remuxSelected.add(filename);
+  buildRemuxFileList();
+}
+function buildRemuxFileList() {
+  const files = getActiveFiles();
+  const n = remuxSelected.size;
+  // Update toggle-all icon
+  const allCheck = document.getElementById('remuxToggleAll');
+  if (n === files.length && n > 0) {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>';
+  } else if (n > 0) {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg>';
+  } else {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>';
+  }
+  document.getElementById('remuxSelCount').textContent = n + ' selected';
+  const runBtn = document.getElementById('remuxRunBtn');
+  runBtn.disabled = n === 0;
+  document.getElementById('remuxRunTxt').textContent = `Remux ${n} File${n!==1?'s':''}`;
+  const list = document.getElementById('remuxFileList');
+  const ext = remuxFmt;
+  list.innerHTML = files.map(f => {
+    const sel = remuxSelected.has(f);
+    const outName = f.replace(/\.[^/.]+$/, ext);
+    return `<button class="modal-file-row" onclick="toggleRemuxFile('${f.replace(/'/g,"\\'")}')">
+      <span style="display:flex;align-items:center;flex-shrink:0">
+        ${sel
+          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>'}
+      </span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.75rem;color:var(--text-secondary);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}</div>
+        <div style="font-size:.7rem;color:var(--text-muted);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">→ ${outName}</div>
+      </div>
+    </button>`;
+  }).join('');
+}
+function remuxStart() {
+  const n = remuxSelected.size;
+  if (!n) return;
+  const btn = document.getElementById('remuxRunBtn');
+  const progress = document.getElementById('remuxProgress');
+  const bar = document.getElementById('remuxBar');
+  const txt = document.getElementById('remuxProgressTxt');
+  btn.disabled = true;
+  progress.style.display = 'block';
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct = Math.min(pct + Math.random() * 18 + 4, 98);
+    bar.style.width = pct + '%';
+    txt.textContent = `Processing file ${Math.ceil(pct / 100 * n)} of ${n}…`;
+  }, 380);
+  setTimeout(() => {
+    clearInterval(interval);
+    bar.style.width = '100%';
+    txt.textContent = `Done — ${n} file${n!==1?'s':''} remuxed`;
+    setTimeout(() => { closeRemuxModal(); showToast(`Remux complete — ${n} file${n!==1?'s':''} ✓`, 'green'); }, 600);
+  }, 2800);
+}
+
+// ── Subtitle modal ────────────────────────────────────────────────────────────
+let subSelected = new Set();
+
+function openSubModal() {
+  if (!state.activeSeason) { showToast('Select a season first', 'blue'); return; }
+  const files = getActiveFiles();
+  subSelected = new Set(files);
+  // Update model summary from settings state
+  document.getElementById('subModelSummary').textContent =
+    `${whisperModel} · beam ${beamSize} · VAD ${vadEnabled ? 'on' : 'off'}`;
+  document.getElementById('subProgress').style.display = 'none';
+  document.getElementById('subPromptInput').value = '';
+  document.getElementById('subPreset').value = '';
+  buildSubFileList();
+  document.getElementById('subOverlay').classList.add('open');
+}
+function closeSubModal() {
+  document.getElementById('subOverlay').classList.remove('open');
+}
+function toggleAllSub() {
+  const files = getActiveFiles();
+  if (subSelected.size === files.length) {
+    subSelected.clear();
+  } else {
+    files.forEach(f => subSelected.add(f));
+  }
+  buildSubFileList();
+}
+function toggleSubFile(filename) {
+  if (subSelected.has(filename)) subSelected.delete(filename);
+  else subSelected.add(filename);
+  buildSubFileList();
+}
+function buildSubFileList() {
+  const files = getActiveFiles();
+  const n = subSelected.size;
+  const allCheck = document.getElementById('subToggleAll');
+  if (n === files.length && n > 0) {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>';
+  } else if (n > 0) {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/></svg>';
+  } else {
+    allCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>';
+  }
+  document.getElementById('subSelCount').textContent = n + ' selected';
+  const runBtn = document.getElementById('subRunBtn');
+  runBtn.disabled = n === 0;
+  document.getElementById('subRunTxt').textContent = `Generate for ${n} File${n!==1?'s':''}`;
+  const list = document.getElementById('subFileList');
+  list.innerHTML = files.map(f => {
+    const sel = subSelected.has(f);
+    const srtName = f.replace(/\.[^/.]+$/, '.srt');
+    return `<button class="modal-file-row" onclick="toggleSubFile('${f.replace(/'/g,"\\'")}')">
+      <span style="display:flex;align-items:center;flex-shrink:0">
+        ${sel
+          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent-400)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>'}
+      </span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.75rem;color:var(--text-secondary);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f}</div>
+        <div style="font-size:.7rem;color:var(--text-muted);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">→ ${srtName}</div>
+      </div>
+    </button>`;
+  }).join('');
+}
+function applySubPreset(preset) {
+  const prompts = {
+    movie: 'English dialogue, movie subtitles',
+    anime: '日本語 アニメ',
+    foreign: 'Foreign language film, include all dialogue'
+  };
+  document.getElementById('subPromptInput').value = prompts[preset] || '';
+}
+function subStart() {
+  const n = subSelected.size;
+  if (!n) return;
+  const btn = document.getElementById('subRunBtn');
+  const progress = document.getElementById('subProgress');
+  const bar = document.getElementById('subBar');
+  const txt = document.getElementById('subProgressTxt');
+  btn.disabled = true;
+  progress.style.display = 'block';
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct = Math.min(pct + Math.random() * 10 + 2, 96);
+    bar.style.width = pct + '%';
+    txt.textContent = `Transcribing file ${Math.ceil(pct / 100 * n)} of ${n}…`;
+  }, 500);
+  setTimeout(() => {
+    clearInterval(interval);
+    bar.style.width = '100%';
+    txt.textContent = `Done — ${n} subtitle${n!==1?'s':''} generated`;
+    setTimeout(() => { closeSubModal(); showToast(`Subtitles generated — ${n} .srt file${n!==1?'s':''} ✓`, 'green'); }, 600);
+  }, 3600);
 }
 function openSplitModal() {
   if (!state.activeSeason && !state.activeMovie) {

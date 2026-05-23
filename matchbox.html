@@ -142,6 +142,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .app-header{background:var(--bg-800);border-bottom:1px solid var(--border);padding:0 12px;height:40px;display:flex;align-items:center;gap:8px;flex-shrink:0}
 .ah-icon{color:var(--accent-400);flex-shrink:0}
 .ah-name{font-size:.8rem;font-weight:600;color:var(--text-primary)}
+.ah-version{font-size:.72rem;font-family:'SF Mono','Fira Code',monospace;color:var(--text-muted);margin-left:1px}
 .mode-toggle{display:flex;align-items:center;gap:2px;background:var(--bg-700);border-radius:7px;padding:2px;margin-left:14px}
 .mt-btn{display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:5px;font-size:.72rem;font-weight:500;border:none;cursor:pointer;transition:all .15s;color:var(--text-muted);background:transparent}
 .mt-btn.active{background:var(--accent-600);color:#fff}
@@ -176,18 +177,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 
 /* Center panel */
 .center-panel{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg-900);overflow:hidden}
-.season-header{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;min-height:80px;position:relative;overflow:hidden;background:var(--bg-800)}
-.sh-backdrop{position:absolute;inset:0;opacity:.08;background-size:cover;background-position:center;filter:blur(8px) scale(1.1)}
-.sh-poster{width:44px;flex-shrink:0;border-radius:5px;overflow:hidden;position:relative;z-index:1}
-.sh-poster img{width:100%;display:block;border-radius:5px}
-.sh-poster-placeholder{width:44px;height:66px;background:var(--bg-600);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.season-header{display:flex;align-items:center;gap:16px;padding:16px;border-bottom:1px solid var(--border);flex-shrink:0;min-height:96px;position:relative;overflow:hidden;background:var(--bg-800)}
+.sh-backdrop{position:absolute;inset:0;opacity:.1;background-size:cover;background-position:center;filter:blur(8px) scale(1.1)}
+.sh-poster{width:56px;flex-shrink:0;border-radius:6px;overflow:hidden;position:relative;z-index:1;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.sh-poster img{width:100%;display:block;border-radius:6px}
+.sh-poster-placeholder{width:56px;height:84px;background:var(--bg-600);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px}
 .sh-info{flex:1;min-width:0;position:relative;z-index:1}
 .sh-sublabel{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
-.sh-title{font-size:.88rem;font-weight:600;color:var(--text-primary);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sh-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
-.badge-g{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(34,197,94,.15);color:#4ade80}
-.badge-y{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(234,179,8,.15);color:#facc15}
-.badge-r{font-size:.67rem;padding:1px 7px;border-radius:20px;background:rgba(239,68,68,.15);color:#f87171}
+.sh-title{font-size:.92rem;font-weight:600;color:var(--text-primary);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-meta{display:flex;align-items:center;gap:10px;margin-top:4px}
+.sh-badges{display:flex;align-items:center;gap:5px;flex-shrink:0;position:relative;z-index:1}
+.badge-g{font-size:.68rem;padding:1px 8px;border-radius:20px;background:rgba(34,197,94,.2);color:#4ade80}
+.badge-y{font-size:.68rem;padding:1px 8px;border-radius:20px;background:rgba(234,179,8,.2);color:#facc15}
+.badge-r{font-size:.68rem;padding:1px 8px;border-radius:20px;background:rgba(239,68,68,.2);color:#f87171}
 .ep-meta{font-size:.72rem;color:var(--text-secondary)}
 .controls-bar{display:flex;align-items:center;gap:10px;padding:6px 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-800);flex-wrap:wrap}
 .ctrl-toggle{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text-secondary);background:none;border:none;cursor:pointer;padding:0}
@@ -203,14 +205,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .ep-row.green{border-left-color:rgba(34,197,94,.6);background:rgba(34,197,94,.04)}
 .ep-row.yellow{border-left-color:rgba(234,179,8,.6);background:rgba(234,179,8,.04)}
 .ep-row.red{border-left-color:rgba(239,68,68,.5);background:rgba(239,68,68,.04)}
-.ep-num{font-size:.72rem;color:var(--text-muted);width:20px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
-.ep-files{flex:1;min-width:0;display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.ep-num{font-size:.72rem;color:var(--text-muted);width:24px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ep-files{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center}
 .ep-old{font-size:.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ep-right{display:flex;align-items:center;gap:5px;min-width:0}
 .ep-arrow{font-size:10px;color:var(--accent-400);flex-shrink:0}
 .ep-new-g{font-size:.72rem;color:#4ade80;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .ep-new-y{font-size:.72rem;color:#facc15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .ep-new-r{font-size:.72rem;color:#f87171;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.ep-nofile{font-size:.72rem;color:var(--text-muted);font-style:italic}
+.ep-nofile-row{display:flex;align-items:center;gap:6px;grid-column:1/-1}
+.ep-nofile-title{font-size:.72rem;color:var(--text-muted);font-weight:500}
+.ep-nofile{font-size:.72rem;color:#f87171;font-style:italic}
 .ep-score{font-size:.67rem;padding:1px 6px;border-radius:4px;flex-shrink:0;font-family:monospace}
 .ep-score.g{background:rgba(34,197,94,.15);color:#4ade80}
 .ep-score.y{background:rgba(234,179,8,.15);color:#facc15}
@@ -231,70 +236,84 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .right-panel{width:380px;min-width:380px;background:var(--bg-800);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .rp-top{flex:1;border-bottom:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .rp-bot{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.panel-hdr{padding:7px 12px;border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);flex-shrink:0}
-.search-bar{display:flex;align-items:center;gap:7px;margin:8px 10px;background:var(--bg-700);border:1px solid var(--bg-400);border-radius:7px;padding:6px 10px}
+.panel-hdr{padding:10px 16px;border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);flex-shrink:0}
+.search-bar{display:flex;align-items:center;gap:8px;margin:8px 12px;background:var(--bg-700);border:1px solid var(--bg-400);border-radius:8px;padding:7px 12px}
 .search-icon{color:var(--text-muted);flex-shrink:0;font-size:13px}
-.search-input{flex:1;background:transparent;border:none;font-size:.8rem;color:var(--text-primary);font-family:inherit;outline:none}
+.search-input{flex:1;background:transparent;border:none;font-size:.85rem;color:var(--text-primary);font-family:inherit;outline:none}
 .search-input::placeholder{color:var(--text-muted)}
 .search-results{flex:1;overflow-y:auto}
-.result-row{display:flex;align-items:center;gap:9px;padding:7px 10px;cursor:pointer;transition:all .12s;border:none;background:transparent;width:100%;text-align:left;border-right:2px solid transparent}
+.result-row{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:all .12s;border:none;background:transparent;width:100%;text-align:left;border-right:2px solid transparent}
 .result-row:hover{background:var(--bg-700)}
 .result-row.active{background:color-mix(in srgb,var(--accent-600) 15%,transparent);border-right-color:var(--accent-500)}
-.result-poster{width:32px;height:48px;border-radius:4px;object-fit:cover;background:var(--bg-600);flex-shrink:0}
-.result-poster-placeholder{width:32px;height:48px;border-radius:4px;background:var(--bg-600);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.result-title{font-size:.8rem;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.result-poster{width:36px;height:54px;border-radius:4px;object-fit:cover;background:var(--bg-600);flex-shrink:0}
+.result-poster-placeholder{width:36px;height:54px;border-radius:4px;background:var(--bg-600);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.result-title{font-size:.85rem;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
 .result-row.active .result-title{color:var(--accent-400)}
-.result-year{font-size:.7rem;color:var(--text-muted);margin-top:1px}
+.result-year{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--text-muted);margin-top:2px}
 .result-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-400);margin-left:auto;flex-shrink:0}
 
 /* Show info panel */
-.show-info{flex:1;overflow-y:auto;padding:10px}
-.si-top{display:flex;gap:10px;margin-bottom:10px}
-.si-poster{width:56px;flex-shrink:0;border-radius:6px;overflow:hidden}
+.show-info{flex:1;overflow-y:auto;padding:16px}
+.si-top{display:flex;gap:12px;margin-bottom:12px}
+.si-poster{width:80px;flex-shrink:0;border-radius:6px;overflow:hidden}
 .si-poster img{width:100%;display:block}
-.si-poster-ph{width:56px;height:84px;background:var(--bg-600);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.si-title{font-size:.85rem;font-weight:600;color:var(--text-primary);line-height:1.3}
-.si-year{font-size:.72rem;color:var(--text-muted);margin-top:3px}
+.si-poster-ph{width:80px;height:120px;background:var(--bg-600);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.si-title{font-size:.88rem;font-weight:600;color:var(--text-primary);line-height:1.3}
+.si-year{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--text-muted);margin-top:4px}
 .si-rating{display:flex;align-items:center;gap:3px;margin-top:3px}
 .si-star{color:#facc15;font-size:11px}
 .si-score{font-size:.72rem;color:#facc15;font-weight:500}
-.si-overview{font-size:.72rem;color:var(--text-secondary);line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.season-card{border-radius:8px;overflow:hidden;margin-bottom:8px;position:relative;cursor:pointer}
-.season-card img{width:100%;display:block;border-radius:8px}
-.season-card-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.5),transparent);padding:10px 10px 8px;border-radius:0 0 8px 8px}
-.sc-title{font-size:.78rem;font-weight:600;color:#fff}
-.sc-meta{font-size:.67rem;color:rgba(255,255,255,.65);margin-top:1px}
-.seasons-header{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:6px 0 4px}
-.season-list-row{display:flex;align-items:center;gap:8px;padding:6px 6px;border-radius:6px;cursor:pointer;transition:background .12s;border-right:2px solid transparent}
+.si-overview{font-size:.72rem;color:var(--text-secondary);line-height:1.55;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.season-card{border-radius:12px;overflow:hidden;margin-bottom:10px;position:relative;cursor:pointer}
+.season-card img{width:100%;display:block;border-radius:12px}
+.season-card-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.5),transparent);padding:12px;border-radius:0 0 12px 12px}
+.sc-title{font-size:.85rem;font-weight:600;color:#fff}
+.sc-meta{font-size:.72rem;color:rgba(255,255,255,.7);margin-top:3px}
+.seasons-header{border-top:1px solid var(--border);margin:0 -16px;padding:8px 16px 4px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.season-list-row{display:flex;align-items:center;gap:10px;padding:8px 4px;cursor:pointer;transition:background .12s;border-right:2px solid transparent;border-radius:4px}
 .season-list-row:hover{background:var(--bg-700)}
 .season-list-row.active{background:color-mix(in srgb,var(--accent-600) 15%,transparent);border-right-color:var(--accent-500)}
-.slr-poster{width:26px;height:39px;border-radius:3px;object-fit:cover;flex-shrink:0;background:var(--bg-600)}
-.slr-name{font-size:.75rem;color:var(--text-secondary);transition:color .12s}
-.season-list-row.active .slr-name{color:var(--accent-400);font-weight:500}
-.slr-meta{font-size:.67rem;color:var(--text-muted)}
+.slr-poster{width:32px;height:48px;border-radius:4px;object-fit:cover;flex-shrink:0;background:var(--bg-600)}
+.slr-name{font-size:.75rem;color:var(--text-secondary);transition:color .12s;font-weight:500}
+.season-list-row.active .slr-name{color:var(--accent-400)}
+.slr-meta{font-size:.68rem;color:var(--text-muted);margin-top:1px}
 .slr-dot{width:5px;height:5px;border-radius:50%;background:var(--accent-400);margin-left:auto;flex-shrink:0}
-.si-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);font-size:.8rem;text-align:center;padding:16px}
-.si-empty-icon{font-size:26px;opacity:.4}
+.si-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:var(--text-muted);font-size:.82rem;text-align:center;padding:16px}
+.si-empty-icon{font-size:30px;opacity:.4}
 .rename-preview-box{background:var(--bg-700);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-top:4px}
 .rpb-label{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px}
 .rpb-value{font-size:.75rem;color:#4ade80;font-family:'SF Mono','Fira Code',monospace;word-break:break-all}
 
 /* Settings modal */
-.settings-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;border-radius:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.settings-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;border-radius:14px;opacity:0;pointer-events:none;transition:opacity .2s}
 .settings-overlay.open{opacity:1;pointer-events:all}
-.settings-modal{background:var(--bg-800);border:1px solid var(--border);border-radius:12px;padding:18px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.settings-title{font-size:.9rem;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.close-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;line-height:1;padding:0}
+.settings-modal{background:var(--bg-800);border:1px solid var(--border);border-radius:16px;padding:24px;width:420px;max-height:88%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.settings-title{font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.close-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;line-height:1;padding:0}
 .close-btn:hover{color:var(--text-primary)}
+.settings-tabs{display:flex;gap:4px;background:var(--bg-700);border-radius:8px;padding:4px;margin-bottom:16px;flex-shrink:0}
+.stab{flex:1;padding:5px 0;border-radius:6px;font-size:.75rem;font-weight:500;border:none;cursor:pointer;transition:all .15s;background:transparent;color:var(--text-muted);font-family:inherit}
+.stab.active{background:var(--bg-500);color:var(--text-primary)}
+.settings-body{flex:1;overflow-y:auto;min-height:0}
 .settings-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:6px;display:block}
-.settings-input{width:100%;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-primary);padding:7px 10px;border-radius:6px;font-size:.8rem;font-family:inherit;margin-bottom:12px}
+.settings-input{width:100%;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-primary);padding:7px 10px;border-radius:8px;font-size:.82rem;font-family:inherit;margin-bottom:12px;outline:none}
+.settings-input-row{display:flex;gap:6px;margin-bottom:12px}
+.settings-input-row .settings-input{flex:1;margin-bottom:0}
+.settings-show-btn{background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-muted);border-radius:8px;padding:0 10px;cursor:pointer;font-size:.78rem;white-space:nowrap;flex-shrink:0}
+.settings-show-btn:hover{color:var(--text-primary)}
+.settings-hint{font-size:.72rem;color:var(--text-muted);margin-bottom:12px;line-height:1.45}
 .theme-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:14px}
-.theme-btn{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:6px;border:1px solid var(--bg-400);cursor:pointer;font-size:.72rem;font-family:inherit;background:var(--bg-700);color:var(--text-secondary);transition:all .15s}
+.theme-btn{display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:6px;border:1px solid var(--bg-400);cursor:pointer;font-size:.72rem;font-family:inherit;background:var(--bg-700);color:var(--text-secondary);transition:all .15s}
 .theme-btn:hover{background:var(--bg-600)}
 .theme-btn.active{background:var(--bg-500);border-color:var(--accent-500);color:var(--accent-400)}
 .theme-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.settings-footer{display:flex;gap:8px;margin-top:4px}
-.settings-footer button{flex:1;padding:7px;border-radius:7px;font-size:.8rem;font-weight:500;cursor:pointer;font-family:inherit;border:none;transition:all .15s}
+.whisper-models{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.whisper-model-btn{padding:5px 12px;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-secondary);border-radius:6px;cursor:pointer;font-size:.75rem;font-family:inherit;transition:all .15s}
+.whisper-model-btn.active{background:var(--accent-600);color:#fff;border-color:transparent}
+.vad-toggle{padding:6px 16px;background:var(--bg-700);border:1px solid var(--bg-400);color:var(--text-secondary);border-radius:8px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:all .15s;margin-bottom:8px}
+.vad-toggle.on{background:var(--accent-600);color:#fff;border-color:transparent}
+.settings-footer{display:flex;gap:8px;margin-top:16px;flex-shrink:0}
+.settings-footer button{flex:1;padding:8px;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;border:none;transition:all .15s}
 .sf-cancel{background:var(--bg-700);color:var(--text-secondary);border:1px solid var(--bg-400)!important}
 .sf-cancel:hover{background:var(--bg-600)}
 .sf-save{background:var(--accent-600);color:#fff}
@@ -445,6 +464,7 @@ footer a{color:var(--pg-fg2)}
       <div class="app-header">
         <svg class="ah-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
         <span class="ah-name">Matchbox</span>
+        <span class="ah-version">v2.1.0</span>
         <div class="mode-toggle">
           <button class="mt-btn active" id="tvBtn" onclick="setMode('tv')">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
@@ -487,9 +507,9 @@ footer a{color:var(--pg-fg2)}
               <div class="sh-title" id="shTitle">—</div>
               <div class="sh-meta">
                 <span class="ep-meta" id="shEpCount"></span>
-                <span id="matchBadges"></span>
               </div>
             </div>
+            <div class="sh-badges" id="matchBadges"></div>
           </div>
 
           <div class="controls-bar" id="controlsBar" style="display:none">
@@ -499,7 +519,7 @@ footer a{color:var(--pg-fg2)}
             </button>
             <div class="ctrl-divider"></div>
             <span class="ctrl-label">Pattern</span>
-            <input class="ctrl-input" value=" - " readonly>
+            <input class="ctrl-input" id="ctrlPatternInput" value=" - " oninput="onPatternChange(this.value)">
             <div class="ctrl-divider"></div>
             <span class="ctrl-label">Offset</span>
             <div class="ctrl-offset">
@@ -530,10 +550,6 @@ footer a{color:var(--pg-fg2)}
               <button class="ab-btn" onclick="openRemuxModal()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
                 Remux
-              </button>
-              <button class="ab-btn" onclick="openSplitModal()">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Split
               </button>
               <button class="ab-btn primary" id="renameBtn" onclick="doRename()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -572,17 +588,58 @@ footer a{color:var(--pg-fg2)}
             Settings
             <button class="close-btn" onclick="toggleSettings()">✕</button>
           </div>
-          <label class="settings-label">TMDB API Key</label>
-          <input class="settings-input" type="password" value="••••••••••••••••••••••••••••••••" readonly>
-          <label class="settings-label">TV Library Path</label>
-          <input class="settings-input" type="text" value="/home/user/TV" readonly>
-          <label class="settings-label">Movie Library Path</label>
-          <input class="settings-input" type="text" value="/home/user/Movies" readonly>
-          <label class="settings-label">Rename Pattern</label>
-          <input class="settings-input" type="text" id="patternInput" value=" - " oninput="onPatternChange(this.value)" style="font-family:'SF Mono','Fira Code',monospace">
-          <div style="font-size:.74rem;color:var(--text-muted);margin-top:.2rem;margin-bottom:.75rem">Preview: <code id="patternPreview">01 - Episode Title.mkv</code></div>
-          <label class="settings-label">Theme</label>
-          <div class="theme-grid" id="themeGrid"></div>
+          <!-- Tabs -->
+          <div class="settings-tabs">
+            <button class="stab active" id="stab-general" onclick="switchSettingsTab('general')">General</button>
+            <button class="stab" id="stab-personalization" onclick="switchSettingsTab('personalization')">Personalization</button>
+            <button class="stab" id="stab-subtitles" onclick="switchSettingsTab('subtitles')">Subtitles</button>
+          </div>
+          <!-- Scrollable body -->
+          <div class="settings-body">
+            <!-- General tab -->
+            <div id="stab-general-body">
+              <label class="settings-label">TMDB API Key</label>
+              <div class="settings-input-row">
+                <input class="settings-input" type="password" value="••••••••••••••••••••••••" id="apiKeyInput">
+                <button class="settings-show-btn" onclick="toggleApiKeyVis()" id="apiKeyShowBtn">Show</button>
+              </div>
+              <label class="settings-label">TV Shows Path</label>
+              <input class="settings-input" type="text" value="/home/user/TV" readonly>
+              <label class="settings-label">Movies Path</label>
+              <input class="settings-input" type="text" value="/home/user/Movies" readonly>
+              <label class="settings-label">TV Episode Template</label>
+              <input class="settings-input" type="text" value="{e:02d}{sep}{title}" readonly style="font-family:'SF Mono','Fira Code',monospace">
+              <div class="settings-hint">Vars: <code>{e:02d}</code> episode number, <code>{title}</code> title, <code>{sep}</code> separator</div>
+              <label class="settings-label">Movie Template</label>
+              <input class="settings-input" type="text" value="{title} ({year})" readonly style="font-family:'SF Mono','Fira Code',monospace">
+              <label class="settings-label">Separator (for <code style="font-size:.75rem">{sep}</code>)</label>
+              <input class="settings-input" type="text" id="patternInput" value=" - " oninput="onPatternChange(this.value)" style="font-family:'SF Mono','Fira Code',monospace">
+              <div class="settings-hint">Preview: <code id="patternPreview">01 - Episode Title.mkv</code></div>
+            </div>
+            <!-- Personalization tab -->
+            <div id="stab-personalization-body" style="display:none">
+              <label class="settings-label">Theme</label>
+              <div class="theme-grid" id="themeGrid"></div>
+            </div>
+            <!-- Subtitles tab -->
+            <div id="stab-subtitles-body" style="display:none">
+              <label class="settings-label">Default Model</label>
+              <div class="whisper-models" id="whisperModels"></div>
+              <div class="settings-hint">Larger models are more accurate but slower to load and run.</div>
+              <label class="settings-label">Language</label>
+              <select class="settings-input" style="margin-bottom:12px;cursor:pointer">
+                <option>Auto-detect</option><option>English</option><option>Japanese</option>
+                <option>Chinese</option><option>Korean</option><option>French</option>
+                <option>German</option><option>Spanish</option><option>Portuguese</option>
+              </select>
+              <label class="settings-label">Beam Size</label>
+              <div class="whisper-models" id="beamSizes"></div>
+              <div class="settings-hint">Higher beam size improves accuracy at the cost of speed.</div>
+              <label class="settings-label">VAD Filter</label>
+              <button class="vad-toggle on" id="vadToggle" onclick="toggleVad()">Enabled</button>
+              <div class="settings-hint">Filters hallucinated text during silence and music. Recommended on.</div>
+            </div>
+          </div>
           <div class="settings-footer">
             <button class="sf-cancel" onclick="toggleSettings()">Cancel</button>
             <button class="sf-save" onclick="toggleSettings()">Save Settings</button>
@@ -1064,23 +1121,23 @@ const MOVIES = [
 const SEARCH_DATA = {
   tv: [
     { id:1, title:'Arcane', year:'2021', poster:'/abf8tHznhSvl9BAElD2cQeRr7do.jpg',
-      seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:6}],
+      seasons:[{n:1,title:'Season 1',eps:9,year:'2021'},{n:2,title:'Season 2',eps:6,year:'2024'}],
       overview:'The utopian Piltover and the oppressed underground of Zaun are in conflict over the ideology of Hextech technology.',
       rating:9.0 },
     { id:2, title:'Severance', year:'2022', poster:'/pPHpeI2X1qEd1CS1SeyrdhZ4qnT.jpg',
-      seasons:[{n:1,title:'Season 1',eps:9},{n:2,title:'Season 2',eps:10}],
+      seasons:[{n:1,title:'Season 1',eps:9,year:'2022'},{n:2,title:'Season 2',eps:10,year:'2025'}],
       overview:'Mark leads a team of office workers whose memories have been surgically divided between their work and personal lives.',
       rating:8.7 },
     { id:3, title:'The Bear', year:'2022', poster:'/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg',
-      seasons:[{n:1,title:'Season 1',eps:8},{n:2,title:'Season 2',eps:10},{n:3,title:'Season 3',eps:10}],
+      seasons:[{n:1,title:'Season 1',eps:8,year:'2022'},{n:2,title:'Season 2',eps:10,year:'2023'},{n:3,title:'Season 3',eps:10,year:'2024'}],
       overview:'A young chef from the fine dining world comes home to Chicago to run his family\'s sandwich shop.',
       rating:8.8 },
     { id:4, title:'Fallout', year:'2024', poster:'/7TBfMjYvAuSVHw1B7E5GZT3I4GG.jpg',
-      seasons:[{n:1,title:'Season 1',eps:8}],
+      seasons:[{n:1,title:'Season 1',eps:8,year:'2024'}],
       overview:'In a future, post-apocalyptic Los Angeles, a young woman emerges from her bunker 200 years after nuclear war.',
       rating:8.5 },
     { id:5, title:'House of the Dragon', year:'2022', poster:'/elwO2VlWzvUWsGGeeypZzpa61Jm.jpg',
-      seasons:[{n:1,title:'Season 1',eps:10},{n:2,title:'Season 2',eps:8}],
+      seasons:[{n:1,title:'Season 1',eps:10,year:'2022'},{n:2,title:'Season 2',eps:8,year:'2024'}],
       overview:'The story of House Targaryen, set 200 years before the events of Game of Thrones.',
       rating:8.4 },
   ],
@@ -1208,7 +1265,7 @@ function buildMoviePanel(movie) {
 
   document.getElementById('shTitle').textContent = `${movie.folder} (${movie.year})`;
   document.getElementById('shEpCount').textContent = '1 file';
-  document.getElementById('matchBadges').innerHTML = '<span class="badge-g">1 ✓</span>';
+  document.getElementById('matchBadges').innerHTML = '<span class="badge-g">100% match</span>';
 
   // Poster / backdrop for movie header
   const mPosterUrl = tmdbImg(movie.poster, 'w342');
@@ -1253,6 +1310,9 @@ function buildRenamePanel(showName, num, seasonName) {
   const titleData = EPISODES_TITLE[key];
   const episodes = (state.matchMode === 'title' && titleData) ? titleData : EPISODES[key];
   if (!episodes) return;
+  // Sync controls bar pattern input
+  const ctrlPat = document.getElementById('ctrlPatternInput');
+  if (ctrlPat && ctrlPat.value !== state.pattern) ctrlPat.value = state.pattern;
 
   document.getElementById('seasonHeader').style.display = 'flex';
   document.getElementById('controlsBar').style.display = state.mode === 'tv' ? 'flex' : 'none';
@@ -1282,13 +1342,13 @@ function buildRenamePanel(showName, num, seasonName) {
   document.getElementById('shEpCount').textContent = `${episodes.length} episodes on TMDB`;
   document.getElementById('matchBadges').innerHTML =
     `<span class="badge-g">${green} ✓</span>` +
-    (yellow ? `<span class="badge-y ml-1">${yellow} ~</span>` : '') +
-    (red ? `<span class="badge-r ml-1">${red} ✗</span>` : '');
+    (yellow ? `<span class="badge-y">${yellow} ~</span>` : '') +
+    (red ? `<span class="badge-r">${red} ✗</span>` : '');
 
   const changed = episodes.filter(e => e.old).length;
   document.getElementById('abInfo').textContent = state.renamed
     ? 'All files renamed ✓'
-    : changed > 0 ? `${changed} file${changed!==1?'s':''} will be renamed` : '';
+    : changed > 0 ? `${changed} file${changed!==1?'s':''} will be renamed` : episodes.length > 0 ? 'No changes pending' : '';
   document.getElementById('renameBtnText').textContent = state.renamed ? 'Renamed' : `Rename ${changed} File${changed!==1?'s':''}`;
   document.getElementById('renameBtn').disabled = state.renamed;
   document.getElementById('undoBtn').style.display = state.renamed ? 'flex' : 'none';
@@ -1313,9 +1373,14 @@ function buildRenamePanel(showName, num, seasonName) {
       <div class="ep-files">
         ${ep.old
           ? `<span class="ep-old">${state.renamed ? newName : ep.old}</span>
-             <span class="ep-arrow">→</span>
-             <span class="${newClass}">${newName}</span>`
-          : `<span class="ep-nofile">${ep.title} — no local file</span><span></span><span></span>`}
+             <div class="ep-right">
+               <span class="ep-arrow">→</span>
+               <span class="${newClass}">${newName}</span>
+             </div>`
+          : `<div class="ep-nofile-row">
+               <span class="ep-nofile-title">${ep.title}</span>
+               <span class="ep-nofile">— no local file</span>
+             </div>`}
       </div>
       <span class="ep-score ${scoreClass}">${ep.old ? ep.score+'%' : '—'}</span>`;
     table.appendChild(row);
@@ -1434,12 +1499,12 @@ function buildShowInfo(r) {
   const seasons = r.seasons || [];
   const activeSeason = state.activeSeasonNum ? seasons.find(s => s.n === state.activeSeasonNum) : null;
   const seasonCardHtml = activeSeason ? (() => {
-    const cardUrl = tmdbImg(r.poster, 'w500');
+    const cardUrl = tmdbImg(r.poster, 'w342');
     return `<div class="season-card" onclick="selectSeasonFromInfo('${r.title}',${activeSeason.n},'${activeSeason.title}')">
-      ${cardUrl ? `<img src="${cardUrl}" loading="lazy">` : `<div style="background:var(--bg-600);height:120px"></div>`}
+      ${cardUrl ? `<img src="${cardUrl}" loading="lazy">` : `<div style="background:var(--bg-600);aspect-ratio:2/3"></div>`}
       <div class="season-card-overlay">
         <div class="sc-title">${activeSeason.title}</div>
-        <div class="sc-meta">${activeSeason.eps} episodes · ${r.year}</div>
+        <div class="sc-meta">${activeSeason.eps} episodes · ${activeSeason.year || r.year}</div>
       </div>
     </div>`;
   })() : '';
@@ -1449,8 +1514,14 @@ function buildShowInfo(r) {
         ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">📺</div>`}
         <div style="flex:1;min-width:0">
           <div class="si-title">${r.title}</div>
-          <div class="si-year">📅 ${r.year}</div>
-          ${r.rating ? `<div class="si-rating"><span class="si-star">★</span><span class="si-score">${r.rating.toFixed(1)}</span></div>` : ''}
+          <div class="si-year">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${r.year}
+          </div>
+          ${r.rating ? `<div class="si-rating">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="#facc15" stroke="#facc15" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="si-score">${r.rating.toFixed(1)}</span>
+          </div>` : ''}
         </div>
       </div>
       <p class="si-overview">${r.overview}</p>
@@ -1458,10 +1529,10 @@ function buildShowInfo(r) {
       <div class="seasons-header">Seasons</div>
       ${seasons.map(s => `
         <div class="season-list-row${state.activeSeasonNum===s.n?' active':''}" onclick="selectSeasonFromInfo('${r.title}',${s.n},'${s.title}')">
-          <div class="slr-poster">${pUrl ? `<img src="${tmdbImg(r.poster,'w92')}" style="width:100%;height:100%;object-fit:cover;border-radius:3px" loading="lazy">` : '📺'}</div>
+          <div class="slr-poster">${pUrl ? `<img src="${tmdbImg(r.poster,'w92')}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" loading="lazy">` : '📺'}</div>
           <div style="flex:1;min-width:0">
             <div class="slr-name">${s.title}</div>
-            <div class="slr-meta">${s.eps} eps</div>
+            <div class="slr-meta">${s.eps} eps · ${s.year || r.year}</div>
           </div>
           ${state.activeSeasonNum===s.n ? '<div class="slr-dot"></div>' : ''}
         </div>`).join('')}
@@ -1488,7 +1559,12 @@ function toggleMatchMode() {
   state.matchMode = state.matchMode === 'numeric' ? 'title' : 'numeric';
   const isTitle = state.matchMode === 'title';
   document.getElementById('modeLabel').textContent = isTitle ? 'Title Match' : 'Numeric';
-  document.getElementById('modeIcon').style.color = isTitle ? 'var(--accent-400)' : '';
+  const iconEl = document.getElementById('modeIcon');
+  // Swap circle left (Numeric) ↔ right (Title Match)
+  iconEl.innerHTML = isTitle
+    ? '<rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3"/>'
+    : '<rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="8" cy="12" r="3"/>';
+  iconEl.style.color = isTitle ? 'var(--accent-400)' : 'var(--text-muted)';
   if (state.activeSeason) {
     buildRenamePanel(state.activeShow, state.activeSeasonNum,
       'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
@@ -1500,6 +1576,11 @@ function onPatternChange(val) {
   state.pattern = val;
   const preview = document.getElementById('patternPreview');
   if (preview) preview.textContent = `01${val}Episode Title.mkv`;
+  // Keep settings modal input and controls bar input in sync
+  const pi = document.getElementById('patternInput');
+  if (pi && pi.value !== val) pi.value = val;
+  const ci = document.getElementById('ctrlPatternInput');
+  if (ci && ci.value !== val) ci.value = val;
   if (state.activeSeason) {
     buildRenamePanel(state.activeShow, state.activeSeasonNum,
       'Season ' + String(state.activeSeasonNum).padStart(2,'0'));
@@ -1570,6 +1651,61 @@ function showToast(msg, color) {
 }
 
 // ── Settings ──────────────────────────────────────────────────────────────────
+function switchSettingsTab(tab) {
+  ['general','personalization','subtitles'].forEach(t => {
+    document.getElementById('stab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('stab-'+t+'-body').style.display = t===tab ? 'block' : 'none';
+  });
+}
+
+function toggleApiKeyVis() {
+  const inp = document.getElementById('apiKeyInput');
+  const btn = document.getElementById('apiKeyShowBtn');
+  if (inp.type === 'password') {
+    inp.type = 'text'; inp.value = 'your_tmdb_api_key_here (demo)'; btn.textContent = 'Hide';
+  } else {
+    inp.type = 'password'; inp.value = '••••••••••••••••••••••••'; btn.textContent = 'Show';
+  }
+}
+
+const WHISPER_MODELS_LIST = ['tiny','base','small','medium','large'];
+let whisperModel = 'base';
+function buildWhisperModels() {
+  const container = document.getElementById('whisperModels');
+  if (!container) return;
+  container.innerHTML = '';
+  WHISPER_MODELS_LIST.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'whisper-model-btn' + (whisperModel===m?' active':'');
+    btn.textContent = m;
+    btn.onclick = () => { whisperModel = m; buildWhisperModels(); };
+    container.appendChild(btn);
+  });
+}
+
+const BEAM_SIZES = [1, 5, 10];
+let beamSize = 5;
+function buildBeamSizes() {
+  const container = document.getElementById('beamSizes');
+  if (!container) return;
+  container.innerHTML = '';
+  BEAM_SIZES.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'whisper-model-btn' + (beamSize===b?' active':'');
+    btn.textContent = b;
+    btn.onclick = () => { beamSize = b; buildBeamSizes(); };
+    container.appendChild(btn);
+  });
+}
+
+let vadEnabled = true;
+function toggleVad() {
+  vadEnabled = !vadEnabled;
+  const btn = document.getElementById('vadToggle');
+  btn.textContent = vadEnabled ? 'Enabled' : 'Disabled';
+  btn.classList.toggle('on', vadEnabled);
+}
+
 function buildThemeGrid() {
   const grid = document.getElementById('themeGrid');
   grid.innerHTML = '';
@@ -1593,6 +1729,8 @@ function toggleSettings() {
   const isOpen = overlay.classList.contains('open');
   if (!isOpen) {
     buildThemeGrid();
+    buildWhisperModels();
+    buildBeamSizes();
     const pi = document.getElementById('patternInput');
     if (pi) { pi.value = state.pattern; onPatternChange(state.pattern); }
   }

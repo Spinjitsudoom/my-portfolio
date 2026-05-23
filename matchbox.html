@@ -39,16 +39,16 @@ body{
   overflow-x:hidden;
 }
 
-/* ── App theme vars (Slate default) ────────────────────────────────────────── */
+/* ── App theme vars — synced exactly to real app index.css ─────────────────── */
 .app-demo{
-  --bg-900:#0d0f14;--bg-800:#13161e;--bg-750:#181b24;
-  --bg-700:#1e2230;--bg-600:#252a3a;--bg-500:#2e3446;--bg-400:#3a4158;
+  --bg-900:#080c18;--bg-800:#0d1222;--bg-750:#111929;
+  --bg-700:#162030;--bg-600:#1d2a42;--bg-500:#263454;--bg-400:#314266;
   --accent-400:#60a5fa;--accent-500:#3b82f6;--accent-600:#2563eb;
   --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;
   --border:rgba(255,255,255,.07);
 }
 .app-demo[data-theme="Dark"]{
-  --bg-900:#0a0a0a;--bg-800:#111;--bg-750:#161616;--bg-700:#1a1a1a;--bg-600:#222;--bg-500:#2a2a2a;--bg-400:#333;
+  --bg-900:#0a0a0e;--bg-800:#101015;--bg-750:#141419;--bg-700:#18181f;--bg-600:#202029;--bg-500:#282834;--bg-400:#33333f;
   --accent-400:#818cf8;--accent-500:#6366f1;--accent-600:#4f46e5;
 }
 .app-demo[data-theme="Midnight"]{
@@ -60,7 +60,7 @@ body{
   --accent-400:#34d399;--accent-500:#10b981;--accent-600:#059669;
 }
 .app-demo[data-theme="Amethyst"]{
-  --bg-900:#0c0814;--bg-800:#130e1e;--bg-750:#171228;--bg-700:#1a1228;--bg-600:#221733;--bg-500:#2b1d40;--bg-400:#36254f;
+  --bg-900:#0c0814;--bg-800:#130e1e;--bg-750:#161228;--bg-700:#1a1228;--bg-600:#221733;--bg-500:#2b1d40;--bg-400:#36254f;
   --accent-400:#c084fc;--accent-500:#a855f7;--accent-600:#9333ea;
 }
 .app-demo[data-theme="Crimson"]{
@@ -228,7 +228,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .empty-icon{font-size:28px;opacity:.5}
 
 /* Right panel */
-.right-panel{width:330px;min-width:330px;background:var(--bg-800);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.right-panel{width:380px;min-width:380px;background:var(--bg-800);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .rp-top{flex:1;border-bottom:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .rp-bot{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .panel-hdr{padding:7px 12px;border-bottom:1px solid var(--border);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);flex-shrink:0}
@@ -320,6 +320,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .dl-card>p{font-size:.875rem;color:var(--pg-fg2);flex:1}
 .dl-badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-bottom:.25rem}
 .dl-badge.win{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa}
+.dl-badge.mac{background:rgba(200,200,200,.08);border-color:rgba(200,200,200,.2);color:#cbd5e1}
 .dl-card-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
 .dl-toggle{background:none;border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:8px;padding:.45rem .9rem;font-size:.85rem;cursor:pointer;transition:color .2s,border-color .2s;font-family:inherit}
 .dl-toggle:hover{color:var(--pg-fg);border-color:var(--pg-accent)}
@@ -368,9 +369,9 @@ footer a{color:var(--pg-fg2)}
   .nav-links{display:none}
   .hamburger{display:flex}
 }
-@media(max-width:900px){
+@media(max-width:980px){
   .lib-panel{width:150px;min-width:150px}
-  .right-panel{width:260px;min-width:260px}
+  .right-panel{width:300px;min-width:300px}
   .app-body{height:460px}
 }
 @media(max-width:700px){
@@ -410,13 +411,15 @@ footer a{color:var(--pg-fg2)}
     <h1><span class="grad">Matchbox</span></h1>
     <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no cloud required.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.0.0.exe" target="_blank" rel="noopener">⬇ Windows</a>
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0.AppImage" target="_blank" rel="noopener">⬇ Linux</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.1.0.exe" target="_blank" rel="noopener">⬇ Windows</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0-arm64.dmg" target="_blank" rel="noopener">⬇ macOS</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0.AppImage" target="_blank" rel="noopener">⬇ Linux</a>
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">View Source</a>
     </div>
     <div class="hero-pills">
-      <div class="pill">🐧 <span>Linux AppImage + Flatpak</span></div>
       <div class="pill">🪟 <span>Windows Installer + Portable</span></div>
+      <div class="pill">🍎 <span>macOS (Apple Silicon)</span></div>
+      <div class="pill">🐧 <span>Linux AppImage + Flatpak</span></div>
       <div class="pill">📺 <span>Plex · Jellyfin · Emby</span></div>
       <div class="pill">🔒 <span>MIT License</span></div>
     </div>
@@ -435,7 +438,7 @@ footer a{color:var(--pg-fg2)}
           <div class="dot" style="background:#ffbd2e"></div>
           <div class="dot" style="background:#28c941"></div>
         </div>
-        <span class="win-title">Matchbox <span style="font-size:.75em;opacity:.5;font-weight:400">v2.0.0</span></span>
+        <span class="win-title">Matchbox <span style="font-size:.75em;opacity:.5;font-weight:400">v2.1.0</span></span>
       </div>
 
       <!-- App header -->
@@ -700,11 +703,11 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Runs the Inno Setup wizard and adds Matchbox to your Start Menu with an optional desktop shortcut and a clean uninstaller.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.0.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-Setup-2.1.0.exe" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
-          <p>1. Run <code>Matchbox-Setup-2.0.0.exe</code> and follow the wizard.</p>
+          <p>1. Run <code>Matchbox-Setup-2.1.0.exe</code> and follow the wizard.</p>
           <p>2. Launch Matchbox from the Start Menu.</p>
           <p>3. The first-run wizard will ask for your TMDB API key and library paths.</p>
         </div>
@@ -717,11 +720,11 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Extract the zip anywhere and run — no installer, no admin rights, no registry entries.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0-portable-win.zip" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0-portable-win.zip" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
-          <p>1. Extract <code>Matchbox-2.0.0-portable-win.zip</code> to any folder.</p>
+          <p>1. Extract <code>Matchbox-2.1.0-portable-win.zip</code> to any folder.</p>
           <p>2. Run <code>Matchbox.exe</code> — no install, no registry changes.</p>
         </div>
       </div>
@@ -733,13 +736,13 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Single executable — no install needed. Works on any modern Linux distro with FUSE support.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0.AppImage" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0.AppImage" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
           <p>Make it executable and run:</p>
-          <div class="dl-cb"><pre>chmod +x Matchbox-2.0.0.AppImage
-./Matchbox-2.0.0.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>chmod +x Matchbox-2.1.0.AppImage
+./Matchbox-2.1.0.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
       </div>
 
@@ -750,16 +753,50 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Fully sandboxed, self-contained bundle. No system dependencies required — everything is included.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.0.0-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
           <p>Install for your user only (no password needed):</p>
-          <div class="dl-cb"><pre>flatpak install --user Matchbox-2.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>flatpak install --user Matchbox-2.1.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>Or system-wide (requires sudo):</p>
-          <div class="dl-cb"><pre>sudo flatpak install Matchbox-2.0.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-cb"><pre>sudo flatpak install Matchbox-2.1.0-x86_64.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>Then launch:</p>
           <div class="dl-cb"><pre>flatpak run io.github.Spinjitsudoom.Matchbox</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div>
+          <div class="dl-badge mac">macOS · Apple Silicon</div>
+          <h3>macOS DMG</h3>
+        </div>
+        <p>Native ARM64 app bundle packaged as a drag-and-drop DMG. Open, drag Matchbox to Applications, and launch.</p>
+        <div class="dl-card-actions">
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0-arm64.dmg" target="_blank" rel="noopener">⬇ Download</a>
+          <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+        </div>
+        <div class="dl-install" style="display:none">
+          <p>1. Open <code>Matchbox-2.1.0-arm64.dmg</code>.</p>
+          <p>2. Drag Matchbox to your Applications folder.</p>
+          <p>3. Right-click → Open on first launch to bypass Gatekeeper.</p>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div>
+          <div class="dl-badge mac">macOS · Apple Silicon</div>
+          <h3>macOS Portable</h3>
+        </div>
+        <p>Zipped <code>.app</code> bundle — no DMG, no install. Extract anywhere and run directly from your preferred location.</p>
+        <div class="dl-card-actions">
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/latest/download/Matchbox-2.1.0-arm64-mac.zip" target="_blank" rel="noopener">⬇ Download</a>
+          <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+        </div>
+        <div class="dl-install" style="display:none">
+          <p>1. Unzip <code>Matchbox-2.1.0-arm64-mac.zip</code>.</p>
+          <p>2. Move <code>Matchbox.app</code> wherever you like.</p>
+          <p>3. Right-click → Open on first launch to bypass Gatekeeper.</p>
         </div>
       </div>
 
@@ -782,7 +819,7 @@ cd frontend && npm ci && npm run build
       </div>
     </div>
 
-    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--pg-fg3);">All builds are v2.0.0. Source code available on <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>.</p>
+    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--pg-fg3);">All builds are v2.1.0. Source code available on <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 </section>
 
@@ -1395,6 +1432,17 @@ function buildShowInfo(r) {
   }
   const pUrl = tmdbImg(r.poster, 'w185');
   const seasons = r.seasons || [];
+  const activeSeason = state.activeSeasonNum ? seasons.find(s => s.n === state.activeSeasonNum) : null;
+  const seasonCardHtml = activeSeason ? (() => {
+    const cardUrl = tmdbImg(r.poster, 'w500');
+    return `<div class="season-card" onclick="selectSeasonFromInfo('${r.title}',${activeSeason.n},'${activeSeason.title}')">
+      ${cardUrl ? `<img src="${cardUrl}" loading="lazy">` : `<div style="background:var(--bg-600);height:120px"></div>`}
+      <div class="season-card-overlay">
+        <div class="sc-title">${activeSeason.title}</div>
+        <div class="sc-meta">${activeSeason.eps} episodes · ${r.year}</div>
+      </div>
+    </div>`;
+  })() : '';
   el.innerHTML = `
     <div class="show-info">
       <div class="si-top">
@@ -1406,6 +1454,7 @@ function buildShowInfo(r) {
         </div>
       </div>
       <p class="si-overview">${r.overview}</p>
+      ${seasonCardHtml}
       <div class="seasons-header">Seasons</div>
       ${seasons.map(s => `
         <div class="season-list-row${state.activeSeasonNum===s.n?' active':''}" onclick="selectSeasonFromInfo('${r.title}',${s.n},'${s.title}')">

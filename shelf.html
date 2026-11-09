@@ -390,7 +390,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .feat-icon{width:40px;height:40px;background:rgba(59,130,246,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.85rem}
 .feat h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
 .feat p{color:var(--pg-fg2);font-size:.88rem;line-height:1.55}
-.feat-exp{display:inline-block;margin-left:.4rem;font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#facc15;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.25);border-radius:20px;padding:.05rem .45rem;vertical-align:middle}
 
 /* ── Download ──────────────────────────────────────────────────────────────── */
 .dl-group{margin-bottom:2.5rem}
@@ -475,7 +474,6 @@ footer a{color:var(--pg-fg2)}
   <symbol id="p-disc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></g><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/></symbol>
   <symbol id="p-volume" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
-  <symbol id="p-radio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></g></symbol>
   <symbol id="p-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="7" rx="1.5"/><rect x="3.5" y="13" width="17" height="7" rx="1.5"/></g><circle cx="7.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="7.5" cy="16.5" r="1.1" fill="currentColor"/></symbol>
   <symbol id="p-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.5h7M12 16.5v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -714,11 +712,6 @@ footer a{color:var(--pg-fg2)}
         <h3>Private by default</h3>
         <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-radio"/></svg></div>
-        <h3>AI radio DJ <span class="feat-exp">Experimental</span></h3>
-        <p>Off by default. Turns your library into a radio show with a host who talks between sets, timed to the next song's intro. Runs on a built-in local model (llama.cpp) with Kokoro or Chatterbox voices, or Gemini, Claude or Ollama.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -757,7 +750,7 @@ footer a{color:var(--pg-fg2)}
             <div class="dl-badge win">Windows 10 / 11</div>
             <h3>Shelf Server for Windows</h3>
           </div>
-          <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in. Tempo and key analysis, "sounds like", CD ripping and the DJ need the Linux server.</p>
+          <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in. Tempo and key analysis, "sounds like" and CD ripping need the Linux server.</p>
           <div class="dl-card-actions">
             <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.6.0.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
@@ -924,7 +917,6 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
       <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia · Web Audio · mutagen</div></div>
       <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android WebView (Java) · Electron · Flatpak</div></div>
       <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp</div></div>
-      <div class="stack-card"><div class="stack-layer">AI DJ</div><div class="stack-val">llama.cpp · Kokoro · Chatterbox</div></div>
       <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder</div></div>
       <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions on Linux &amp; Windows</div></div>
     </div>

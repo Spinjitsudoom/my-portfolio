@@ -82,6 +82,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
 .pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
 .pill span{color:var(--pg-fg2)}
+.pi{width:1em;height:1em;flex:none;vertical-align:-.125em}
+.pill .pi{width:16px;height:16px;color:#7c9cf5}
+.feat-icon .pi{width:21px;height:21px;color:#60a5fa}
+.btn .pi{width:16px;height:16px}
 
 /* ── Demo section ──────────────────────────────────────────────────────────── */
 .demo-section{padding:0 0 5rem}
@@ -458,6 +462,26 @@ footer a{color:var(--pg-fg2)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-devices" viewBox="0 0 24 24"><rect x="3" y="3" width="11" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="14.3" r="2.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="7.4" r="1.2" fill="currentColor"/><path d="M17.5 6.5H20a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1h-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19.5c.7-3.2 3.1-5 6.2-5s5.5 1.8 6.2 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 6M17.6 14.8c1.9.6 3.2 2.2 3.6 4.7"/></g></symbol>
+  <symbol id="p-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9ZM18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8Z" fill="currentColor"/></symbol>
+  <symbol id="p-mix" viewBox="0 0 24 24"><path d="M3 6.5c5.5 0 11.5 11 18 11M3 17.5c5.5 0 11.5-11 18-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-eq" viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/><rect x="3.5" y="12" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="9.5" y="6.5" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="15.5" y="14.5" width="5" height="3" rx="1.2" fill="currentColor"/></symbol>
+  <symbol id="p-blend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></g></symbol>
+  <symbol id="p-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v8m-3.5-3.5 3.5 3.5 3.5-3.5"/></g></symbol>
+  <symbol id="p-arrow" viewBox="0 0 24 24"><path d="M12 4v13m-5.5-5.5L12 17l5.5-5.5M5 20.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-disc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></g><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/></symbol>
+  <symbol id="p-volume" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="p-radio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></g></symbol>
+  <symbol id="p-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="7" rx="1.5"/><rect x="3.5" y="13" width="17" height="7" rx="1.5"/></g><circle cx="7.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="7.5" cy="16.5" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="p-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.5h7M12 16.5v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.8 5.7 3.8 9s-1.2 6.3-3.8 9c-2.6-2.7-3.8-5.7-3.8-9S9.4 3 12 3Z"/></g></symbol>
+  <symbol id="p-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
 
 <nav>
   <div class="nav-inner">
@@ -488,15 +512,15 @@ footer a{color:var(--pg-fg2)}
     <h1><span class="grad">Shelf</span></h1>
     <p>A self-hosted music server for your own CD rips, with the features of a big streaming app. It scans a folder of music, lays it out as a shelf of albums, and streams it to every browser, phone and computer in the house, for everyone you add.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="#download">⬇ Get Shelf</a>
+      <a class="btn btn-primary" href="#download"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Get Shelf</a>
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">View Source</a>
     </div>
     <div class="hero-pills">
-      <div class="pill">🐧 <span>Linux &amp; Windows server</span></div>
-      <div class="pill">🤖 <span>Android app + widget</span></div>
-      <div class="pill">🖥️ <span>Windows &amp; Linux players</span></div>
-      <div class="pill">🌐 <span>Any browser</span></div>
-      <div class="pill">🔒 <span>AGPL-3.0</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-server"/></svg><span>Linux &amp; Windows server</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg><span>Android app + widget</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-computer"/></svg><span>Windows &amp; Linux players</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg><span>Any browser</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg><span>AGPL-3.0</span></div>
     </div>
   </div>
 </section>
@@ -636,62 +660,62 @@ footer a{color:var(--pg-fg2)}
     <p class="sub">Everything you'd expect from a big streaming app, running on your own computer and playing your own files.</p>
     <div class="features-grid">
       <div class="feat">
-        <div class="feat-icon">📱</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-devices"/></svg></div>
         <h3>Your music, everywhere</h3>
         <p>Stream to any browser (desktop, phone or TV), the <strong>Android app</strong> with lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">👥</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-people"/></svg></div>
         <h3>Accounts for everyone</h3>
         <p>The music is shared, but each person has their own Favourites, playlists, history and devices. An <strong>admin dashboard</strong> adds people, resets passwords, shows two weeks of listening, and runs rescans and storage.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">✨</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-sparkle"/></svg></div>
         <h3>Made for you</h3>
         <p><strong>Shelf Mixes</strong>, On Repeat, Rediscover, Discover, and song and artist radio. Songs are matched on how they actually sound (tone, brightness, danceability) as well as artist, genre, tempo and key.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🎚️</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mix"/></svg></div>
         <h3>DJ-style Mix transitions</h3>
         <p>Turn on <strong>Mix</strong> and a playlist plays like a DJ set: Blend, Bass swap, Rise, Fade or Cut between songs, beat-matched and tempo-adjusted. Edit any transition on a two-waveform timeline.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🎛️</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-eq"/></svg></div>
         <h3>Playlists like a DJ app</h3>
         <p>BPM and key columns in Camelot notation, coloured around the wheel so compatible keys stand out. <strong>Recommended</strong> suggests songs from your library that fit by artist, genre, tempo and key.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🤝</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-blend"/></svg></div>
         <h3>Together</h3>
         <p>Public and collaborative playlists, <strong>Friend activity</strong> showing what everyone's playing, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">📥</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-download"/></svg></div>
         <h3>Offline downloads</h3>
         <p>Download albums, playlists and Favourites to the device. Downloaded playlists follow your changes, and plays made offline go into your history when you're back online.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🎤</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mic"/></svg></div>
         <h3>Lyrics &amp; music videos</h3>
         <p>Timed lyrics that light up line by line, from <code>.lrc</code> files, tags or LRCLIB. When a song has an official video, <strong>Switch to video</strong> picks it up where the song was, and switches back the same way.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">💿</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-disc"/></svg></div>
         <h3>Getting music in</h3>
         <p>Upload songs, folders or ZIPs from the browser, or <strong>rip a CD</strong> in the server's drive. It gets tags and cover art from MusicBrainz, rips to FLAC with cd-paranoia, and files it. <em>Not on your shelf</em> lists your artists' releases that you don't have yet.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🔊</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-volume"/></svg></div>
         <h3>Sound settings</h3>
         <p>Gapless playback, crossfade, loudness normalization (album-aware), a 6-band equalizer with a draggable curve, balance, mono, and separate Wi-Fi and mobile streaming quality up to lossless.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🔐</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg></div>
         <h3>Private by default</h3>
         <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">📻</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-radio"/></svg></div>
         <h3>AI radio DJ <span class="feat-exp">Experimental</span></h3>
         <p>Off by default. Turns your library into a radio show with a host who talks between sets, timed to the next song's intro. Runs on a built-in local model (llama.cpp) with Kokoro or Chatterbox voices, or Gemini, Claude or Ollama.</p>
       </div>
@@ -735,7 +759,7 @@ footer a{color:var(--pg-fg2)}
           </div>
           <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in. Tempo and key analysis, "sounds like", CD ripping and the DJ need the Linux server.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.6.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.6.0.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
@@ -749,7 +773,7 @@ footer a{color:var(--pg-fg2)}
 
       <div class="dl-source">
         <div class="dl-source-hdr" onclick="toggleSource(this)">
-          <span>⚙ Run from source</span>
+          <span style="display:inline-flex;align-items:center;gap:.5rem"><svg class="pi" aria-hidden="true"><use href="#p-settings"/></svg>Run from source</span>
           <span class="dl-src-arrow">▼</span>
         </div>
         <div class="dl-source-body" style="display:none">
@@ -775,7 +799,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>Full-screen Shelf with a media notification, lock-screen and Bluetooth controls, a home-screen widget, and offline downloads that open with no connection.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.apk" target="_blank" rel="noopener">⬇ Download APK</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
@@ -792,7 +816,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>A desktop app for Shelf that works with your keyboard's media keys and the Windows playback controls.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.6.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.6.0.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
@@ -808,7 +832,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The desktop player for Debian-based distributions. Works with media keys and the desktop's own playback controls (MPRIS).</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.6.0_amd64.deb" target="_blank" rel="noopener">⬇ Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.6.0_amd64.deb" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
@@ -823,7 +847,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The same desktop player as a sandboxed bundle that runs on any distribution.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.flatpak" target="_blank" rel="noopener">⬇ Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">

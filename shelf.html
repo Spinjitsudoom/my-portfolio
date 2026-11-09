@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shelf — a self-hosted music server and player for your own CD rips. Web, Android, Windows and Linux.">
+<title>Shelf — Etienne Axiak</title>
+<link rel="icon" type="image/svg+xml" href="shelf-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+
+/* ── Page theme ────────────────────────────────────────────────────────────── */
+:root{
+  --pg-bg:#0a0a0f;
+  --pg-bg2:#0f0f18;
+  --pg-surface:#13131e;
+  --pg-surface2:#1a1a28;
+  --pg-border:rgba(255,255,255,.07);
+  --pg-border2:rgba(255,255,255,.12);
+  --pg-accent:#5b8dee;
+  --pg-accent2:#7c6ff7;
+  --pg-grad:linear-gradient(135deg,#5b8dee,#7c6ff7);
+  --pg-fg:#e8e8f0;
+  --pg-fg2:#9898b8;
+  --pg-fg3:#55556a;
+  --r:10px;--rlg:14px;
+}
+
+body{
+  background:var(--pg-bg);
+  color:var(--pg-fg);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ── Utilities ─────────────────────────────────────────────────────────────── */
+.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}
+.section{padding:6rem 0}
+.tag{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:.2rem .85rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+h2.sh{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;margin-bottom:.6rem}
+h2.sh span{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--pg-fg2);font-size:1rem;max-width:560px;margin-bottom:2.5rem}
+a{color:var(--pg-accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:5px;padding:.1rem .4rem;font-family:"SF Mono","Fira Code",monospace;font-size:.84em;color:#c8d8f8}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.6rem;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;text-decoration:none;border:none;white-space:nowrap;font-family:inherit}
+.btn-primary{background:var(--pg-grad);color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.5);text-decoration:none}
+.btn-secondary{background:var(--pg-surface2);color:var(--pg-fg);border:1px solid var(--pg-border2)}
+.btn-secondary:hover{background:#1e2338;text-decoration:none}
+.btn-sm{padding:.45rem 1rem;font-size:.85rem}
+
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;background:rgba(7,10,16,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--pg-border)}
+.nav-inner{max-width:1140px;margin:0 auto;padding:0 1.5rem;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-back{font-weight:600;font-size:.9rem;color:var(--pg-fg2);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--pg-fg);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:var(--pg-fg2);font-size:.9rem;transition:color .2s;text-decoration:none}
+.nav-links a:hover{color:var(--pg-fg)}
+
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 4rem;position:relative;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.g1{width:700px;height:700px;background:rgba(59,130,246,.07);top:-100px;left:50%;transform:translateX(-50%)}
+.g2{width:400px;height:400px;background:rgba(129,140,248,.05);bottom:0;right:-100px}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero h1 .grad{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--pg-fg2);font-size:clamp(1rem,2vw,1.15rem);max-width:600px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-logo{width:96px;height:96px;border-radius:22px;margin:0 auto 1.5rem;display:block;box-shadow:0 8px 40px rgba(59,130,246,.3)}
+.hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
+.pill span{color:var(--pg-fg2)}
+
+/* ── Demo section ──────────────────────────────────────────────────────────── */
+.demo-section{padding:0 0 5rem}
+.demo-wrap{max-width:1180px;margin:0 auto;padding:0 1rem;position:relative}
+.demo-wrap::before{content:'';position:absolute;inset:-1px 1rem;border-radius:15px;background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(129,140,248,.1),transparent 60%);z-index:0;pointer-events:none}
+.demo-hint{text-align:center;color:var(--pg-fg3);font-size:.84rem;margin-top:1.1rem}
+.app-window{position:relative;z-index:1;background:#0c0e12;border-radius:14px;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,.7)}
+.win-bar{background:#0c0e12;border-bottom:1px solid rgba(255,255,255,.05);padding:0 12px;height:34px;display:flex;align-items:center;gap:8px}
+.dots{display:flex;gap:5px}
+.dot{width:11px;height:11px;border-radius:50%}
+.win-title{color:#5f6675;font-size:.76rem;margin-left:8px;flex:1;font-family:'Inter',system-ui,sans-serif}
+
+/* ══ Shelf app demo — tokens and shapes from the real app's dark theme ═══════ */
+.sh-demo{
+  --base:#0c0e12;--tray:#1a1d24;--sleeve:#232731;
+  --ink:#e6e9ef;--ink-2:#99a1b0;--rule:#323745;
+  --cobalt:#8199ff;--cobalt-ink:#0f1424;
+  --hover:rgba(230,233,239,.07);
+  --shadow:0 1px 1px rgba(0,0,0,.4),0 8px 16px -6px rgba(0,0,0,.7);
+  --gap:6px;
+  font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:13.5px;line-height:1.45;color:var(--ink);
+  -webkit-font-smoothing:antialiased;text-align:left;
+}
+:where(.sh-demo) button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:where(.sh-demo) input{font:inherit;color:inherit}
+:where(.sh-demo) svg{width:20px;height:20px;flex:none}
+.sh-demo :focus-visible{outline:2px solid var(--cobalt);outline-offset:2px;border-radius:4px}
+.sh-demo ::-webkit-scrollbar{width:6px;height:6px}
+.sh-demo ::-webkit-scrollbar-track{background:transparent}
+.sh-demo ::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px}
+
+.s-app{
+  position:relative;display:grid;
+  grid-template-columns:220px var(--gap) minmax(0,1fr) var(--gap) 256px;
+  grid-template-rows:58px minmax(0,1fr) 76px;
+  height:620px;padding:0 var(--gap);background:var(--base);
+}
+.s-app.npv-closed{grid-template-columns:220px var(--gap) minmax(0,1fr) 0 0}
+.s-app.npv-closed .s-npv{display:none}
+
+/* top bar */
+.s-top{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px) minmax(0,1fr);gap:10px;align-items:center;padding:0 2px}
+.s-top-start{display:flex;align-items:center;gap:2px}
+.s-brand{display:inline-grid;place-items:center;width:36px;height:36px;margin-right:6px}
+.s-brand img{width:26px;height:26px;display:block}
+.s-top-c{display:flex;align-items:center;gap:8px}
+.s-home{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--tray);color:var(--ink-2);transition:transform .12s,color .12s}
+.s-home:hover,.s-home.on{color:var(--ink)}
+.s-home:hover{transform:scale(1.04)}
+.s-search{flex:1;display:flex;align-items:center;gap:9px;min-width:0;height:42px;padding:0 6px 0 13px;border-radius:999px;background:var(--tray);color:var(--ink-2);transition:box-shadow .12s}
+.s-search:hover{box-shadow:inset 0 0 0 1px var(--rule)}
+.s-search:focus-within{box-shadow:inset 0 0 0 2px var(--ink)}
+.s-search svg{width:19px;height:19px}
+.s-search input{flex:1;min-width:0;height:100%;border:0;background:none;outline:none;font-size:14px;font-weight:500}
+.s-search input::placeholder{color:var(--ink-2)}
+.s-search-sep{width:1px;height:20px;background:var(--rule);flex:none}
+.s-top-end{display:flex;justify-content:flex-end;align-items:center;gap:2px}
+
+.s-icon-btn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:999px;color:var(--ink-2)}
+.s-icon-btn:hover{color:var(--ink);background:var(--hover)}
+.s-icon-btn svg{width:19px;height:19px}
+.s-icon-btn[aria-pressed="true"],.s-icon-btn[data-mode="all"],.s-icon-btn[data-mode="one"]{color:var(--cobalt)}
+.s-icon-btn:disabled{opacity:.35;cursor:default;background:none}
+
+/* panels */
+.s-lib,.s-view,.s-npv{grid-row:2;min-height:0;overflow:hidden;border-radius:10px;background:var(--tray)}
+.s-lib{grid-column:1;display:flex;flex-direction:column}
+.s-view{grid-column:3;overflow-y:auto;overflow-x:hidden;position:relative;container-type:inline-size;scrollbar-width:thin}
+.s-npv{grid-column:5;display:flex;flex-direction:column}
+
+/* your library */
+.s-lib-head{display:flex;align-items:center;justify-content:space-between;padding:10px 8px 4px 10px}
+.s-lib-title{display:flex;align-items:center;gap:10px;padding:5px;color:var(--ink-2);font-size:14.5px;font-weight:750}
+.s-lib-title svg{width:20px;height:20px}
+.s-chips{display:flex;gap:6px;padding:6px 12px 6px;flex-wrap:wrap}
+.s-chip{height:28px;padding:0 11px;border-radius:999px;background:color-mix(in srgb,var(--ink) 9%,transparent);font-size:12.5px;font-weight:600;white-space:nowrap}
+.s-chip:hover{background:color-mix(in srgb,var(--ink) 14%,transparent)}
+.s-chip[aria-pressed="true"]{background:var(--ink);color:var(--tray)}
+.s-lib-list{flex:1;min-height:0;overflow-y:auto;padding:4px 6px 8px;scrollbar-width:thin}
+.s-lib-item{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border-radius:6px}
+.s-lib-item:hover{background:var(--hover)}
+.s-lib-item.here{background:color-mix(in srgb,var(--ink) 9%,transparent)}
+.s-lib-item .s-case,.s-lib-item .s-pl-cover{width:42px;height:42px;flex:none}
+.s-lib-artist .s-case{border-radius:50%}
+.s-lib-artist .s-case::before,.s-lib-artist .s-case::after{display:none}
+.s-lib-text{display:flex;flex-direction:column;min-width:0;line-height:1.35;flex:1}
+.s-lib-name{font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-lib-sub{color:var(--ink-2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+.s-lib-sub svg{width:12px;height:12px;color:var(--cobalt)}
+.s-lib-item.playing .s-lib-name{color:var(--cobalt)}
+.s-lib-vol{display:none;width:15px;height:15px;color:var(--cobalt)}
+.s-lib-item.playing.live .s-lib-vol{display:block}
+
+/* the jewel case */
+.s-case{position:relative;display:block;aspect-ratio:1;width:100%;border-radius:3px;background:var(--case-bg,#8a909c);box-shadow:var(--shadow);overflow:hidden;isolation:isolate;container-type:inline-size}
+.s-case::before{content:"";position:absolute;z-index:2;top:0;bottom:0;left:0;width:7.5%;
+  background:linear-gradient(90deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.10) 18%,rgba(0,0,0,.22) 30%,rgba(255,255,255,.16) 46%,rgba(255,255,255,.04) 70%,rgba(0,0,0,.28) 100%);
+  border-right:1px solid rgba(255,255,255,.22);box-shadow:1px 0 0 rgba(0,0,0,.18)}
+.s-case::after{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(118deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.05) 34%,transparent 35%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 0 0 2px rgba(0,0,0,.08);border-radius:inherit;pointer-events:none}
+.s-case .no-art{position:absolute;inset:0;padding:14% 10% 10% 16%;display:flex;align-items:flex-end;color:rgba(255,255,255,.94);font-weight:800;font-stretch:112%;line-height:1.05;font-size:11.5cqw;overflow:hidden;word-break:break-word;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.s-case-sm{width:42px;height:42px;flex:none;border-radius:2px}
+.s-case-sm::before{width:9%}
+.s-case-sm .no-art{display:none}
+.s-mix-band{position:absolute;left:0;right:0;bottom:0;height:30%;display:flex;align-items:center;padding:0 9%;background:var(--mix);color:#fff;font-weight:850;font-stretch:118%;letter-spacing:-.01em;line-height:.98;font-size:10.5cqw;z-index:1}
+.s-mix-band::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,255,255,.35)}
+.s-pl-cover{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;aspect-ratio:1;width:100%;overflow:hidden;border-radius:4px;background:color-mix(in srgb,var(--ink) 9%,var(--tray))}
+.s-pl-cover > span{display:block;background:var(--case-bg)}
+.s-pl-cover.fav{display:grid;place-items:center;grid-template-columns:1fr;grid-template-rows:1fr;background:linear-gradient(135deg,#4b5fd6,#8199ff 60%,#b8c4ff);color:#fff}
+.s-pl-cover.fav svg{width:44%;height:44%;--heart-fill:#fff}
+
+/* page */
+.s-page{padding:20px 24px 36px}
+.s-page-title{font-size:clamp(24px,3.4vw,32px);line-height:1.05;font-weight:850;font-stretch:125%;letter-spacing:-.02em}
+.s-page-sub{margin-top:4px;color:var(--ink-2);font-stretch:85%}
+.s-section-title{margin:26px 0 12px;font-size:17px;font-weight:750;font-stretch:112%}
+.s-btn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 16px;border-radius:999px;font-weight:650;white-space:nowrap;background:var(--sleeve);box-shadow:inset 0 0 0 1px var(--rule)}
+.s-btn:hover{background:var(--hover)}
+.s-btn svg{width:16px;height:16px}
+.s-btn-primary{background:var(--cobalt);color:var(--cobalt-ink);box-shadow:none}
+.s-btn-primary:hover{background:color-mix(in srgb,var(--cobalt) 88%,var(--ink))}
+.s-btn-album{background:var(--album-strong,var(--cobalt));color:var(--album-on,var(--cobalt-ink));box-shadow:none}
+.s-btn-album:hover{filter:brightness(1.08);background:var(--album-strong,var(--cobalt))}
+.s-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.s-badge{display:inline-block;font-size:11px;font-weight:700;font-stretch:85%;color:var(--ink-2);white-space:nowrap;padding:1px 6px;border-radius:4px;box-shadow:inset 0 0 0 1px var(--rule)}
+.s-badge.lossless{color:var(--ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 40%,transparent)}
+
+/* home */
+.s-hero{display:grid;grid-template-columns:170px minmax(0,1fr);gap:24px;align-items:end;margin-top:18px;padding:20px;border-radius:16px;
+  background:color-mix(in srgb,var(--album,var(--cobalt)) 20%,var(--sleeve));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--album,var(--cobalt)) 22%,var(--rule))}
+.s-hero-art{display:block;border-radius:3px}
+.s-hero-title{margin:0 0 6px;font-size:max(22px,min(34px,5.4cqi));line-height:1.02;font-weight:900;font-stretch:125%;letter-spacing:-.025em;text-wrap:balance}
+.s-hero-title button:hover,.s-hero-artist:hover{text-decoration:underline}
+.s-hero-artist{font-size:15px;font-weight:650}
+.s-hero-line{margin:5px 0 16px;color:var(--ink-2)}
+.s-hero-stack{position:relative;aspect-ratio:1}
+.s-hero-stack .s-case{position:absolute;inset:0}
+.s-hero-stack .s-case:nth-child(1){transform:translate(-6%,4%) rotate(-7deg)}
+.s-hero-stack .s-case:nth-child(2){transform:translate(5%,-2%) rotate(4deg)}
+.s-row-shelf{display:grid;grid-auto-flow:column;grid-auto-columns:138px;gap:18px;overflow-x:auto;margin:0 -24px;padding:4px 24px 12px;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+.s-shelf{display:grid;gap:22px 18px;grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
+.s-card{display:block;min-width:0}
+.s-card-art{position:relative}
+.s-card-open{display:block;width:100%;border-radius:3px}
+.s-card .s-case{transition:transform .18s ease}
+.s-card:hover .s-case{transform:translateY(-3px)}
+.s-card-play{position:absolute;z-index:3;right:7px;bottom:7px;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:var(--sleeve);color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.3);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.s-card:hover .s-card-play,.s-card:focus-within .s-card-play{opacity:1;transform:none}
+.s-card-play svg{width:15px;height:15px;margin-left:2px}
+.s-card-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:9px;font-weight:650;line-height:1.25;width:100%}
+.s-card-title:hover{text-decoration:underline}
+.s-card-sub{margin-top:2px;color:var(--ink-2);font-size:12.5px;font-stretch:85%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* album / playlist / artist page */
+.s-album-hero{background:color-mix(in srgb,var(--album,var(--cobalt)) 26%,var(--tray));border-bottom:1px solid color-mix(in srgb,var(--album,var(--cobalt)) 30%,var(--rule))}
+.s-album-hero-inner{display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:24px;align-items:end;padding:22px 24px 24px}
+.s-kind{margin:0 0 4px;color:var(--ink-2);font-size:12.5px;font-weight:650}
+.s-album-title{margin:0 0 8px;font-size:max(24px,min(44px,6cqi));line-height:1;font-weight:900;font-stretch:125%;letter-spacing:-.025em;text-wrap:balance;overflow-wrap:anywhere}
+.s-album-artist{font-size:15.5px;font-weight:650}
+.s-album-artist:hover{text-decoration:underline}
+.s-album-facts{margin:5px 0 16px;color:var(--ink-2);font-stretch:85%;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.s-artist-hero .s-case{border-radius:50%}
+.s-artist-hero .s-case::before,.s-artist-hero .s-case::after,.s-artist-hero .s-case .no-art{display:none}
+.s-bio{color:var(--ink-2);max-width:60ch;margin-top:4px}
+.s-tracklist{padding:10px 24px 32px}
+.s-track-head{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;margin:0 0 6px;padding:6px 10px;border-bottom:1px solid var(--rule);color:var(--ink-2);font-size:12px;font-weight:550}
+.s-track-head span:first-child{text-align:right}
+.s-track-head svg{width:15px;height:15px;display:block}
+.s-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto auto;gap:12px;align-items:center;min-height:46px;padding:5px 10px;border-radius:8px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.s-row:hover{background:var(--hover)}
+.s-row .s-num{text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;font-stretch:85%;display:flex;justify-content:flex-end}
+.s-t-main{min-width:0;display:flex;align-items:center;gap:10px}
+.s-t-text{min-width:0;display:flex;flex-direction:column}
+.s-t-title{font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-t-sub{color:var(--ink-2);font-size:12.5px;font-stretch:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-dur{color:var(--ink-2);font-variant-numeric:tabular-nums;font-stretch:85%}
+.s-row-actions{display:flex;opacity:0}
+.s-row:hover .s-row-actions,.s-row-actions.on{opacity:1}
+.s-row-actions .s-icon-btn{width:30px;height:30px}
+.s-row-actions .s-icon-btn svg{width:16px;height:16px}
+.s-row.playing .s-t-title,.s-row.playing .s-num{color:var(--album-strong,var(--cobalt))}
+.s-like[aria-pressed="true"]{color:var(--cobalt);--heart-fill:currentColor}
+/* playlist table: # | title | BPM | key | album | length */
+.s-row.pl,.s-track-head.pl{grid-template-columns:28px minmax(0,1.6fr) 40px 44px minmax(0,1fr) 30px 40px}
+.s-bpm,.s-key{font-variant-numeric:tabular-nums;font-stretch:85%;color:var(--ink-2)}
+.s-key b{font-weight:700;color:var(--k)}
+.s-alb{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-stretch:85%}
+.s-alb:hover{color:var(--ink);text-decoration:underline}
+@container (max-width:560px){
+  .s-row.pl,.s-track-head.pl{grid-template-columns:28px minmax(0,1fr) 40px 44px 0 30px 40px}
+  .s-row.pl .s-alb,.s-track-head.pl .s-alb{visibility:hidden}
+  .s-hero{grid-template-columns:120px minmax(0,1fr);gap:16px;padding:14px}
+  .s-album-hero-inner{grid-template-columns:120px minmax(0,1fr);gap:16px}
+}
+.s-pill-wrap{display:flex;justify-content:center;margin:-2px 0}
+.s-pill{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:650;color:var(--ink-2);background:color-mix(in srgb,var(--ink) 6%,transparent);box-shadow:inset 0 0 0 1px var(--rule)}
+.s-pill:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink-2)}
+.s-pill svg{width:13px;height:13px}
+.s-pill.set{color:var(--cobalt);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cobalt) 55%,transparent)}
+.s-mix-toggle[aria-pressed="true"]{background:var(--cobalt);color:var(--cobalt-ink);box-shadow:none}
+.s-empty{padding:28px 24px;color:var(--ink-2)}
+.s-empty strong{display:block;margin-bottom:6px;color:var(--ink);font-size:17px}
+
+/* equalizer bars for the playing row */
+.s-eq{display:inline-flex;gap:2px;align-items:flex-end;height:13px}
+.s-eq i{width:3px;background:currentColor;border-radius:1px;animation:s-eq 1s ease-in-out infinite}
+.s-eq i:nth-child(2){animation-delay:-.4s}
+.s-eq i:nth-child(3){animation-delay:-.7s}
+.s-eq.paused i{animation-play-state:paused}
+@keyframes s-eq{0%,100%{height:30%}50%{height:100%}}
+
+/* now playing panel */
+.s-npv-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 6px 2px 14px}
+.s-npv-context{min-width:0;font-size:14.5px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-npv-context:hover{text-decoration:underline}
+.s-npv-body{flex:1;min-height:0;overflow-y:auto;padding:6px 14px 18px;scrollbar-width:thin}
+.s-npv-art{display:block;width:100%;margin:4px 0 14px}
+.s-npv-art .s-case{box-shadow:0 2px 2px rgba(0,0,0,.12),0 18px 34px -16px rgba(0,0,0,.55)}
+.s-npv-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.s-npv-names{display:flex;flex-direction:column;min-width:0}
+.s-npv-title{font-size:20px;line-height:1.15;font-weight:800;font-stretch:110%;overflow-wrap:anywhere}
+.s-npv-artist{margin-top:2px;color:var(--ink-2);font-weight:550}
+.s-npv-artist:hover{text-decoration:underline;color:var(--ink)}
+.s-npv-card{margin-bottom:12px;padding:12px 12px 10px;border-radius:10px;background:var(--sleeve)}
+.s-npv-card h3{margin:0 0 8px;font-size:13.5px;font-weight:750;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.s-npv-link{color:var(--ink-2);font-size:12px;font-weight:650}
+.s-npv-link:hover{color:var(--ink);text-decoration:underline}
+.s-artist-card{overflow:hidden;padding:0}
+.s-artist-photo{height:96px;background:var(--case-bg);position:relative}
+.s-artist-photo span{position:absolute;left:12px;top:10px;font-size:12px;font-weight:750;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.s-artist-text{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px}
+.s-artist-text b{font-size:14.5px;font-weight:750}
+.s-artist-text span{color:var(--ink-2);font-size:12px}
+.s-row.npv{min-height:0;margin:0 -6px;padding:5px 6px;grid-template-columns:42px minmax(0,1fr)}
+.s-q-title{margin:6px 0 6px;font-size:13.5px;font-weight:750}
+
+/* player bar */
+.s-player{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,2fr) minmax(150px,1fr);gap:14px;align-items:center;padding:0 6px;--rule:color-mix(in srgb,var(--ink) 20%,transparent)}
+.s-player-left{display:flex;align-items:center;gap:8px;min-width:0}
+.s-player-now{flex:0 1 auto;display:flex;align-items:center;gap:11px;min-width:0;border-radius:8px}
+.s-player-now .s-case{width:50px;height:50px}
+.s-player-text{display:flex;flex-direction:column;min-width:0}
+.s-player-title{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-player-artist{color:var(--ink-2);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-player-device{display:flex;align-items:center;gap:4px;color:var(--cobalt);font-size:12px;font-weight:650;white-space:nowrap}
+.s-player-device svg{width:13px;height:13px}
+.s-player-center{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;max-width:620px;justify-self:center}
+.s-controls{display:flex;align-items:center;gap:6px}
+.s-play{width:34px;height:34px;margin:0 6px;background:var(--ink);color:var(--tray)}
+.s-play:hover{background:var(--ink);color:var(--tray);transform:scale(1.04)}
+.s-play svg{width:16px;height:16px}
+.s-seek{display:flex;align-items:center;gap:8px;width:100%}
+.s-time{min-width:34px;color:var(--ink-2);font-size:11.5px;font-variant-numeric:tabular-nums;text-align:center}
+.s-extra{display:flex;align-items:center;justify-content:flex-end;color:var(--ink-2)}
+.s-extra .s-icon-btn{width:32px;height:32px}
+.s-extra .s-icon-btn svg{width:18px;height:18px}
+.s-panel-btn[aria-pressed="true"]{color:var(--cobalt);position:relative}
+.s-panel-btn[aria-pressed="true"]::after{content:"";position:absolute;bottom:2px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}
+.s-volume{width:80px;flex:0 1 80px;margin-right:4px}
+.s-player.empty .s-controls,.s-player.empty .s-seek{opacity:.45;pointer-events:none}
+.sh-demo input[type="range"]{-webkit-appearance:none;appearance:none;flex:1;height:18px;margin:0;background:transparent;cursor:pointer;--pct:0%}
+.sh-demo input[type="range"]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--ink) var(--pct),var(--rule) var(--pct))}
+.sh-demo input[type="range"]::-moz-range-track{height:4px;border-radius:2px;background:var(--rule)}
+.sh-demo input[type="range"]::-moz-range-progress{height:4px;border-radius:2px;background:var(--ink)}
+.sh-demo input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-4px;border-radius:50%;background:var(--ink);border:0;opacity:0;transition:opacity .12s}
+.sh-demo input[type="range"]::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:var(--ink);opacity:0}
+.sh-demo input[type="range"]:hover::-webkit-slider-thumb{opacity:1}
+.sh-demo input[type="range"]:hover::-moz-range-thumb{opacity:1}
+
+/* devices popover */
+.s-pop{position:absolute;right:70px;bottom:80px;z-index:20;width:250px;padding:10px;border-radius:12px;background:var(--sleeve);box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 18px 40px -8px rgba(0,0,0,.8)}
+.s-pop h4{font-size:14px;font-weight:750;margin:4px 6px 8px}
+.s-dev{display:flex;align-items:center;gap:10px;width:100%;padding:8px 6px;border-radius:8px}
+.s-dev:hover{background:var(--hover)}
+.s-dev svg{width:22px;height:22px;color:var(--ink-2)}
+.s-dev span{display:flex;flex-direction:column;min-width:0}
+.s-dev b{font-weight:650}
+.s-dev small{color:var(--ink-2);font-size:11.5px}
+.s-dev.on b,.s-dev.on svg,.s-dev.on small{color:var(--cobalt)}
+
+/* demo responsiveness */
+@media(max-width:1060px){
+  .s-app,.s-app.npv-closed{grid-template-columns:200px var(--gap) minmax(0,1fr) 0 0}
+  .s-npv{display:none}
+  .s-npv-btn,.s-queue-btn{display:none!important}
+}
+@media(max-width:720px){
+  .s-app,.s-app.npv-closed{grid-template-columns:0 0 minmax(0,1fr) 0 0;height:560px}
+  .s-lib,.s-top-start .s-nav-btn,.s-top-end,.s-extra,.s-seek,.s-hide-m{display:none!important}
+  .s-top{grid-template-columns:auto minmax(0,1fr) 0}
+  .s-player{grid-template-columns:minmax(0,1fr) auto}
+  .s-player-center{width:auto}
+  .s-page,.s-tracklist{padding-left:14px;padding-right:14px}
+  .s-row-shelf{margin:0 -14px;padding:4px 14px 12px}
+  .s-album-hero-inner{padding:16px 14px}
+  .s-pop{right:10px}
+}
+
+/* ── Features grid ─────────────────────────────────────────────────────────── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
+.feat{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:1.5rem;transition:border-color .2s,transform .2s}
+.feat:hover{border-color:var(--pg-border2);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;background:rgba(59,130,246,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.85rem}
+.feat h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.feat p{color:var(--pg-fg2);font-size:.88rem;line-height:1.55}
+.feat-exp{display:inline-block;margin-left:.4rem;font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#facc15;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.25);border-radius:20px;padding:.05rem .45rem;vertical-align:middle}
+
+/* ── Download ──────────────────────────────────────────────────────────────── */
+.dl-group{margin-bottom:2.5rem}
+.dl-group-h{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.dl-group-h h3{font-size:1.15rem;font-weight:800}
+.dl-group-h p{color:var(--pg-fg2);font-size:.9rem}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;max-width:1080px}
+.dl-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:2rem;display:flex;flex-direction:column;gap:1rem}
+.dl-card h3{font-size:1.1rem;font-weight:700}
+.dl-card>p{font-size:.875rem;color:var(--pg-fg2);flex:1}
+.dl-badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-bottom:.25rem}
+.dl-badge.win{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa}
+.dl-badge.android{background:rgba(163,230,53,.08);border-color:rgba(163,230,53,.25);color:#a3e635}
+.dl-badge.web{background:rgba(200,200,200,.08);border-color:rgba(200,200,200,.2);color:#cbd5e1}
+.dl-card-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.dl-toggle{background:none;border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:8px;padding:.45rem .9rem;font-size:.85rem;cursor:pointer;transition:color .2s,border-color .2s;font-family:inherit}
+.dl-toggle:hover{color:var(--pg-fg);border-color:var(--pg-accent)}
+.dl-toggle.open{color:var(--pg-accent);border-color:var(--pg-accent)}
+.dl-install{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--pg-border);font-size:.875rem;color:var(--pg-fg2);display:flex;flex-direction:column;gap:.5rem}
+.dl-install p{font-size:.875rem;color:var(--pg-fg2)}
+.dl-cb{position:relative;background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:8px;padding:.75rem 4.2rem .75rem 1rem;overflow-x:auto}
+.dl-cb pre{font-family:"SF Mono","Fira Code",monospace;font-size:.8rem;color:#c8d8f8;margin:0;white-space:pre}
+.dl-cb.wrap pre{white-space:pre-wrap;word-break:break-all}
+.dl-cb-copy{position:absolute;top:.4rem;right:.5rem;background:var(--pg-surface2);border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:5px;padding:.15rem .5rem;font-size:.72rem;cursor:pointer;font-family:inherit}
+.dl-cb-copy:hover{color:var(--pg-fg)}
+.dl-source{margin-top:1.5rem;border:1px solid var(--pg-border);border-radius:var(--rlg);overflow:hidden;max-width:1080px}
+.dl-source-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;cursor:pointer;background:var(--pg-surface);font-weight:600;font-size:.95rem;user-select:none}
+.dl-source-hdr:hover{background:var(--pg-surface2)}
+.dl-source-body{padding:1.25rem 1.5rem;border-top:1px solid var(--pg-border);display:flex;flex-direction:column;gap:.6rem}
+.dl-source-body p{font-size:.875rem;color:var(--pg-fg2)}
+
+/* ── Setup ─────────────────────────────────────────────────────────────────── */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1.1rem}
+.step-n{counter-increment:step;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#60a5fa}
+.step-n::after{content:counter(step)}
+.step-body{min-width:0}
+.step-body h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.step-body p,.step-body li{color:var(--pg-fg2);font-size:.9rem;line-height:1.55}
+.note{margin-top:.5rem;padding:.55rem .85rem;background:rgba(234,179,8,.07);border-left:3px solid #ca8a04;border-radius:0 5px 5px 0;color:var(--pg-fg2);font-size:.83rem}
+
+/* ── Tech ──────────────────────────────────────────────────────────────────── */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.85rem}
+.stack-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--r);padding:1rem 1.1rem}
+.stack-layer{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--pg-fg3);margin-bottom:.3rem}
+.stack-val{font-size:.9rem;color:var(--pg-fg);font-weight:500}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--pg-border);padding:2.5rem 0;text-align:center;color:var(--pg-fg3);font-size:.88rem}
+footer a{color:var(--pg-fg2)}
+
+/* ── Hamburger / mobile menu ───────────────────────────────────────────────── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--pg-fg2);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(10,10,15,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--pg-border);padding:1.5rem;flex-direction:column;gap:1rem;z-index:199}
+.mobile-menu a{color:var(--pg-fg2);font-size:1rem;padding:.4rem 0;text-decoration:none}
+.mobile-menu.open{display:flex}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
+@media(max-width:700px){
+  .stack-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}
+  .dl-card{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Etienne Axiak</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#setup">Setup</a>
+      <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#download" onclick="closeMenu()">Download</a>
+  <a href="#setup" onclick="closeMenu()">Setup</a>
+  <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener" onclick="closeMenu()">GitHub ↗</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="hero-content">
+    <img src="shelf-logo.svg" alt="Shelf logo" class="hero-logo">
+    <div class="tag">Self-hosted Music</div>
+    <h1><span class="grad">Shelf</span></h1>
+    <p>A self-hosted music server for your own CD rips, with the features of a big streaming app. It scans a folder of music, lays it out as a shelf of albums, and streams it to every browser, phone and computer in the house, for everyone you add.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#download">⬇ Get Shelf</a>
+      <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">View Source</a>
+    </div>
+    <div class="hero-pills">
+      <div class="pill">🐧 <span>Linux &amp; Windows server</span></div>
+      <div class="pill">🤖 <span>Android app + widget</span></div>
+      <div class="pill">🖥️ <span>Windows &amp; Linux players</span></div>
+      <div class="pill">🌐 <span>Any browser</span></div>
+      <div class="pill">🔒 <span>AGPL-3.0</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive demo -->
+<section class="demo-section" aria-label="Interactive demo">
+  <div class="demo-wrap">
+    <div class="app-window sh-demo" id="shelfDemo">
+      <div class="win-bar">
+        <div class="dots"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span></div>
+        <span class="win-title">Shelf — 192.168.1.20:4533</span>
+      </div>
+
+      <!-- icon sprite (the real app's icons) -->
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a.8.8 0 0 0 1.2.7l12-7.5a.8.8 0 0 0 0-1.4l-12-7.5A.8.8 0 0 0 7 4.5Z" fill="currentColor"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><rect x="5.5" y="4" width="4.5" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4.5" height="16" rx="1" fill="currentColor"/></symbol>
+        <symbol id="i-next" viewBox="0 0 24 24"><path d="M4 5.3v13.4a.7.7 0 0 0 1.1.6l10-6.7a.7.7 0 0 0 0-1.2l-10-6.7a.7.7 0 0 0-1.1.6Z" fill="currentColor"/><rect x="17" y="5" width="3" height="14" rx="1" fill="currentColor"/></symbol>
+        <symbol id="i-prev" viewBox="0 0 24 24"><path d="M20 5.3v13.4a.7.7 0 0 1-1.1.6l-10-6.7a.7.7 0 0 1 0-1.2l10-6.7a.7.7 0 0 1 1.1.6Z" fill="currentColor"/><rect x="4" y="5" width="3" height="14" rx="1" fill="currentColor"/></symbol>
+        <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h3.5c2 0 3.2.9 4.3 2.6l2.4 4.8c1.1 1.7 2.3 2.6 4.3 2.6H21M3 17h3.5c1.6 0 2.7-.6 3.6-1.7M21 7h-3.5c-1.6 0-2.7.6-3.6 1.7M18 4l3 3-3 3M18 14l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h13M17 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H4M7 21l-3-3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-repeat-one" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 0 1 3-3h13M17 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H4M7 21l-3-3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 10.5l1.5-1v5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-albums" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-queue" viewBox="0 0 24 24"><path d="M3 6h13M3 12h13M3 18h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 15.5v5.2a.5.5 0 0 0 .8.4l4.2-2.6a.5.5 0 0 0 0-.8l-4.2-2.6a.5.5 0 0 0-.8.4Z" fill="currentColor"/></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+        <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-forward" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="m16 9.5 5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+        <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor"/></symbol>
+        <symbol id="i-eq" viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/><rect x="3.5" y="12" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="9.5" y="6.5" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="15.5" y="14.5" width="5" height="3" rx="1.2" fill="currentColor"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-devices" viewBox="0 0 24 24"><rect x="3" y="3" width="11" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="14.3" r="2.9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="7.4" r="1.2" fill="currentColor"/><path d="M17.5 6.5H20a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1h-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-dev-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 20.5h7M12 16.5v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-dev-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.5 18.5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-dev-tv" viewBox="0 0 24 24"><rect x="2" y="4.5" width="20" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 21h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-dev-speaker" viewBox="0 0 24 24"><rect x="5.5" y="2.5" width="13" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14.5" r="3.3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="7" r="1.2" fill="currentColor"/></symbol>
+        <symbol id="i-library" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4.5" y="9" width="7" height="10" rx="1"/><rect x="13" y="5" width="6.5" height="14" rx="1"/></g><path d="M2.5 20.5h19" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+        <symbol id="i-npv" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M14 4v16" stroke="currentColor" stroke-width="1.8"/><rect x="16" y="7" width="3.5" height="3.5" rx=".6" fill="currentColor"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2s-7.6-4.6-7.6-10.3A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.6 2.7c0 5.7-7.6 10.3-7.6 10.3Z" style="fill:var(--heart-fill,none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M14.5 3.5 20.5 9.5l-2.6.9-3.6 3.6.4 4.2-1.4 1.4-3.4-3.4L5 20.1l-1.1-1.1 4.9-4.9-3.4-3.4 1.4-1.4 4.2.4 3.6-3.6Z" fill="currentColor"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v8m-3.5-3.5 3.5 3.5 3.5-3.5"/></g></symbol>
+        <symbol id="i-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19.5c.7-3.2 3.1-5 6.2-5s5.5 1.8 6.2 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 6M17.6 14.8c1.9.6 3.2 2.2 3.6 4.7"/></g></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+        <symbol id="i-mix" viewBox="0 0 24 24"><path d="M3 6.5c5.5 0 11.5 11 18 11M3 17.5c5.5 0 11.5-11 18-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-radio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></g></symbol>
+      </svg>
+
+      <div class="s-app" id="sApp">
+        <header class="s-top">
+          <div class="s-top-start">
+            <button class="s-brand" data-go="home" aria-label="Shelf home"><img src="shelf-logo.svg" alt=""></button>
+            <button class="s-icon-btn s-nav-btn" id="sBack" data-act="back" aria-label="Go back" title="Go back"><svg><use href="#i-back"/></svg></button>
+            <button class="s-icon-btn s-nav-btn" id="sFwd" data-act="fwd" aria-label="Go forward" title="Go forward"><svg><use href="#i-forward"/></svg></button>
+          </div>
+          <div class="s-top-c">
+            <button class="s-home" id="sHome" data-go="home" aria-label="Home" title="Home"><svg><use href="#i-home"/></svg></button>
+            <label class="s-search">
+              <svg aria-hidden="true"><use href="#i-search"/></svg>
+              <input id="sSearch" type="search" placeholder="Search songs, albums and artists" aria-label="Search the demo library" autocomplete="off">
+              <span class="s-search-sep s-hide-m" aria-hidden="true"></span>
+              <button class="s-icon-btn s-hide-m" data-go="albums" aria-label="Browse all albums" title="Browse all albums"><svg><use href="#i-albums"/></svg></button>
+            </label>
+          </div>
+          <div class="s-top-end">
+            <button class="s-icon-btn" data-go="people" aria-label="Friend activity" title="Friend activity"><svg><use href="#i-people"/></svg></button>
+            <button class="s-icon-btn" data-go="settings" aria-label="Settings" title="Settings"><svg><use href="#i-settings"/></svg></button>
+          </div>
+        </header>
+
+        <aside class="s-lib" aria-label="Your library">
+          <div class="s-lib-head">
+            <span class="s-lib-title"><svg><use href="#i-library"/></svg>Your Library</span>
+            <button class="s-icon-btn" aria-label="Create playlist" title="Create playlist" data-act="noop"><svg><use href="#i-plus"/></svg></button>
+          </div>
+          <div class="s-chips" id="sChips"></div>
+          <div class="s-lib-list" id="sLib"></div>
+        </aside>
+
+        <main class="s-view" id="sView" tabindex="-1"></main>
+
+        <aside class="s-npv" id="sNpv" aria-label="Now playing"></aside>
+
+        <section class="s-player" id="sPlayer" aria-label="Player">
+          <div class="s-player-left">
+            <button class="s-player-now" data-act="open-npv" aria-label="Open now playing">
+              <span id="sPCover"></span>
+              <span class="s-player-text">
+                <span class="s-player-title" id="sPTitle">Nothing playing</span>
+                <span class="s-player-artist" id="sPArtist">Pick an album to start</span>
+                <span class="s-player-device" id="sPDevice" hidden><svg><use href="#i-devices"/></svg><span id="sPDeviceName"></span></span>
+              </span>
+            </button>
+            <button class="s-icon-btn s-like s-hide-m" id="sPLike" data-act="like-cur" aria-pressed="false" aria-label="Add to Favourites"><svg><use href="#i-heart"/></svg></button>
+          </div>
+          <div class="s-player-center">
+            <div class="s-controls">
+              <button class="s-icon-btn s-hide-m" id="sShuffle" data-act="shuffle" aria-pressed="false" aria-label="Shuffle" title="Shuffle"><svg><use href="#i-shuffle"/></svg></button>
+              <button class="s-icon-btn s-hide-m" data-act="prev" aria-label="Previous"><svg><use href="#i-prev"/></svg></button>
+              <button class="s-icon-btn s-play" id="sPlay" data-act="toggle" aria-label="Play"><svg><use href="#i-play"/></svg></button>
+              <button class="s-icon-btn" data-act="next" aria-label="Next"><svg><use href="#i-next"/></svg></button>
+              <button class="s-icon-btn s-hide-m" id="sRepeat" data-act="repeat" data-mode="off" aria-label="Repeat: off" title="Repeat"><svg><use href="#i-repeat"/></svg></button>
+            </div>
+            <div class="s-seek">
+              <span class="s-time" id="sCur">0:00</span>
+              <input type="range" id="sSeek" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <span class="s-time" id="sDur">0:00</span>
+            </div>
+          </div>
+          <div class="s-extra">
+            <button class="s-icon-btn s-panel-btn s-npv-btn" id="sNpvBtn" data-act="npv" aria-pressed="true" aria-label="Now playing view" title="Now playing view"><svg><use href="#i-npv"/></svg></button>
+            <button class="s-icon-btn s-panel-btn s-queue-btn" id="sQueueBtn" data-act="queue" aria-pressed="false" aria-label="Queue" title="Queue"><svg><use href="#i-queue"/></svg></button>
+            <button class="s-icon-btn" data-act="noop" aria-label="Sleep timer" title="Sleep timer"><svg><use href="#i-moon"/></svg></button>
+            <button class="s-icon-btn s-panel-btn" id="sDevBtn" data-act="devices" aria-pressed="false" aria-label="Play on another device" title="Play on another device"><svg><use href="#i-devices"/></svg></button>
+            <button class="s-icon-btn" data-act="noop" aria-label="Mixer" title="Mixer"><svg><use href="#i-eq"/></svg></button>
+            <button class="s-icon-btn" id="sMute" data-act="mute" aria-label="Mute" title="Mute"><svg><use href="#i-volume"/></svg></button>
+            <input type="range" class="s-volume" id="sVol" min="0" max="100" value="80" aria-label="Volume">
+          </div>
+        </section>
+
+        <div class="s-pop" id="sPop" hidden></div>
+      </div>
+    </div>
+    <p class="demo-hint">Interactive demo with a made-up library. Open an album, play a song, try the queue, Mix on the <em>Late Drive</em> playlist, and the devices button.</p>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="container">
+    <h2 class="sh"><span>Features</span></h2>
+    <p class="sub">Everything you'd expect from a big streaming app, running on your own computer and playing your own files.</p>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-icon">📱</div>
+        <h3>Your music, everywhere</h3>
+        <p>Stream to any browser (desktop, phone or TV), the <strong>Android app</strong> with lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">👥</div>
+        <h3>Accounts for everyone</h3>
+        <p>The music is shared, but each person has their own Favourites, playlists, history and devices. An <strong>admin dashboard</strong> adds people, resets passwords, shows two weeks of listening, and runs rescans and storage.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">✨</div>
+        <h3>Made for you</h3>
+        <p><strong>Shelf Mixes</strong>, On Repeat, Rediscover, Discover, and song and artist radio. Songs are matched on how they actually sound (tone, brightness, danceability) as well as artist, genre, tempo and key.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎚️</div>
+        <h3>DJ-style Mix transitions</h3>
+        <p>Turn on <strong>Mix</strong> and a playlist plays like a DJ set: Blend, Bass swap, Rise, Fade or Cut between songs, beat-matched and tempo-adjusted. Edit any transition on a two-waveform timeline.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎛️</div>
+        <h3>Playlists like a DJ app</h3>
+        <p>BPM and key columns in Camelot notation, coloured around the wheel so compatible keys stand out. <strong>Recommended</strong> suggests songs from your library that fit by artist, genre, tempo and key.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🤝</div>
+        <h3>Together</h3>
+        <p>Public and collaborative playlists, <strong>Friend activity</strong> showing what everyone's playing, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📥</div>
+        <h3>Offline downloads</h3>
+        <p>Download albums, playlists and Favourites to the device. Downloaded playlists follow your changes, and plays made offline go into your history when you're back online.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎤</div>
+        <h3>Lyrics &amp; music videos</h3>
+        <p>Timed lyrics that light up line by line, from <code>.lrc</code> files, tags or LRCLIB. When a song has an official video, <strong>Switch to video</strong> picks it up where the song was, and switches back the same way.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">💿</div>
+        <h3>Getting music in</h3>
+        <p>Upload songs, folders or ZIPs from the browser, or <strong>rip a CD</strong> in the server's drive. It gets tags and cover art from MusicBrainz, rips to FLAC with cd-paranoia, and files it. <em>Not on your shelf</em> lists your artists' releases that you don't have yet.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🔊</div>
+        <h3>Sound settings</h3>
+        <p>Gapless playback, crossfade, loudness normalization (album-aware), a 6-band equalizer with a draggable curve, balance, mono, and separate Wi-Fi and mobile streaming quality up to lossless.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🔐</div>
+        <h3>Private by default</h3>
+        <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📻</div>
+        <h3>AI radio DJ <span class="feat-exp">Experimental</span></h3>
+        <p>Off by default. Turns your library into a radio show with a host who talks between sets, timed to the next song's intro. Runs on a built-in local model (llama.cpp) with Kokoro or Chatterbox voices, or Gemini, Claude or Ollama.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Download -->
+<section class="section" id="download" style="background:var(--pg-bg2)">
+  <div class="container">
+    <div class="tag">Download</div>
+    <h2 class="sh">Get <span>Shelf</span></h2>
+    <p class="sub">Shelf has two halves: the <strong>server</strong> runs on the computer with your music (one per household), and <strong>players</strong> run on the devices you listen on.</p>
+
+    <div class="dl-group">
+      <div class="dl-group-h"><h3>1. The server</h3><p>Install this on the computer with your music.</p></div>
+      <div class="dl-grid">
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · Any distro</div>
+            <h3>One-line install</h3>
+          </div>
+          <p>Installs everything except <code>ffmpeg</code> and keeps Shelf running in the background, starting with the computer. Run it again to update.</p>
+          <div class="dl-cb wrap"><pre>curl -fsSL https://raw.githubusercontent.com/Spinjitsudoom/shelf/main/install.sh | bash</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-card-actions">
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Install ffmpeg first, e.g. <code>sudo apt install ffmpeg</code> (or your distribution's equivalent).</p>
+            <p>2. Run the command above, then open <code>http://localhost:4533</code>.</p>
+            <p>To remove it (your library data is kept):</p>
+            <div class="dl-cb wrap"><pre>curl -fsSL https://raw.githubusercontent.com/Spinjitsudoom/shelf/main/install.sh | bash -s -- --uninstall</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge win">Windows 10 / 11</div>
+            <h3>Shelf Server for Windows</h3>
+          </div>
+          <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in. Tempo and key analysis, "sounds like", CD ripping and the DJ need the Linux server.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.6.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Run <code>Shelf-Server-Setup-0.6.0.exe</code>.</p>
+            <p>2. When Windows asks whether to let it on the network, <strong>allow it</strong> so your phone can reach it.</p>
+            <p>3. Choose <strong>Open Shelf</strong> from the tray icon.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dl-source">
+        <div class="dl-source-hdr" onclick="toggleSource(this)">
+          <span>⚙ Run from source</span>
+          <span class="dl-src-arrow">▼</span>
+        </div>
+        <div class="dl-source-body" style="display:none">
+          <p>Any system with <a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a> and <code>ffmpeg</code> on the PATH.</p>
+          <div class="dl-cb"><pre>git clone https://github.com/Spinjitsudoom/shelf
+cd shelf
+cp config.example.toml config.toml   # optional: music_dirs, admin password
+bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <p>Run the tests with:</p>
+          <div class="dl-cb"><pre>UV_PROJECT_ENVIRONMENT=~/.local/share/shelf/venv uv run pytest</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-group">
+      <div class="dl-group-h"><h3>2. Players</h3><p>On the devices you listen on. Each asks for your server's address (like <code>192.168.1.20:4533</code>), then you sign in.</p></div>
+      <div class="dl-grid">
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge android">Android</div>
+            <h3>Android app</h3>
+          </div>
+          <p>Full-screen Shelf with a media notification, lock-screen and Bluetooth controls, a home-screen widget, and offline downloads that open with no connection.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.apk" target="_blank" rel="noopener">⬇ Download APK</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Open <code>Shelf-0.6.0.apk</code> on the phone and allow installing from this source.</p>
+            <p>2. Enter the server address, e.g. <code>192.168.1.20:4533</code> at home, or a Tailscale name away from it.</p>
+            <p>3. Sign in. Add the widget by long-pressing the home screen → Widgets → Shelf.</p>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge win">Windows 10 / 11</div>
+            <h3>Windows player</h3>
+          </div>
+          <p>A desktop app for Shelf that works with your keyboard's media keys and the Windows playback controls.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.6.0.exe" target="_blank" rel="noopener">⬇ Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Run <code>Shelf-Setup-0.6.0.exe</code>.</p>
+            <p>2. Enter your server's address and sign in.</p>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · Debian / Ubuntu / Mint</div>
+            <h3>.deb package</h3>
+          </div>
+          <p>The desktop player for Debian-based distributions. Works with media keys and the desktop's own playback controls (MPRIS).</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.6.0_amd64.deb" target="_blank" rel="noopener">⬇ Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <div class="dl-cb"><pre>sudo apt install ./shelf_0.6.0_amd64.deb</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · Flatpak</div>
+            <h3>Flatpak</h3>
+          </div>
+          <p>The same desktop player as a sandboxed bundle that runs on any distribution.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.flatpak" target="_blank" rel="noopener">⬇ Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>Install for your user (no password needed):</p>
+            <div class="dl-cb"><pre>flatpak install --user Shelf-0.6.0.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <p>Then launch:</p>
+            <div class="dl-cb"><pre>flatpak run io.github.spinjitsudoom.Shelf</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge web">Any browser</div>
+            <h3>Nothing to install</h3>
+          </div>
+          <p>Open the server's address in any browser on a phone, computer or TV. On a phone you can add it to the home screen. Over HTTPS it also works offline.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <p style="font-size:.85rem;color:var(--pg-fg3);">All builds are v0.6.0. Source code available on <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>.</p>
+  </div>
+</section>
+
+<!-- How it Works -->
+<section class="section" id="setup">
+  <div class="container">
+    <div class="tag">How it Works</div>
+    <h2 class="sh"><span>From CD rips to every room</span></h2>
+    <p class="sub">Set up the server once, then listen anywhere.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Install the server</h3>
+          <p>Run the one-line installer on Linux or the setup program on Windows, then open <code>http://localhost:4533</code>. The first time, Shelf asks you to create the admin account.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Point it at your music</h3>
+          <p>Add your music folders in <strong>Settings</strong>. The first scan starts straight away; after that, new music is picked up every 10 minutes. In the background, Shelf measures each song's loudness, tempo, key and sound for normalization, Mix and recommendations.</p>
+          <div class="note">Albums are the tracks in one folder sharing an album tag, so <code>CD1</code> / <code>Disc 2</code> subfolders count as one album. Covers come from <code>cover.jpg</code>, <code>folder.jpg</code> or embedded art.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Add people and devices</h3>
+          <p>Create accounts for everyone in the admin dashboard. Install a player, or open the address in a browser, enter the server address and sign in. Every open device shows up under <strong>Play on</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Listen away from home</h3>
+          <p>Use <a href="https://tailscale.com" target="_blank" rel="noopener">Tailscale</a> on the server and your devices rather than exposing the port to the internet. <code>sudo tailscale serve --bg 4533</code> gives you an HTTPS address on every device in your tailnet, which also enables offline mode and home-screen install in the browser.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech stack -->
+<section class="section" style="background:var(--pg-bg2)">
+  <div class="container">
+    <h2 class="sh"><span>Tech Stack</span></h2>
+    <p class="sub">A Python server and a web app with no build step, wrapped into native players for each platform.</p>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-layer">Server</div><div class="stack-val">Python · FastAPI · uvicorn · SQLite</div></div>
+      <div class="stack-card"><div class="stack-layer">Web app</div><div class="stack-val">Vanilla HTML · CSS · JS modules, no build step</div></div>
+      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia · Web Audio · mutagen</div></div>
+      <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android WebView (Java) · Electron · Flatpak</div></div>
+      <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp</div></div>
+      <div class="stack-card"><div class="stack-layer">AI DJ</div><div class="stack-val">llama.cpp · Kokoro · Chatterbox</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder</div></div>
+      <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions on Linux &amp; Windows</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built by <a href="index.html">Etienne Axiak</a> &mdash; AGPL-3.0 License &mdash; <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a></p>
+    <p style="margin-top:.4rem">&copy; 2026 Etienne Axiak</p>
+  </div>
+</footer>
+
+<script>
+// ── Mobile menu ───────────────────────────────────────────────────────────────
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ── Download helpers ──────────────────────────────────────────────────────────
+function toggleInstall(btn) {
+  const box = btn.closest('.dl-card').querySelector('.dl-install');
+  const show = box.style.display === 'none' || box.style.display === '';
+  box.style.display = show ? 'flex' : 'none';
+  btn.classList.toggle('open', show);
+  btn.textContent = show ? '▲ Install guide' : '▼ Install guide';
+}
+function toggleSource(hdr) {
+  const body = hdr.nextElementSibling;
+  const show = body.style.display === 'none' || body.style.display === '';
+  body.style.display = show ? 'flex' : 'none';
+  hdr.querySelector('.dl-src-arrow').textContent = show ? '▲' : '▼';
+}
+function dlCopy(btn) {
+  const text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+
+// ══ Shelf demo ═════════════════════════════════════════════════════════════════
+(() => {
+// ── Demo library (made up: artists, albums and songs are fictional) ─────────
+const RAW = [
+  { id:'gh', title:'Glass Harbour', artist:'The Low Tides', year:2021, color:'#5b8eea', fmt:'CD quality',
+    art:'radial-gradient(circle at 72% 30%,#cfe2ff 0 9%,rgba(207,226,255,.25) 9.5% 15%,transparent 15.5%),linear-gradient(180deg,#244a8f 0 56%,#16305e 56% 60%,#0d1e3d 60%)',
+    tracks:'Lighthouse Keeper|4:12|118|8A;Glass Harbour|3:48|122|9A;Undertow|5:03|96|4A;Paper Boats|3:21|128|9B;Low Tide Hymn|4:40|84|3A;Salt & Static|3:55|120|8B;Breakwater|4:28|110|10A;The Long Way Home|6:02|92|7A' },
+  { id:'sb', title:'Static Bloom', artist:'Marrow Lane', year:2023, color:'#e0619a', fmt:'CD quality',
+    art:'radial-gradient(circle at 50% 46%,#ffd1e4 0 7%,#f27bb0 7.5% 18%,#b83a76 18.5% 27%,transparent 27.5%),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 2px,transparent 2px 5px),linear-gradient(135deg,#3a1030,#7a1f55)',
+    tracks:'Static Bloom|3:34|126|11A;Neon Orchard|3:12|132|12A;Velvet Alarm|4:05|118|1A;Petals on the Wire|3:47|124|11B;Afterglow Club|4:21|128|2A;Soft Machines|3:58|100|6A;Bloom Again|5:10|90|11A' },
+  { id:'nh', title:'Northbound Hours', artist:'Ilse Varga', year:2018, color:'#e6ad48', fmt:'Hi-Res lossless',
+    art:'linear-gradient(160deg,transparent 0 58%,#2a3a2c 58.5%),linear-gradient(200deg,transparent 0 64%,#1e2b20 64.5%),linear-gradient(180deg,#f2c46b,#d9853b 55%,#8c4a2b)',
+    tracks:'Northbound|4:44|76|5B;Hours Like Rivers|5:12|70|6B;Pine & Ember|3:39|88|4B;Frost Letters|4:02|82|5A;Cabin Light|3:27|96|7B;Aurora, Slowly|6:18|64|6A' },
+  { id:'cc', title:'Concrete Choir', artist:'Hollow Arcade', year:2016, color:'#97a0b4', fmt:'CD quality',
+    art:'repeating-linear-gradient(90deg,#3b3f49 0 14%,#2b2e36 14% 16%),linear-gradient(#000,#000)',
+    tracks:'Concrete Choir|4:56|140|3A;Sodium Lights|3:44|146|2A;Overpass|4:13|138|4A;Choir of Engines|5:31|150|3B;Graffiti Psalm|3:20|144|1A;Last Train Out|4:47|132|5A;Echo Chamber|6:05|120|2B' },
+  { id:'fa', title:'Fever Atlas', artist:'Copper Saints', year:2022, color:'#e8703f', fmt:'CD quality',
+    art:'radial-gradient(circle at 30% 70%,#ffe08a 0 6%,#ff9a3c 6.5% 16%,transparent 16.5%),conic-gradient(from 210deg at 30% 70%,#c2321b,#ff7a2f,#7a1410,#c2321b)',
+    tracks:'Fever Atlas|3:28|164|9A;Rust Belt Gospel|4:01|156|10A;Kingdom of Sparks|3:46|170|8A;Wildfire Map|3:12|160|9B;Saints & Sinners|4:33|148|11A;Heatwave Radio|3:57|152|10B;Burn Slow|5:20|112|8A' },
+  { id:'lg', title:'Lanterns for Ghosts', artist:'Wren & Cinder', year:2020, color:'#4fbf8f', fmt:'CD quality',
+    art:'radial-gradient(circle at 28% 34%,#fff3b0 0 4%,rgba(255,243,176,.25) 4.5% 9%,transparent 9.5%),radial-gradient(circle at 66% 52%,#fff3b0 0 3%,rgba(255,243,176,.2) 3.5% 7%,transparent 7.5%),radial-gradient(circle at 46% 72%,#fff3b0 0 2.5%,transparent 3%),linear-gradient(180deg,#0f3a2e,#1d6b52)',
+    tracks:'Lanterns|3:52|100|12B;Ghost Orchard|4:15|94|1B;Hollow Bones|3:33|104|12A;Candle Logic|4:48|98|11B;The Quiet Hours|5:05|86|2B;Kindling|3:19|108|1A' },
+  { id:'sn', title:'Signal / Noise', artist:'Pale Engine', year:2024, color:'#9a82f5', fmt:'Hi-Res lossless',
+    art:'repeating-radial-gradient(circle at 50% 50%,#b9a8ff 0 1.5%,transparent 2% 7%),linear-gradient(135deg,#1c1240,#3b2a85)',
+    tracks:'Carrier Wave|5:40|124|7A;Signal|4:22|126|8A;Noise Floor|6:11|122|6A;Phase Locked|4:57|128|7B;Dead Air|3:48|120|9A;Transmission End|7:02|118|7A' },
+  { id:'sw', title:'Salt in the Wires', artist:'The Low Tides', year:2017, color:'#3fb0d4', fmt:'MP3 320',
+    art:'repeating-linear-gradient(170deg,rgba(255,255,255,.18) 0 2px,transparent 2px 22px),linear-gradient(180deg,#9bd7ea,#2f86a8 60%,#1a4f66)',
+    tracks:'Salt in the Wires|3:41|116|9A;Driftwood|4:05|108|8A;Sea Glass Summer|3:29|124|10B;Harbour Lights|4:38|100|9A;Fog Signal|5:12|90|7A' },
+];
+const BIOS = {
+  'The Low Tides':'A four-piece from a seaside town, making slow-building guitar records about weather, water and leaving home.',
+  'Marrow Lane':'A synth-pop duo with bright hooks and darker lyrics. Static Bloom was recorded in a converted greenhouse.',
+  'Ilse Varga':'A folk songwriter who records alone in a cabin every winter, known for long, quiet closing tracks.',
+  'Hollow Arcade':'Post-punk built around a drum machine, a baritone guitar and three singers shouting in unison.',
+  'Copper Saints':'Loud, fast rock and roll with gospel choruses and a horn section that is mostly one saxophone.',
+  'Wren & Cinder':'An indie-folk duo: banjo, cello and close harmony, recorded live around one microphone.',
+  'Pale Engine':'An ambient techno producer whose long tracks are built from radio static and modular synth loops.',
+};
+
+const toSec = s => { const [m, x] = s.split(':'); return +m * 60 + +x; };
+const ALB = {}, ALL = [];
+RAW.forEach(a => {
+  a.tracks = a.tracks.split(';').map((s, i) => {
+    const [title, d, bpm, key] = s.split('|');
+    const t = { id: `${a.id}${i}`, n: i + 1, title, dur: toSec(d), bpm: +bpm, key, album: a, artist: a.artist };
+    ALL.push(t); return t;
+  });
+  ALB[a.id] = a;
+});
+const ARTISTS = [...new Set(RAW.map(a => a.artist))];
+const T = id => ALL.find(t => t.id === id);
+const pick = ids => ids.split(' ').map(T);
+
+const PL = {
+  late: { id:'late', kind:'Playlist', title:'Late Drive', owner:'Etienne', desc:'Night motorway, windows down. Mix is on: songs blend like a DJ set.', mix:true,
+          tracks: pick('sw0 gh1 gh5 sn1 sn0 sn3 sb2 sb0 sb3 gh0 sw1 gh6') },
+  sunday: { id:'sunday', kind:'Playlist', title:'Sunday Morning', owner:'Etienne', desc:'Coffee, records, no plans.', mix:false,
+          tracks: pick('nh0 lg0 nh2 lg1 gh4 nh4 lg3 sw3 nh1 lg4') },
+  mix1: { id:'mix1', kind:'Made for you', title:'Shelf Mix 1', band:'#3d6fe0', desc:'The Low Tides, Ilse Varga, Wren & Cinder and more',
+          tracks: pick('gh0 nh2 lg1 sw2 gh3 nh4 lg0 gh7 sw4 lg5') },
+  mix2: { id:'mix2', kind:'Made for you', title:'Shelf Mix 2', band:'#c2367a', desc:'Marrow Lane, Pale Engine and more',
+          tracks: pick('sb0 sn1 sb4 sn3 sb1 sn0 sb3 sn5 sb6') },
+  mix3: { id:'mix3', kind:'Made for you', title:'Shelf Mix 3', band:'#d0571f', desc:'Copper Saints, Hollow Arcade and more',
+          tracks: pick('fa0 cc1 fa2 cc0 fa5 cc3 fa1 cc5 fa6') },
+  repeat: { id:'repeat', kind:'Made for you', title:'On Repeat', band:'#1f9a6c', desc:'Songs you’ve had on a lot this month',
+          tracks: pick('gh1 sb0 fa0 sn1 lg0 nh0 cc1') },
+  discover: { id:'discover', kind:'Made for you', title:'Discover', band:'#7a56e0', desc:'Never played, picked to fit your taste. New every week.',
+          tracks: pick('cc6 nh5 sw4 lg2 sb5 sn4 fa3') },
+};
+const MIXES = ['mix1','mix2','mix3','repeat','discover'];
+
+// ── State ────────────────────────────────────────────────────────────────────
+const S = {
+  view: { name:'home' }, hist: [], fwd: [],
+  queue: PL.late.tracks.slice(), idx: 0, ctx: 'pl:late', ctxName: 'Late Drive',
+  playing: false, pos: 71, shuffle: false, repeat: 'off',
+  liked: new Set(['gh1','sb0','sn1','lg0','fa0','nh0']),
+  npv: 'now', npvOpen: true, libFilter: null, device: 'computer', muted: false, vol: 80,
+  pills: {},
+};
+const DEVICES = [
+  { id:'computer', name:'This browser', kind:'Firefox on Linux', icon:'dev-computer' },
+  { id:'tv', name:'Living room TV', kind:'Browser', icon:'dev-tv' },
+  { id:'phone', name:'Pixel phone', kind:'Shelf for Android', icon:'dev-phone' },
+  { id:'kitchen', name:'Kitchen speaker', kind:'Browser', icon:'dev-speaker' },
+];
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const root = $('shelfDemo');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const ic = id => `<svg><use href="#i-${id}"/></svg>`;
+const fmt = s => { s = Math.max(0, Math.floor(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+const fmtLen = s => { const m = Math.round(s / 60); return m >= 60 ? `${Math.floor(m / 60)} hr ${m % 60} min` : `${m} min`; };
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const total = ts => ts.reduce((n, t) => n + t.dur, 0);
+const albVars = a => `--album:${a.color};--album-strong:${a.color};--album-on:#0f1424`;
+const cur = () => S.queue[S.idx] || null;
+const caseHtml = (a, cls = '') => `<span class="s-case ${cls}" style="--case-bg:${a.art}"><span class="no-art">${esc(a.title)}</span></span>`;
+const plCover = p => p.id === 'fav'
+  ? `<span class="s-pl-cover fav">${ic('heart')}</span>`
+  : `<span class="s-pl-cover">${[...new Map(p.tracks.map(t => [t.album.id, t.album])).values()].slice(0, 4).map(a => `<span style="--case-bg:${a.art}"></span>`).join('')}</span>`;
+const eq = () => `<span class="s-eq${S.playing ? '' : ' paused'}"><i></i><i></i><i></i></span>`;
+const camelot = k => { const n = parseInt(k, 10); return `hsl(${(n - 1) * 30 + 10} 80% 70%)`; };
+const likeBtn = t => `<button class="s-icon-btn s-like" data-like="${t.id}" aria-pressed="${S.liked.has(t.id)}" aria-label="Favourite ${esc(t.title)}">${ic('heart')}</button>`;
+
+function favPl() { return { id:'fav', kind:'Playlist', title:'Favourites', owner:'Etienne', desc:'Songs you’ve hearted, on every device.', tracks: ALL.filter(t => S.liked.has(t.id)) }; }
+function getPl(id) { return id === 'fav' ? favPl() : PL[id]; }
+function searchHits(q) {
+  q = q.trim().toLowerCase();
+  if (!q) return { artists:[], albums:[], tracks:[] };
+  return {
+    artists: ARTISTS.filter(a => a.toLowerCase().includes(q)),
+    albums: RAW.filter(a => a.title.toLowerCase().includes(q) || a.artist.toLowerCase().includes(q)),
+    tracks: ALL.filter(t => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q)).slice(0, 8),
+  };
+}
+function popular(artist) { return ALL.filter(t => t.artist === artist).sort((a, b) => (S.liked.has(b.id) - S.liked.has(a.id)) || a.n - b.n).slice(0, 5); }
+function ctxTracks(ctx) {
+  const i = ctx.indexOf(':'), kind = ctx.slice(0, i), id = ctx.slice(i + 1);
+  if (kind === 'album') return { tracks: ALB[id].tracks, name: ALB[id].title };
+  if (kind === 'pl') { const p = getPl(id); return { tracks: p.tracks, name: p.title }; }
+  if (kind === 'artist') return { tracks: popular(id), name: id };
+  if (kind === 'search') return { tracks: searchHits(id).tracks, name: `Search: ${id}` };
+  return { tracks: ALL, name: 'Your shelf' };
+}
+
+// ── Playback ─────────────────────────────────────────────────────────────────
+function playCtx(ctx, i, shuffle = false) {
+  const { tracks, name } = ctxTracks(ctx);
+  if (!tracks.length) return;
+  S.queue = tracks.slice(); S.ctx = ctx; S.ctxName = name;
+  if (shuffle) {
+    for (let k = S.queue.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [S.queue[k], S.queue[j]] = [S.queue[j], S.queue[k]]; }
+    i = 0; S.shuffle = true;
+  }
+  S.idx = Math.min(i, S.queue.length - 1); S.pos = 0; S.playing = true;
+  refresh();
+}
+function toggle() { if (!cur()) return; S.playing = !S.playing; refresh(); }
+function next(auto = false) {
+  if (!S.queue.length) return;
+  if (S.shuffle && S.queue.length > 1) {
+    let j; do { j = Math.floor(Math.random() * S.queue.length); } while (j === S.idx);
+    S.idx = j;
+  } else if (S.idx + 1 < S.queue.length) S.idx++;
+  else if (S.repeat === 'all' || !auto) S.idx = 0;
+  else { S.playing = false; S.pos = 0; refresh(); return; }
+  S.pos = 0; if (!auto) S.playing = true; refresh();
+}
+function prev() {
+  if (!S.queue.length) return;
+  if (S.pos > 3 || S.idx === 0) S.pos = 0; else { S.idx--; S.pos = 0; }
+  S.playing = true; refresh();
+}
+setInterval(() => {
+  const t = cur();
+  if (!S.playing || !t) return;
+  S.pos += .25;
+  if (S.pos >= t.dur) {
+    if (S.repeat === 'one') S.pos = 0; else next(true);
+  }
+  updateSeek();
+}, 250);
+
+// ── Rendering: player bar ────────────────────────────────────────────────────
+function setRange(el, pct) { el.style.setProperty('--pct', `${pct}%`); }
+function updateSeek() {
+  const t = cur(), seek = $('sSeek');
+  const pct = t ? S.pos / t.dur * 100 : 0;
+  if (document.activeElement !== seek || !seek.matches(':active')) seek.value = Math.round(pct * 10);
+  setRange(seek, pct);
+  $('sCur').textContent = fmt(S.pos);
+  $('sDur').textContent = t ? fmt(t.dur) : '0:00';
+}
+function renderPlayer() {
+  const t = cur();
+  $('sPlayer').classList.toggle('empty', !t);
+  $('sPCover').innerHTML = t ? caseHtml(t.album, 's-case-sm') : '';
+  $('sPTitle').textContent = t ? t.title : 'Nothing playing';
+  $('sPArtist').textContent = t ? t.artist : 'Pick an album to start';
+  const dev = DEVICES.find(d => d.id === S.device);
+  $('sPDevice').hidden = !t || S.device === 'computer';
+  $('sPDeviceName').textContent = dev.name;
+  const like = $('sPLike');
+  like.hidden = !t; if (t) like.setAttribute('aria-pressed', S.liked.has(t.id));
+  const play = $('sPlay');
+  play.innerHTML = ic(S.playing ? 'pause' : 'play');
+  play.setAttribute('aria-label', S.playing ? 'Pause' : 'Play');
+  $('sShuffle').setAttribute('aria-pressed', S.shuffle);
+  const rep = $('sRepeat');
+  rep.dataset.mode = S.repeat; rep.innerHTML = ic(S.repeat === 'one' ? 'repeat-one' : 'repeat');
+  rep.setAttribute('aria-label', `Repeat: ${S.repeat}`);
+  $('sNpvBtn').setAttribute('aria-pressed', S.npvOpen && S.npv === 'now');
+  $('sQueueBtn').setAttribute('aria-pressed', S.npvOpen && S.npv === 'queue');
+  $('sDevBtn').setAttribute('aria-pressed', !$('sPop').hidden);
+  $('sMute').innerHTML = ic(S.muted || S.vol == 0 ? 'mute' : 'volume');
+  setRange($('sVol'), S.muted ? 0 : S.vol);
+  $('sApp').classList.toggle('npv-closed', !S.npvOpen);
+  updateSeek();
+}
+
+// ── Rendering: library ───────────────────────────────────────────────────────
+function renderLib() {
+  const chips = [['pl','Playlists'],['album','Albums'],['artist','Artists']];
+  $('sChips').innerHTML = chips.map(([k, l]) => `<button class="s-chip" data-filter="${k}" aria-pressed="${S.libFilter === k}">${l}</button>`).join('');
+  const t = cur(), v = S.view, f = S.libFilter;
+  const item = (go, ctx, art, name, sub, extraCls = '') => {
+    const here = v.name === go.split(':')[0] && String(v.id) === go.slice(go.indexOf(':') + 1);
+    const playing = S.ctx === ctx && t;
+    return `<button class="s-lib-item ${extraCls}${here ? ' here' : ''}${playing ? ' playing' : ''}${playing && S.playing ? ' live' : ''}" data-go="${esc(go)}">
+      ${art}<span class="s-lib-text"><span class="s-lib-name">${esc(name)}</span><span class="s-lib-sub">${sub}</span></span>${ic('volume').replace('<svg>', '<svg class="s-lib-vol">')}</button>`;
+  };
+  let html = '';
+  if (!f || f === 'pl') {
+    const fav = favPl();
+    html += item('pl:fav', 'pl:fav', plCover(fav), 'Favourites', `${ic('pin')}Playlist · ${plural(fav.tracks.length, 'song')}`);
+    html += item('pl:late', 'pl:late', plCover(PL.late), 'Late Drive', 'Playlist · Etienne');
+    html += item('pl:sunday', 'pl:sunday', plCover(PL.sunday), 'Sunday Morning', 'Playlist · Etienne');
+  }
+  if (!f || f === 'album') RAW.forEach(a => { html += item(`album:${a.id}`, `album:${a.id}`, caseHtml(a, 's-case-sm'), a.title, `Album · ${esc(a.artist)}`); });
+  if (!f || f === 'artist') ARTISTS.forEach(ar => {
+    const a = RAW.find(x => x.artist === ar);
+    html += item(`artist:${ar}`, `artist:${ar}`, caseHtml(a, 's-case-sm'), ar, 'Artist', 's-lib-artist');
+  });
+  $('sLib').innerHTML = html;
+}
+
+// ── Rendering: main view ─────────────────────────────────────────────────────
+function albumCard(a) {
+  return `<div class="s-card"><div class="s-card-art">
+      <button class="s-card-open" data-go="album:${a.id}" aria-label="Open ${esc(a.title)}">${caseHtml(a)}</button>
+      <button class="s-card-play" data-play="album:${a.id}|0" aria-label="Play ${esc(a.title)}">${ic('play')}</button></div>
+    <button class="s-card-title" data-go="album:${a.id}">${esc(a.title)}</button>
+    <div class="s-card-sub">${esc(a.artist)}</div></div>`;
+}
+function mixCard(p) {
+  const a = p.tracks[0].album;
+  return `<div class="s-card"><div class="s-card-art">
+      <button class="s-card-open" data-go="pl:${p.id}" aria-label="Open ${esc(p.title)}"><span class="s-case" style="--case-bg:${a.art}"><span class="s-mix-band" style="--mix:${p.band}">${esc(p.title)}</span></span></button>
+      <button class="s-card-play" data-play="pl:${p.id}|0" aria-label="Play ${esc(p.title)}">${ic('play')}</button></div>
+    <button class="s-card-title" data-go="pl:${p.id}">${esc(p.title)}</button>
+    <div class="s-card-sub">${esc(p.desc)}</div></div>`;
+}
+const rowShelf = (title, cards) => `<section><h2 class="s-section-title">${title}</h2><div class="s-row-shelf">${cards}</div></section>`;
+
+function trackRow(t, ctx, i, { withArt = false } = {}) {
+  const on = cur() && cur().id === t.id;
+  const lead = withArt ? caseHtml(t.album, 's-case-sm') : '';
+  return `<div class="s-row${on ? ' playing' : ''}" data-play="${esc(ctx)}|${i}" tabindex="0">
+    <span class="s-num">${on ? eq() : (withArt ? i + 1 : t.n)}</span>
+    <span class="s-t-main">${lead}<span class="s-t-text"><span class="s-t-title">${esc(t.title)}</span>${withArt ? `<span class="s-t-sub">${esc(t.artist)}, ${esc(t.album.title)}</span>` : ''}</span></span>
+    <span class="s-row-actions${S.liked.has(t.id) ? ' on' : ''}">${likeBtn(t)}</span>
+    <span class="s-dur">${fmt(t.dur)}</span></div>`;
+}
+
+function homeView() {
+  const t = cur();
+  let hero;
+  if (t) {
+    const a = t.album;
+    const line = S.playing ? `Playing “${esc(t.title)}”` : S.pos > 1 ? `Paused at ${fmt(S.pos)} in “${esc(t.title)}”` : `Up now: “${esc(t.title)}”`;
+    hero = `<section class="s-hero" style="${albVars(a)}">
+      <button class="s-hero-art" data-go="album:${a.id}" aria-label="Open ${esc(a.title)}">${caseHtml(a)}</button>
+      <div><h2 class="s-hero-title"><button data-go="album:${a.id}">${esc(a.title)}</button></h2>
+        <button class="s-hero-artist" data-go="artist:${esc(a.artist)}">${esc(a.artist)}</button>
+        <p class="s-hero-line">${line}</p>
+        <div class="s-actions"><button class="s-btn s-btn-album" data-act="toggle">${ic(S.playing ? 'pause' : 'play')}${S.playing ? 'Pause' : 'Resume'}</button><button class="s-btn" data-go="album:${a.id}">Open album</button></div>
+      </div></section>`;
+  } else {
+    hero = `<section class="s-hero"><div class="s-hero-stack">${RAW.slice(0, 3).map(a => caseHtml(a)).join('')}</div>
+      <div><h2 class="s-hero-title">Put something on</h2><p class="s-hero-line">Shuffle the whole shelf, or pick an album below.</p>
+      <div class="s-actions"><button class="s-btn s-btn-primary" data-play="all:|0" data-shuffle="1">${ic('shuffle')}Shuffle everything</button></div></div></section>`;
+  }
+  return `<div class="s-page">
+    <h1 class="s-page-title">Home</h1><p class="s-page-sub">41 songs, 2 hr 47 min of listening this week</p>
+    ${hero}
+    ${rowShelf('Made for you', MIXES.map(id => mixCard(PL[id])).join(''))}
+    ${rowShelf('Recently added', RAW.slice().reverse().map(albumCard).join(''))}
+    ${rowShelf('Haven’t heard these in a while', [ALB.cc, ALB.sw, ALB.nh, ALB.fa].map(albumCard).join(''))}
+  </div>`;
+}
+
+function albumsView() {
+  return `<div class="s-page"><h1 class="s-page-title">Albums</h1><p class="s-page-sub">${plural(RAW.length, 'album')}, ${plural(ALL.length, 'song')}</p>
+    <div class="s-shelf" style="margin-top:20px">${RAW.map(albumCard).join('')}</div></div>`;
+}
+
+function albumView(id) {
+  const a = ALB[id], ctx = `album:${id}`, here = S.ctx === ctx && cur();
+  return `<div style="${albVars(a)}">
+    <div class="s-album-hero"><div class="s-album-hero-inner">${caseHtml(a)}
+      <div><p class="s-kind">Album</p><h1 class="s-album-title">${esc(a.title)}</h1>
+        <button class="s-album-artist" data-go="artist:${esc(a.artist)}">${esc(a.artist)}</button>
+        <p class="s-album-facts">${a.year} · ${plural(a.tracks.length, 'song')}, ${fmtLen(total(a.tracks))} <span class="s-badge${a.fmt === 'MP3 320' ? '' : ' lossless'}">${a.fmt}</span></p>
+        <div class="s-actions">
+          ${here ? `<button class="s-btn s-btn-album" data-act="toggle">${ic(S.playing ? 'pause' : 'play')}${S.playing ? 'Pause' : 'Play'}</button>` : `<button class="s-btn s-btn-album" data-play="${ctx}|0">${ic('play')}Play</button>`}
+          <button class="s-icon-btn" data-play="${ctx}|0" data-shuffle="1" aria-label="Shuffle" title="Shuffle">${ic('shuffle')}</button>
+          <button class="s-icon-btn" data-act="noop" aria-label="Download" title="Download">${ic('download')}</button>
+          <button class="s-icon-btn" data-act="noop" aria-label="More" title="More">${ic('more')}</button>
+        </div></div></div></div>
+    <div class="s-tracklist">
+      <div class="s-track-head"><span>#</span><span>Title</span><span>${ic('clock')}</span></div>
+      ${a.tracks.map((t, i) => trackRow(t, ctx, i)).join('')}
+    </div></div>`;
+}
+
+const PRESETS = ['Auto','Blend','Bass swap','Rise','Fade','Cut'];
+function autoTransition(a, b, i) { return Math.abs(a.bpm - b.bpm) / a.bpm <= .08 ? (i % 2 ? 'Bass swap' : 'Blend') : 'Fade'; }
+
+function playlistView(id) {
+  const p = getPl(id), ctx = `pl:${id}`, here = S.ctx === ctx && cur();
+  const head = p.tracks[0] ? p.tracks[0].album : RAW[0];
+  const isMade = p.kind === 'Made for you';
+  const cover = isMade ? `<span class="s-case" style="--case-bg:${head.art}"><span class="s-mix-band" style="--mix:${p.band}">${esc(p.title)}</span></span>` : plCover(p);
+  const rows = p.tracks.map((t, i) => {
+    const on = cur() && cur().id === t.id;
+    let pill = '';
+    if (p.mix && i < p.tracks.length - 1) {
+      const key = `${id}:${i}`, set = S.pills[key];
+      const label = set && set !== 'Auto' ? set : `Auto: ${autoTransition(t, p.tracks[i + 1], i)}`;
+      pill = `<div class="s-pill-wrap"><button class="s-pill${set && set !== 'Auto' ? ' set' : ''}" data-pill="${key}" title="Change how this song hands over to the next">${ic('mix')}${label}</button></div>`;
+    }
+    return `<div class="s-row pl${on ? ' playing' : ''}" data-play="${ctx}|${i}" tabindex="0">
+      <span class="s-num">${on ? eq() : i + 1}</span>
+      <span class="s-t-main">${caseHtml(t.album, 's-case-sm')}<span class="s-t-text"><span class="s-t-title">${esc(t.title)}</span><span class="s-t-sub">${esc(t.artist)}</span></span></span>
+      <span class="s-bpm">${t.bpm}</span>
+      <span class="s-key"><b style="--k:${camelot(t.key)}">${t.key}</b></span>
+      <button class="s-alb" data-go="album:${t.album.id}">${esc(t.album.title)}</button>
+      <span class="s-row-actions${S.liked.has(t.id) ? ' on' : ''}">${likeBtn(t)}</span>
+      <span class="s-dur">${fmt(t.dur)}</span></div>${pill}`;
+  }).join('');
+  return `<div style="${albVars({ color: isMade ? p.band : '#8199ff' })}">
+    <div class="s-album-hero"><div class="s-album-hero-inner">${cover}
+      <div><p class="s-kind">${p.kind}</p><h1 class="s-album-title">${esc(p.title)}</h1>
+        <p class="s-bio" style="margin:0 0 4px">${esc(p.desc)}</p>
+        <p class="s-album-facts">${isMade ? 'Made for Etienne' : esc(p.owner)} · ${plural(p.tracks.length, 'song')}, ${fmtLen(total(p.tracks))}</p>
+        <div class="s-actions">
+          ${here ? `<button class="s-btn s-btn-album" data-act="toggle">${ic(S.playing ? 'pause' : 'play')}${S.playing ? 'Pause' : 'Play'}</button>` : `<button class="s-btn s-btn-album" data-play="${ctx}|0"${p.tracks.length ? '' : ' disabled'}>${ic('play')}Play</button>`}
+          <button class="s-icon-btn" data-play="${ctx}|0" data-shuffle="1" aria-label="Shuffle" title="Shuffle">${ic('shuffle')}</button>
+          ${p.kind === 'Playlist' && id !== 'fav' ? `<button class="s-btn s-mix-toggle" data-mix="${id}" aria-pressed="${!!p.mix}">${ic('mix')}Mix</button>` : ''}
+          <button class="s-icon-btn" data-act="noop" aria-label="Download" title="Download">${ic('download')}</button>
+        </div></div></div></div>
+    <div class="s-tracklist">
+      ${p.tracks.length ? `<div class="s-track-head pl"><span>#</span><span>Title</span><span>BPM</span><span>Key</span><span class="s-alb">Album</span><span></span><span>${ic('clock')}</span></div>${rows}`
+        : `<div class="s-empty"><strong>No favourites yet</strong>Tap the heart on any song to add it here.</div>`}
+    </div></div>`;
+}
+
+function artistView(name) {
+  const albums = RAW.filter(a => a.artist === name), a = albums[0], ctx = `artist:${name}`;
+  const songs = ALL.filter(t => t.artist === name);
+  return `<div style="${albVars(a)}">
+    <div class="s-album-hero s-artist-hero"><div class="s-album-hero-inner">${caseHtml(a)}
+      <div><p class="s-kind">Artist</p><h1 class="s-album-title">${esc(name)}</h1>
+        <p class="s-album-facts">${plural(albums.length, 'album')}, ${plural(songs.length, 'song')} on your shelf</p>
+        <div class="s-actions"><button class="s-btn s-btn-album" data-play="${esc(ctx)}|0">${ic('play')}Play</button>
+          <button class="s-btn" data-play="${esc(ctx)}|0" data-shuffle="1">${ic('radio')}Artist radio</button></div>
+      </div></div></div>
+    <div class="s-tracklist">
+      <h2 class="s-section-title" style="margin-top:6px">Popular</h2>
+      ${popular(name).map((t, i) => trackRow(t, ctx, i, { withArt: true })).join('')}
+      <h2 class="s-section-title">Discography</h2>
+      <div class="s-shelf">${albums.map(albumCard).join('')}</div>
+      <h2 class="s-section-title">About</h2>
+      <p class="s-bio">${esc(BIOS[name])}</p>
+    </div></div>`;
+}
+
+function searchView(q) {
+  const r = searchHits(q), ctx = `search:${q.replace(/\|/g, '')}`;
+  if (!r.artists.length && !r.albums.length && !r.tracks.length)
+    return `<div class="s-empty"><strong>Nothing found for “${esc(q)}”</strong>Try an artist, like “Low Tides”, or a song, like “Signal”.</div>`;
+  return `<div class="s-page"><h1 class="s-page-title">Results for “${esc(q)}”</h1>
+    ${r.artists.length ? `<h2 class="s-section-title">Artists</h2>${r.artists.map(ar => { const a = RAW.find(x => x.artist === ar); return `<button class="s-lib-item s-lib-artist" data-go="artist:${esc(ar)}">${caseHtml(a, 's-case-sm')}<span class="s-lib-text"><span class="s-lib-name">${esc(ar)}</span><span class="s-lib-sub">Artist</span></span></button>`; }).join('')}` : ''}
+    ${r.albums.length ? `<h2 class="s-section-title">Albums</h2><div class="s-shelf">${r.albums.map(albumCard).join('')}</div>` : ''}
+    ${r.tracks.length ? `<h2 class="s-section-title">Songs</h2>${r.tracks.map((t, i) => trackRow(t, ctx, i, { withArt: true })).join('')}` : ''}
+  </div>`;
+}
+
+function stubView(title, text) {
+  return `<div class="s-page"><h1 class="s-page-title">${title}</h1><div class="s-empty" style="padding-left:0">${text}</div></div>`;
+}
+const STUBS = {
+  people: ['Friend activity', '<strong>Sam is playing “Fever Atlas”</strong>on Living room TV. In the real app this lists what everyone on your server is playing, their shared playlists and Blends.'],
+  settings: ['Settings', '<strong>Audio, playback, sound and privacy</strong>Streaming quality, gapless, crossfade, normalization, the equalizer and more live here in the real app.'],
+};
+
+function renderView(keepScroll = false) {
+  const el = $('sView'), top = el.scrollTop, v = S.view;
+  el.innerHTML =
+    v.name === 'album' ? albumView(v.id) :
+    v.name === 'pl' ? playlistView(v.id) :
+    v.name === 'artist' ? artistView(v.id) :
+    v.name === 'search' ? searchView(v.id) :
+    v.name === 'albums' ? albumsView() :
+    STUBS[v.name] ? stubView(...STUBS[v.name]) : homeView();
+  el.scrollTop = keepScroll ? top : 0;
+  $('sHome').classList.toggle('on', v.name === 'home');
+  $('sBack').disabled = !S.hist.length;
+  $('sFwd').disabled = !S.fwd.length;
+}
+
+// ── Rendering: now playing panel ─────────────────────────────────────────────
+function renderNpv() {
+  const el = $('sNpv'), t = cur();
+  if (!t) { el.innerHTML = `<div class="s-npv-body"><div class="s-empty" style="padding:24px 4px"><strong>Nothing playing</strong>Pick an album to start.</div></div>`; return; }
+  const head = `<div class="s-npv-head"><button class="s-npv-context" data-go="${esc(S.ctx.startsWith('search') || S.ctx.startsWith('all') ? 'home' : S.ctx)}">${S.npv === 'queue' ? 'Queue' : esc(S.ctxName)}</button>
+    <button class="s-icon-btn" data-act="npv-close" aria-label="Close" title="Close">${ic('close')}</button></div>`;
+  if (S.npv === 'queue') {
+    const nextUp = S.queue.slice(S.idx + 1);
+    el.innerHTML = head + `<div class="s-npv-body">
+      <h3 class="s-q-title">Now playing</h3>
+      <div class="s-row npv playing" data-act="toggle">${caseHtml(t.album, 's-case-sm')}<span class="s-t-text"><span class="s-t-title">${esc(t.title)}</span><span class="s-t-sub">${esc(t.artist)}</span></span></div>
+      <h3 class="s-q-title" style="margin-top:14px">Up next${nextUp.length ? `, ${plural(nextUp.length, 'song')}, ${fmtLen(total(nextUp))}` : ''}</h3>
+      ${nextUp.length ? nextUp.map((q, k) => `<div class="s-row npv" data-jump="${S.idx + 1 + k}">${caseHtml(q.album, 's-case-sm')}<span class="s-t-text"><span class="s-t-title">${esc(q.title)}</span><span class="s-t-sub">${esc(q.artist)}</span></span></div>`).join('')
+        : `<p class="s-bio">Autoplay will carry on with similar songs from your library.</p>`}
+    </div>`;
+    return;
+  }
+  const nx = S.queue[S.idx + 1];
+  el.innerHTML = head + `<div class="s-npv-body">
+    <button class="s-npv-art" data-go="album:${t.album.id}" aria-label="Open ${esc(t.album.title)}">${caseHtml(t.album)}</button>
+    <div class="s-npv-meta"><div class="s-npv-names"><button class="s-npv-title" data-go="album:${t.album.id}">${esc(t.title)}</button>
+      <button class="s-npv-artist" data-go="artist:${esc(t.artist)}">${esc(t.artist)}</button></div>${likeBtn(t)}</div>
+    <p style="margin:-6px 0 14px;display:flex;gap:6px;flex-wrap:wrap"><span class="s-badge${t.album.fmt === 'MP3 320' ? '' : ' lossless'}">${t.album.fmt}</span><span class="s-badge">${t.bpm} BPM</span><span class="s-badge" style="color:${camelot(t.key)}">${t.key}</span></p>
+    <button class="s-npv-card s-artist-card" data-go="artist:${esc(t.artist)}" style="display:block;width:100%">
+      <span class="s-artist-photo" style="--case-bg:${t.album.art};display:block"><span>About the artist</span></span>
+      <span class="s-artist-text"><b>${esc(t.artist)}</b><span>${esc(BIOS[t.artist])}</span></span></button>
+    <div class="s-npv-card"><h3>Next in queue <button class="s-npv-link" data-act="queue">Open queue</button></h3>
+      ${nx ? `<div class="s-row npv" data-jump="${S.idx + 1}">${caseHtml(nx.album, 's-case-sm')}<span class="s-t-text"><span class="s-t-title">${esc(nx.title)}</span><span class="s-t-sub">${esc(nx.artist)}</span></span></div>`
+        : `<p class="s-bio">Autoplay will carry on with similar songs.</p>`}
+    </div></div>`;
+}
+
+function renderPop() {
+  $('sPop').innerHTML = `<h4>Play on</h4>` + DEVICES.map(d => `<button class="s-dev${d.id === S.device ? ' on' : ''}" data-dev="${d.id}">${ic(d.icon)}<span><b>${d.name}</b><small>${d.id === S.device ? 'Listening on' : d.kind}</small></span></button>`).join('');
+}
+
+function refresh() { renderPlayer(); renderLib(); renderView(true); renderNpv(); }
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+function go(target) {
+  const i = target.indexOf(':');
+  const v = i < 0 ? { name: target } : { name: target.slice(0, i), id: target.slice(i + 1) };
+  if (v.name === S.view.name && v.id === S.view.id) { $('sView').scrollTop = 0; return; }
+  S.hist.push(S.view); S.fwd = []; S.view = v;
+  if (v.name !== 'search') $('sSearch').value = '';
+  renderView(); renderLib();
+}
+
+// ── Events ───────────────────────────────────────────────────────────────────
+root.addEventListener('click', e => {
+  const el = e.target.closest('[data-like],[data-pill],[data-mix],[data-dev],[data-filter],[data-jump],[data-act],[data-play],[data-go]');
+  if (!el || !root.contains(el)) return;
+  const d = el.dataset;
+  if (d.like) {
+    S.liked.has(d.like) ? S.liked.delete(d.like) : S.liked.add(d.like);
+    refresh(); return;
+  }
+  if (d.pill) {
+    const curP = S.pills[d.pill] || 'Auto';
+    S.pills[d.pill] = PRESETS[(PRESETS.indexOf(curP) + 1) % PRESETS.length];
+    renderView(true); return;
+  }
+  if (d.mix) { PL[d.mix].mix = !PL[d.mix].mix; renderView(true); return; }
+  if (d.dev) { S.device = d.dev; renderPop(); renderPlayer(); return; }
+  if (d.filter) { S.libFilter = S.libFilter === d.filter ? null : d.filter; renderLib(); return; }
+  if (d.jump) { S.idx = +d.jump; S.pos = 0; S.playing = true; refresh(); return; }
+  if (d.act) {
+    switch (d.act) {
+      case 'toggle': toggle(); break;
+      case 'next': next(); break;
+      case 'prev': prev(); break;
+      case 'shuffle': S.shuffle = !S.shuffle; renderPlayer(); break;
+      case 'repeat': S.repeat = { off:'all', all:'one', one:'off' }[S.repeat]; renderPlayer(); break;
+      case 'like-cur': { const t = cur(); if (t) { S.liked.has(t.id) ? S.liked.delete(t.id) : S.liked.add(t.id); refresh(); } break; }
+      case 'npv': S.npvOpen = !(S.npvOpen && S.npv === 'now'); S.npv = 'now'; renderPlayer(); renderNpv(); break;
+      case 'open-npv': S.npvOpen = true; S.npv = 'now'; renderPlayer(); renderNpv(); break;
+      case 'queue': S.npvOpen = !(S.npvOpen && S.npv === 'queue'); S.npv = S.npvOpen ? 'queue' : 'now'; renderPlayer(); renderNpv(); break;
+      case 'npv-close': S.npvOpen = false; renderPlayer(); break;
+      case 'devices': $('sPop').hidden = !$('sPop').hidden; renderPop(); renderPlayer(); break;
+      case 'mute': S.muted = !S.muted; $('sVol').value = S.muted ? 0 : S.vol; renderPlayer(); break;
+      case 'back': if (S.hist.length) { S.fwd.push(S.view); S.view = S.hist.pop(); renderView(); renderLib(); } break;
+      case 'fwd': if (S.fwd.length) { S.hist.push(S.view); S.view = S.fwd.pop(); renderView(); renderLib(); } break;
+    }
+    return;
+  }
+  if (d.play) {
+    const k = d.play.lastIndexOf('|'), ctx = d.play.slice(0, k), i = +d.play.slice(k + 1);
+    const { tracks } = ctxTracks(ctx), t = tracks[i];
+    if (!d.shuffle && t && cur() && cur().id === t.id && S.ctx === ctx) { toggle(); return; }
+    playCtx(ctx, i, !!d.shuffle); return;
+  }
+  if (d.go) go(d.go);
+});
+root.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.s-row[tabindex]')) { e.preventDefault(); e.target.click(); }
+});
+// close the devices popover on outside click
+document.addEventListener('click', e => {
+  const pop = $('sPop');
+  if (!pop.hidden && !e.target.closest('#sPop,#sDevBtn')) { pop.hidden = true; renderPlayer(); }
+});
+$('sSeek').addEventListener('input', e => {
+  const t = cur(); if (!t) return;
+  S.pos = e.target.value / 1000 * t.dur; updateSeek();
+});
+$('sVol').addEventListener('input', e => { S.vol = +e.target.value; S.muted = false; renderPlayer(); });
+$('sSearch').addEventListener('input', e => {
+  const q = e.target.value.trim();
+  if (!q) { if (S.view.name === 'search') { S.view = S.hist.pop() || { name:'home' }; renderView(); renderLib(); } return; }
+  if (S.view.name === 'search') { S.view = { name:'search', id:q }; renderView(); }
+  else { S.hist.push(S.view); S.fwd = []; S.view = { name:'search', id:q }; renderView(); renderLib(); }
+});
+
+refresh();
+renderView();
+})();
+</script>
+</body>
+</html>

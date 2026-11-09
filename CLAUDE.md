@@ -19,13 +19,17 @@ The site will be live at `spinjitsudoom.github.io`. No build step needed.
 
 ### Two separate CSS palettes
 
-All three pages share the same blue-purple palette (`--accent: #5b8dee`, `--accent2: #7c6ff7`) and Inter font. The project pages (`music-manager.html`, `matchbox.html`) use self-contained inline `<style>` blocks; `index.html` uses `style.css`.
+All pages share the same blue-purple palette (`--accent: #5b8dee`, `--accent2: #7c6ff7`) and Inter font. The project pages (`artisync.html`, `matchbox.html`, `shelf.html`) use self-contained inline `<style>` blocks; `index.html` uses `style.css`.
 
 | File | Stylesheet | Background |
 |------|-----------|------------|
 | `index.html` | `style.css` | `#0d1117` |
 | `music-manager.html` | inline `<style>` | `#0a0a0f` |
 | `matchbox.html` | inline `<style>` | `#0a0a0f` |
+| `artisync.html` | inline `<style>` | `#0a0a0f` |
+| `shelf.html` | inline `<style>` | `#0a0a0f` |
+
+`shelf.html` follows the `matchbox.html` structure (nav, hero, demo, features, download, setup, tech stack). Its interactive demo recreates the real Shelf web app's dark theme (Archivo font, jewel-case covers). All demo classes are prefixed `s-` and scoped under `.sh-demo` so they don't clash with page classes like `.btn` and `.hero`. The demo library (artists, albums, songs) is fictional; covers are CSS gradients.
 
 ### Project pages are fully self-contained
 

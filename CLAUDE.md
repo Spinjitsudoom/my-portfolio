@@ -8,12 +8,11 @@ Static portfolio site for Etienne Axiak. Plain HTML/CSS/vanilla JS — no build 
 
 ## Deployment
 
-GitHub Pages from the root of `main`. No remote is configured yet; to deploy:
+GitHub Pages from the root of `main`. The remote `origin` is `https://github.com/Spinjitsudoom/my-portfolio.git`; to deploy, push `main`:
 ```bash
-git remote add origin https://github.com/Spinjitsudoom/spinjitsudoom.github.io.git
-git push -u origin main
+git push origin main
 ```
-The site will be live at `spinjitsudoom.github.io`. No build step needed.
+The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build step needed.
 
 ## Architecture
 

@@ -239,6 +239,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .s-pl-made{color:var(--cobalt)}
 .s-pl-cover{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;aspect-ratio:1;width:100%;overflow:hidden;border-radius:4px;background:color-mix(in srgb,var(--ink) 9%,var(--tray))}
 .s-pl-cover > span{display:block;background:var(--case-bg)}
+.s-pl-cover.impala{display:block;background:#141a33}
+.s-pl-cover.impala svg{display:block;width:100%;height:100%}
 .s-pl-cover.fav{display:grid;place-items:center;grid-template-columns:1fr;grid-template-rows:1fr;background:linear-gradient(135deg,#4b5fd6,#8199ff 60%,#b8c4ff);color:#fff}
 .s-pl-cover.fav svg{width:44%;height:44%;--heart-fill:#fff}
 
@@ -582,6 +584,13 @@ footer a{color:var(--pg-fg2)}
 
       <!-- icon sprite (the real app's icons) -->
       <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs><linearGradient id="imp-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#141a33"/><stop offset=".45" stop-color="#3a2f5a"/><stop offset=".72" stop-color="#c8603a"/><stop offset=".78" stop-color="#f0a25a"/>
+    </linearGradient>
+    <linearGradient id="imp-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2d36"/><stop offset=".35" stop-color="#0d0e12"/><stop offset="1" stop-color="#050608"/>
+    </linearGradient>
+    <radialGradient id="imp-lamp"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></radialGradient></defs>
         <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a.8.8 0 0 0 1.2.7l12-7.5a.8.8 0 0 0 0-1.4l-12-7.5A.8.8 0 0 0 7 4.5Z" fill="currentColor"/></symbol>
         <symbol id="i-pause" viewBox="0 0 24 24"><rect x="5.5" y="4" width="4.5" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4.5" height="16" rx="1" fill="currentColor"/></symbol>
         <symbol id="i-next" viewBox="0 0 24 24"><path d="M4 5.3v13.4a.7.7 0 0 0 1.1.6l10-6.7a.7.7 0 0 0 0-1.2l-10-6.7a.7.7 0 0 0-1.1.6Z" fill="currentColor"/><rect x="17" y="5" width="3" height="14" rx="1" fill="currentColor"/></symbol>
@@ -1058,7 +1067,7 @@ const RAW = [
     tracks:'Concrete Choir|4:56|140|3A;Sodium Lights|3:44|146|2A;Overpass|4:13|138|4A;Choir of Engines|5:31|150|3B;Graffiti Psalm|3:20|144|1A;Last Train Out|4:47|132|5A;Echo Chamber|6:05|120|2B' },
   { id:'fa', title:'Fever Atlas', artist:'Copper Saints', year:2022, color:'#e8703f', fmt:'CD quality',
     art:'radial-gradient(circle at 30% 70%,#ffe08a 0 6%,#ff9a3c 6.5% 16%,transparent 16.5%),conic-gradient(from 210deg at 30% 70%,#c2321b,#ff7a2f,#7a1410,#c2321b)',
-    tracks:'Fever Atlas|3:28|164|9A;Rust Belt Gospel|4:01|156|10A;Kingdom of Sparks|3:46|170|8A;Wildfire Map|3:12|160|9B;Saints & Sinners|4:33|148|11A;Heatwave Radio|3:57|152|10B;Burn Slow|5:20|112|8A' },
+    tracks:'Fever Atlas|3:28|164|9A;Rust Belt Gospel|4:01|156|10A;Kingdom of Sparks|3:46|170|8A;Wildfire Map|3:12|160|9B;Saints & Sinners|4:33|148|11A;Heatwave Radio|3:57|152|10B;Carry On|5:20|112|8A' },
   { id:'lg', title:'Lanterns for Ghosts', artist:'Wren & Cinder', year:2020, color:'#4fbf8f', fmt:'CD quality',
     art:'radial-gradient(circle at 28% 34%,#fff3b0 0 4%,rgba(255,243,176,.25) 4.5% 9%,transparent 9.5%),radial-gradient(circle at 66% 52%,#fff3b0 0 3%,rgba(255,243,176,.2) 3.5% 7%,transparent 7.5%),radial-gradient(circle at 46% 72%,#fff3b0 0 2.5%,transparent 3%),linear-gradient(180deg,#0f3a2e,#1d6b52)',
     tracks:'Lanterns|3:52|100|12B;Ghost Orchard|4:15|94|1B;Hollow Bones|3:33|104|12A;Candle Logic|4:48|98|11B;The Quiet Hours|5:05|86|2B;Kindling|3:19|108|1A' },
@@ -1229,7 +1238,25 @@ const total = ts => ts.reduce((n, t) => n + t.dur, 0);
 const albVars = a => `--album:${a.color};--album-strong:${a.color};--album-on:#0f1424`;
 const cur = () => S.queue[S.idx] || null;
 const caseHtml = (a, cls = '') => `<span class="s-case ${cls}" style="--case-bg:${a.art}"><span class="no-art">${esc(a.title)}</span></span>`;
-const plCover = p => p.id === 'fav'
+const IMPALA = `<svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+<rect width="100" height="78" fill="url(#imp-sky)"/>
+<circle cx="74" cy="72" r="9" fill="#ffd27a" opacity=".55"/>
+<g fill="#fff" opacity=".7"><circle cx="12" cy="10" r=".5"/><circle cx="30" cy="18" r=".4"/><circle cx="52" cy="8" r=".6"/><circle cx="70" cy="15" r=".4"/><circle cx="88" cy="9" r=".5"/><circle cx="20" cy="30" r=".35"/><circle cx="62" cy="27" r=".35"/></g>
+<path d="M0 74 L18 66 L30 71 L44 64 L60 70 L78 63 L100 71 V78 H0Z" fill="#1d1830" opacity=".9"/>
+<rect y="77" width="100" height="23" fill="#121318"/>
+<path d="M0 88 H100" stroke="#3a3c46" stroke-width=".8" stroke-dasharray="6 5"/>
+<ellipse cx="50" cy="77.6" rx="45" ry="2" fill="#000" opacity=".6"/>
+<path d="M5 74.5 V69 Q5.4 66.6 8 66.2 L33.5 64.6 Q35 64.4 36 63.4 L43 56.3 Q44.2 55.2 46 55.2 H65 Q66.8 55.2 68 56.3 L74.6 63.4 Q75.4 64.2 77 64.3 L92.5 64.9 Q95.2 65.1 95.2 67.8 V74.5 Z" fill="url(#imp-body)" stroke="rgba(255,255,255,.22)" stroke-width=".35"/>
+<path d="M37.6 63.6 L44.4 57 H54.6 V63.6 Z" fill="#26324a"/><path d="M56.2 63.6 V57 H65.2 L71.9 63.6 Z" fill="#26324a"/>
+<path d="M38.6 63 L44.8 57.6 H48 L42 63Z" fill="#fff" opacity=".12"/>
+<path d="M7 69.4 H93.5" stroke="#9aa3b2" stroke-width=".5" opacity=".8"/>
+<rect x="3.8" y="71.2" width="4" height="2.3" rx=".8" fill="#c3cad6"/><rect x="92.6" y="71.2" width="3.6" height="2.3" rx=".8" fill="#c3cad6"/>
+<rect x="94.2" y="66.6" width="1.2" height="3" rx=".4" fill="#ff3b3b"/>
+<circle cx="5.8" cy="68.4" r="5" fill="url(#imp-lamp)" opacity=".8"/><circle cx="5.9" cy="68.4" r="1.1" fill="#fff3c4"/>
+<g><circle cx="22" cy="74.5" r="5.6" fill="#050608"/><circle cx="22" cy="74.5" r="4.6" fill="#16171c"/><circle cx="22" cy="74.5" r="2.2" fill="#aab2bf"/><circle cx="22" cy="74.5" r=".8" fill="#4a505c"/></g>
+<g><circle cx="78" cy="74.5" r="5.6" fill="#050608"/><circle cx="78" cy="74.5" r="4.6" fill="#16171c"/><circle cx="78" cy="74.5" r="2.2" fill="#aab2bf"/><circle cx="78" cy="74.5" r=".8" fill="#4a505c"/></g>
+</svg>`;
+const plCover = p => p.id === 'impala' ? `<span class="s-pl-cover impala">${IMPALA}</span>` : p.id === 'fav'
   ? `<span class="s-pl-cover fav">${ic('heart')}</span>`
   : `<span class="s-pl-cover">${[...new Map(p.tracks.map(t => [t.album.id, t.album])).values()].slice(0, 4).map(a => `<span style="--case-bg:${a.art}"></span>`).join('')}</span>`;
 const eq = () => `<span class="s-eq${S.playing ? '' : ' paused'}"><i></i><i></i><i></i></span>`;

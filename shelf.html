@@ -1098,6 +1098,8 @@ const PL = {
           tracks: pick('sw0 gh1 gh5 sn1 sn0 sn3 sb2 sb0 sb3 gh0 sw1 gh6') },
   sunday: { id:'sunday', kind:'Playlist', title:'Sunday Morning', owner:'Etienne', desc:'Coffee, records, no plans.', mix:false,
           tracks: pick('nh0 lg0 nh2 lg1 gh4 nh4 lg3 sw3 nh1 lg4') },
+  impala: { id:'impala', kind:'Playlist', title:'Driver Picks the Music', owner:'Etienne', desc:'For long drives in a ’67. Shotgun shuts his cakehole.', mix:false,
+          tracks: pick('fa1 cc5 fa0 cc1 fa4 cc3 fa2 fa6') },
   mix1: { id:'mix1', kind:'Made for you', title:'Shelf Mix 1', band:'#3d6fe0', desc:'The Low Tides, Ilse Varga, Wren & Cinder and more',
           tracks: pick('gh0 nh2 lg1 sw2 gh3 nh4 lg0 gh7 sw4 lg5') },
   mix2: { id:'mix2', kind:'Made for you', title:'Shelf Mix 2', band:'#c2367a', desc:'Marrow Lane, Pale Engine and more',
@@ -1347,6 +1349,7 @@ function renderLib() {
     html += item('pl:fav', 'pl:fav', plCover(fav), 'Favourites', `${ic('pin')}Playlist · ${plural(fav.tracks.length, 'song')}`);
     html += item('pl:late', 'pl:late', plCover(PL.late), 'Late Drive', 'Playlist · Etienne');
     html += item('pl:sunday', 'pl:sunday', plCover(PL.sunday), 'Sunday Morning', 'Playlist · Etienne');
+    html += item('pl:impala', 'pl:impala', plCover(PL.impala), 'Driver Picks the Music', 'Playlist · Etienne');
     MADE.forEach(id => { html += item(`pl:${id}`, `pl:${id}`, plCover(PL[id]), PL[id].title, 'Playlist · Made by Shelf'); });
   }
   if (!f || f === 'album') RAW.forEach(a => { html += item(`album:${a.id}`, `album:${a.id}`, caseHtml(a, 's-case-sm'), a.title, `Album · ${esc(a.artist)}`); });
@@ -1398,7 +1401,7 @@ function plCard(p) {
     <div class="s-card-sub">${p.made ? '<span class="s-pl-made">Made by Shelf</span> · ' : ''}${plural(p.tracks.length, 'song')}</div></div>`;
 }
 function playlistsView() {
-  const all = ['fav', 'late', 'sunday', ...MADE].map(getPl);
+  const all = ['fav', 'late', 'sunday', 'impala', ...MADE].map(getPl);
   return `<div class="s-page"><h1 class="s-page-title">Playlists</h1><p class="s-page-sub">${plural(all.length, 'playlist')}</p>
     <div class="s-head-tools"><button class="s-btn" data-act="make">${ic('sparkle')}Make a playlist</button><button class="s-btn s-btn-primary" data-act="noop">${ic('plus')}New playlist</button></div>
     <div class="s-shelf" style="margin-top:22px">${all.map(plCard).join('')}</div></div>`;

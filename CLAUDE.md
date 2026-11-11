@@ -14,6 +14,15 @@ git push origin main
 ```
 The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build step needed.
 
+### New releases update the pages automatically
+
+`.github/workflows/update-releases.yml` runs hourly (and by hand from the Actions tab). `.github/scripts/update_releases.py` reads each project page's version from its **"All builds are vX.Y.Z"** line. It compares that with the project's latest GitHub release and replaces every mention of the old version on the page. It writes a page only if every download link on it exists in the release. If any link is missing, the run fails and GitHub emails about it.
+
+- Keep the "All builds are vX.Y.Z" line on each project page, since the script finds the version there.
+- Pin download links to the tag (`releases/download/vX.Y.Z/<file>`), never `releases/latest/download/<versioned file>`, which 404s as soon as a newer release ships. ArtiSync's file names carry no version, so its `latest/download` links are fine.
+- The workflow only changes version numbers. New features still need the page's feature text updated by hand.
+- Before pushing, `git pull` first, because the workflow commits to `main` too.
+
 ## Architecture
 
 ### Two separate CSS palettes

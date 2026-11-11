@@ -1,0 +1,41 @@
+name: Update release versions
+
+# Hourly: bump shelf.html, matchbox.html and artisync.html to each project's
+# latest GitHub release, after checking every download link exists.
+# Run it by hand from the Actions tab with "Run workflow".
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: update-releases
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check releases and update pages
+        run: python3 .github/scripts/update_releases.py --message-file "$RUNNER_TEMP/msg"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Runs even if a page had broken links, so the other pages still update.
+      - name: Commit and publish
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet; then echo "Nothing to update"; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898283+github-actions[bot]@users.noreply.github.com'
+          git commit -a -F "$RUNNER_TEMP/msg"
+          git push
+          # Make sure GitHub Pages rebuilds for a push made by the workflow.
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true

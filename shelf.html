@@ -515,6 +515,7 @@ footer a{color:var(--pg-fg2)}
   <symbol id="p-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9ZM18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8Z" fill="currentColor"/></symbol>
   <symbol id="p-mix" viewBox="0 0 24 24"><path d="M3 6.5c5.5 0 11.5 11 18 11M3 17.5c5.5 0 11.5-11 18-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-eq" viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/><rect x="3.5" y="12" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="9.5" y="6.5" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="15.5" y="14.5" width="5" height="3" rx="1.2" fill="currentColor"/></symbol>
+  <symbol id="p-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16v-4M12 16V6M17 16v-7"/></g></symbol>
   <symbol id="p-blend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></g></symbol>
   <symbol id="p-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v8m-3.5-3.5 3.5 3.5 3.5-3.5"/></g></symbol>
   <symbol id="p-playlist" viewBox="0 0 24 24"><path d="M3 6h12M3 11h12M3 16h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 18.5V9.5l4-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.5" cy="18.5" r="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -749,7 +750,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-update"/></svg></div>
         <h3>Keeps itself up to date</h3>
-        <p>The server checks for new releases and the admin dashboard (or the Windows tray icon) offers <strong>Update now</strong>; nothing changes until you press it. The Android app and the desktop players download updates in the background.</p>
+        <p>The server <strong>installs new releases by itself at night</strong>, between 2 and 6, once nothing has played for half an hour, so music is never cut off. You can switch that off on the admin dashboard and use <strong>Update now</strong> instead. The Android app and the desktop players download updates in the background.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mix"/></svg></div>
@@ -764,7 +765,12 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-blend"/></svg></div>
         <h3>Together</h3>
-        <p>Public and collaborative playlists, <strong>Friend activity</strong> showing what everyone's playing, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to.</p>
+        <p><strong>Party mode</strong>: guests join from their own phones, add songs to the queue and vote to skip, and can play along in step with the host. Plus public and collaborative playlists, <strong>Friend activity</strong>, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-chart"/></svg></div>
+        <h3>Your listening &amp; Wrapped</h3>
+        <p>Time listened, your daily streak, top artists, songs, albums and genres, when you listen by hour and weekday, artists new to you, and <em>On this day</em>, for this month, this year or all time. <strong>Wrapped</strong> steps through your year one card at a time and ends with your top songs to play.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-download"/></svg></div>
@@ -784,7 +790,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-volume"/></svg></div>
         <h3>Sound settings</h3>
-        <p>Gapless playback, crossfade, loudness normalization (album-aware), a 6-band equalizer with a draggable curve, balance, mono, and separate Wi-Fi and mobile streaming quality up to lossless.</p>
+        <p>Gapless playback, crossfade, loudness normalization (album-aware), a 6-band equalizer with a draggable curve, balance, mono, and separate Wi-Fi and mobile streaming quality up to lossless. In the browser, Now Playing has a <strong>visualizer</strong>: a ring of bars around the disc that moves with the music in the album's colour.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg></div>
@@ -831,11 +837,11 @@ footer a{color:var(--pg-fg2)}
           </div>
           <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in, and measures tempo, key and "sounds like" just like the Linux server. CD ripping needs the Linux server.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.7.2.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/Shelf-Server-Setup-0.7.3.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Run <code>Shelf-Server-Setup-0.7.2.exe</code>.</p>
+            <p>1. Run <code>Shelf-Server-Setup-0.7.3.exe</code>.</p>
             <p>2. When Windows asks whether to let it on the network, <strong>allow it</strong> so your phone can reach it.</p>
             <p>3. Choose <strong>Open Shelf</strong> from the tray icon.</p>
           </div>
@@ -871,11 +877,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The full native app (about 13 MB): offline downloads, Android Auto, a home-screen widget, lock-screen and Bluetooth controls, and it updates itself from GitHub.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/Shelf-0.7.3.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Open <code>Shelf-0.7.2.apk</code> on the phone and allow installing from this source.</p>
+            <p>1. Open <code>Shelf-0.7.3.apk</code> on the phone and allow installing from this source.</p>
             <p>2. Enter the server address, e.g. <code>192.168.1.20:4533</code> at home, or a Tailscale name away from it.</p>
             <p>3. Sign in. Add the widget by long-pressing the home screen → Widgets → Shelf.</p>
             <p>It replaces the older Android app in place: open it once and sign in again. Anything downloaded in the old app needs downloading again.</p>
@@ -889,7 +895,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The lightweight app (under 100 KB) for older or low-storage phones: Shelf's web app full screen, with a media notification, the widget and background play. It gets new web features first, and installs beside the full app.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2-Lite.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/Shelf-0.7.3-Lite.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
           </div>
         </div>
 
@@ -900,11 +906,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>A desktop app for Shelf that works with your keyboard's media keys and the Windows playback controls.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.7.2.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/Shelf-Setup-0.7.3.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Run <code>Shelf-Setup-0.7.2.exe</code>.</p>
+            <p>1. Run <code>Shelf-Setup-0.7.3.exe</code>.</p>
             <p>2. Enter your server's address and sign in.</p>
           </div>
         </div>
@@ -916,11 +922,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The desktop player for Debian-based distributions. Works with media keys and the desktop's own playback controls (MPRIS).</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.7.2_amd64.deb" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/shelf_0.7.3_amd64.deb" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <div class="dl-cb"><pre>sudo apt install ./shelf_0.7.2_amd64.deb</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <div class="dl-cb"><pre>sudo apt install ./shelf_0.7.3_amd64.deb</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           </div>
         </div>
 
@@ -931,12 +937,12 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The same desktop player as a sandboxed bundle that runs on any distribution.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/download/v0.7.3/Shelf-0.7.3.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
             <p>Install for your user (no password needed):</p>
-            <div class="dl-cb"><pre>flatpak install --user Shelf-0.7.2.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <div class="dl-cb"><pre>flatpak install --user Shelf-0.7.3.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
             <p>Then launch:</p>
             <div class="dl-cb"><pre>flatpak run io.github.spinjitsudoom.Shelf</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           </div>
@@ -953,7 +959,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
       </div>
     </div>
 
-    <p style="font-size:.85rem;color:var(--pg-fg3);">All builds are v0.7.2. Source code available on <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>.</p>
+    <p style="font-size:.85rem;color:var(--pg-fg3);">All builds are v0.7.3. Source code available on <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 </section>
 

@@ -125,6 +125,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
 .pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
 .pill span{color:var(--pg-fg2)}
+.pi{width:1em;height:1em;flex:none;vertical-align:-.125em}
+.pill .pi{width:16px;height:16px;color:#7c9cf5}
+.feat-icon .pi{width:21px;height:21px;color:#60a5fa}
+.btn .pi{width:16px;height:16px}
 
 /* ── Demo section ──────────────────────────────────────────────────────────── */
 .demo-section{padding:0 0 5rem}
@@ -425,6 +429,24 @@ footer a{color:var(--pg-fg2)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-arrow" viewBox="0 0 24 24"><path d="M12 4v13m-5.5-5.5L12 17l5.5-5.5M5 20.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-computer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/></g></symbol>
+  <symbol id="p-laptop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="5" width="15" height="10.5" rx="1.5"/><path d="M2.5 19h19"/></g></symbol>
+  <symbol id="p-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15H17"/></g></symbol>
+  <symbol id="p-tv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="m8 3 4 4 4-4"/></g></symbol>
+  <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="p-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></g></symbol>
+  <symbol id="p-scissors" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.8"/><circle cx="6" cy="18" r="2.8"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></g></symbol>
+  <symbol id="p-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.8 5.7 3.8 9s-1.2 6.3-3.8 9c-2.6-2.7-3.8-5.7-3.8-9S9.4 3 12 3Z"/></g></symbol>
+  <symbol id="p-captions" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 11h2.5M12 11h5M7 15h6M15.5 15H17"/></g></symbol>
+  <symbol id="p-bolt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 4.5 13.5H12l-1 8 8.5-11H12Z"/></g></symbol>
+  <symbol id="p-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3Z"/></g><circle cx="7.5" cy="11.5" r="1.3" fill="currentColor"/><circle cx="10" cy="7.3" r="1.3" fill="currentColor"/><circle cx="14.8" cy="7.3" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="p-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="p-film" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7.5 3v18M16.5 3v18M3 7.5h4.5M3 12h18M3 16.5h4.5M16.5 7.5H21M16.5 16.5H21"/></g></symbol>
+  <symbol id="p-pencil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/><path d="m14.5 5.5 3 3"/></g></symbol>
+  <symbol id="p-calendar" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g></symbol>
+</svg>
 
 <nav>
   <div class="nav-inner">
@@ -432,6 +454,7 @@ footer a{color:var(--pg-fg2)}
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#download">Download</a>
+      <a href="#setup">Setup</a>
       <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
@@ -440,6 +463,7 @@ footer a{color:var(--pg-fg2)}
 <div class="mobile-menu" id="mobileMenu">
   <a href="#features" onclick="closeMenu()">Features</a>
   <a href="#download" onclick="closeMenu()">Download</a>
+  <a href="#setup" onclick="closeMenu()">Setup</a>
   <a href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener" onclick="closeMenu()">GitHub ↗</a>
 </div>
 
@@ -453,17 +477,17 @@ footer a{color:var(--pg-fg2)}
     <h1><span class="grad">Matchbox</span></h1>
     <p>Automated TV show and movie renaming for Plex, Jellyfin, and Emby — powered by The Movie Database. Generate subtitles locally with faster-whisper, no cloud required.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-Setup-2.1.1.exe" target="_blank" rel="noopener">⬇ Windows</a>
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64.dmg" target="_blank" rel="noopener">⬇ macOS</a>
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1.AppImage" target="_blank" rel="noopener">⬇ Linux</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-Setup-2.1.1.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Windows</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64.dmg" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>macOS</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1.AppImage" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Linux</a>
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/Matchbox" target="_blank" rel="noopener">View Source</a>
     </div>
     <div class="hero-pills">
-      <div class="pill">🪟 <span>Windows Installer + Portable</span></div>
-      <div class="pill">🍎 <span>macOS (Apple Silicon)</span></div>
-      <div class="pill">🐧 <span>Linux AppImage + Flatpak</span></div>
-      <div class="pill">📺 <span>Plex · Jellyfin · Emby</span></div>
-      <div class="pill">🔒 <span>MIT License</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-computer"/></svg><span>Windows Installer + Portable</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-laptop"/></svg><span>macOS (Apple Silicon)</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-terminal"/></svg><span>Linux AppImage + Flatpak</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-tv"/></svg><span>Plex · Jellyfin · Emby</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg><span>MIT License</span></div>
     </div>
   </div>
 </section>
@@ -524,7 +548,7 @@ footer a{color:var(--pg-fg2)}
         <div class="center-panel">
           <div id="seasonHeader" class="season-header" style="display:none">
             <div class="sh-backdrop" id="shBackdrop"></div>
-            <div class="sh-poster-placeholder" id="shPoster">🎬</div>
+            <div class="sh-poster-placeholder" id="shPoster"><svg class="pi" aria-hidden="true"><use href="#p-film"/></svg></div>
             <div class="sh-info">
               <div class="sh-sublabel">Now Renaming</div>
               <div class="sh-title" id="shTitle">—</div>
@@ -554,7 +578,7 @@ footer a{color:var(--pg-fg2)}
 
           <div class="ep-table" id="epTable">
             <div class="empty-state" id="emptyState">
-              <div class="empty-icon">✏️</div>
+              <div class="empty-icon"><svg class="pi" aria-hidden="true"><use href="#p-pencil"/></svg></div>
               <div>Select a show, season, and folder<br>to preview the rename</div>
             </div>
           </div>
@@ -587,7 +611,7 @@ footer a{color:var(--pg-fg2)}
           <div class="rp-top">
             <div class="panel-hdr" id="searchHdr">TV Show Search</div>
             <div class="search-bar">
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><svg class="pi" aria-hidden="true"><use href="#p-search"/></svg></span>
               <input class="search-input" id="searchInput" placeholder="Search TV shows…" oninput="onSearch(this.value)">
             </div>
             <div class="search-results" id="searchResults"></div>
@@ -596,7 +620,7 @@ footer a{color:var(--pg-fg2)}
             <div class="panel-hdr">Show Info</div>
             <div id="showInfoContent">
               <div class="si-empty">
-                <div class="si-empty-icon">🎬</div>
+                <div class="si-empty-icon"><svg class="pi" aria-hidden="true"><use href="#p-film"/></svg></div>
                 Search for a show and select it to see details
               </div>
             </div>
@@ -897,37 +921,37 @@ footer a{color:var(--pg-fg2)}
     <p class="sub">Everything you need to keep a clean, accurate media library.</p>
     <div class="features-grid">
       <div class="feat">
-        <div class="feat-icon">🔍</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-search"/></svg></div>
         <h3>Smart Renaming — Two Modes</h3>
         <p><strong>Numeric</strong> matches files to TMDB episodes by their position in the folder. <strong>Title Match</strong> uses fuzzy string matching to align filenames to episode titles — useful for mixed or out-of-order directories. Full undo support on every rename.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">📺</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-tv"/></svg></div>
         <h3>TV Shows &amp; Movies</h3>
         <p>Renames TV episodes to <code>01 - Episode Title.mkv</code> and movie files to <code>Title (Year).mkv</code>. Configure separate root paths for your TV and movie libraries — switch between them instantly with the mode toggle.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">✂️</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-scissors"/></svg></div>
         <h3>Frame-Accurate Splitting</h3>
         <p>Split any video at an exact frame with a visual timeline editor. Stream-copies when the cut lands on a keyframe — lossless and instant. Re-encodes only the unaligned head/tail when it doesn't. Auto-names segments from the source filename.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🌐</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg></div>
         <h3>TMDB Integration</h3>
         <p>Pulls real-time episode titles, air dates, season posters, and ratings from The Movie Database API — the same database Plex, Jellyfin, and Emby use behind the scenes. Shows auto-match from your folder names.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">💬</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-captions"/></svg></div>
         <h3>Local Subtitle Generation</h3>
         <p>Generate <code>.srt</code> files fully offline using <strong>faster-whisper</strong> (CTranslate2). Supports tiny → large model sizes, VAD silence filtering, configurable beam size, language, and initial prompt. No cloud required after the first model download.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">⚡</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-bolt"/></svg></div>
         <h3>Remux</h3>
         <p>Batch convert video containers (MKV ↔ MP4 ↔ AVI…) using FFmpeg stream copy — no re-encoding, no quality loss, typically finishes in seconds per file. Set default audio and subtitle tracks per conversion.</p>
       </div>
       <div class="feat">
-        <div class="feat-icon">🎨</div>
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-palette"/></svg></div>
         <h3>9 Themes + 3 Custom</h3>
         <p>Slate, Dark, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Light — plus three fully customisable colour slots. Click <strong>Settings</strong> in the demo above to try them live.</p>
       </div>
@@ -950,7 +974,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Runs the Inno Setup wizard and adds Matchbox to your Start Menu with an optional desktop shortcut and a clean uninstaller.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-Setup-2.1.1.exe" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-Setup-2.1.1.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -967,7 +991,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Extract the zip anywhere and run — no installer, no admin rights, no registry entries.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-portable-win.zip" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-portable-win.zip" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -983,7 +1007,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Single executable — no install needed. Works on any modern Linux distro with FUSE support.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1.AppImage" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1.AppImage" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -1000,7 +1024,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Fully sandboxed, self-contained bundle. No system dependencies required — everything is included.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-x86_64.flatpak" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-x86_64.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -1020,7 +1044,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Native ARM64 app bundle packaged as a drag-and-drop DMG. Open, drag Matchbox to Applications, and launch.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64.dmg" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64.dmg" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -1037,7 +1061,7 @@ footer a{color:var(--pg-fg2)}
         </div>
         <p>Zipped <code>.app</code> bundle — no DMG, no install. Extract anywhere and run directly from your preferred location.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64-mac.zip" target="_blank" rel="noopener">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/Matchbox/releases/download/v2.1.1/Matchbox-2.1.1-arm64-mac.zip" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
         <div class="dl-install" style="display:none">
@@ -1051,7 +1075,7 @@ footer a{color:var(--pg-fg2)}
 
     <div class="dl-source">
       <div class="dl-source-hdr" onclick="toggleSource(this)">
-        <span>⚙ Build from Source</span>
+        <span style="display:inline-flex;align-items:center;gap:.5rem"><svg class="pi" aria-hidden="true"><use href="#p-settings"/></svg>Build from Source</span>
         <span class="dl-src-arrow">▼</span>
       </div>
       <div class="dl-source-body" style="display:none">
@@ -1135,6 +1159,9 @@ cd frontend && npm ci && npm run build
 </footer>
 
 <script>
+// Page icons from the SVG sprite at the top of <body> (emoji don't render everywhere)
+const ICO = n => '<svg class="pi" aria-hidden="true"><use href="#p-' + n + '"/></svg>';
+
 // ── Mobile menu ───────────────────────────────────────────────────────────────
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
@@ -1467,7 +1494,7 @@ function buildMoviePanel(movie) {
     mPosterEl.innerHTML = `<img src="${mSmallUrl}" loading="lazy">`;
   } else {
     mPosterEl.className = 'sh-poster-placeholder';
-    mPosterEl.textContent = '🎬';
+    mPosterEl.innerHTML = ICO('film');
   }
 
   const info = document.getElementById('abInfo');
@@ -1484,7 +1511,7 @@ function buildMoviePanel(movie) {
   const row = document.createElement('div');
   row.className = 'ep-row green';
   row.innerHTML = `
-    <span class="ep-num" style="font-size:1rem">🎬</span>
+    <span class="ep-num" style="font-size:1rem">${ICO('film')}</span>
     <div class="ep-files">
       <span class="ep-old">${state.renamed ? movie.renamed : movie.old}</span>
       <span class="ep-arrow">→</span>
@@ -1523,7 +1550,7 @@ function buildRenamePanel(showName, num, seasonName) {
     posterEl2.innerHTML = `<img src="${smallUrl}" loading="lazy">`;
   } else {
     posterEl2.className = 'sh-poster-placeholder';
-    posterEl2.textContent = '🎬';
+    posterEl2.innerHTML = ICO('film');
   }
 
   const green = episodes.filter(e => e.old && e.score > 90).length;
@@ -1594,10 +1621,10 @@ function setMode(m) {
   document.getElementById('seasonHeader').style.display = 'none';
   document.getElementById('controlsBar').style.display = 'none';
   document.getElementById('actionBar').style.display = 'none';
-  document.getElementById('epTable').innerHTML = '<div class="empty-state"><div class="empty-icon">✏️</div><div>Select a ' + (m==='movie'?'folder and search for a movie':'show, season, and folder') + ' to preview the rename</div></div>';
+  document.getElementById('epTable').innerHTML = '<div class="empty-state"><div class="empty-icon">' + ICO('pencil') + '</div><div>Select a ' + (m==='movie'?'folder and search for a movie':'show, season, and folder') + ' to preview the rename</div></div>';
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').innerHTML = '';
-  document.getElementById('showInfoContent').innerHTML = '<div class="si-empty"><div class="si-empty-icon">🎬</div>' + (m==='movie'?'Search for a movie to see details':'Search for a show and select it to see details') + '</div>';
+  document.getElementById('showInfoContent').innerHTML = '<div class="si-empty"><div class="si-empty-icon">' + ICO('film') + '</div>' + (m==='movie'?'Search for a movie to see details':'Search for a show and select it to see details') + '</div>';
   buildLibrary();
   buildSearchResults(state.searchQ);
 }
@@ -1623,10 +1650,10 @@ function buildSearchResults(q) {
       row.className = 'result-row' + (state.selectedResult === m.id ? ' active' : '');
       const img = tmdbImg(m.poster, 'w92');
       row.innerHTML = `
-        ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">🎬</div>`}
+        ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">${ICO('film')}</div>`}
         <div style="flex:1;min-width:0">
           <div class="result-title">${m.folder}</div>
-          <div class="result-year">📅 ${m.year}</div>
+          <div class="result-year">${ICO('calendar')}${m.year}</div>
         </div>
         ${state.selectedResult===m.id ? '<div class="result-dot"></div>' : ''}`;
       row.onclick = () => { state.selectedResult = m.id; buildSearchResults(q); buildShowInfo(m); };
@@ -1642,10 +1669,10 @@ function buildSearchResults(q) {
     row.className = 'result-row' + (state.selectedResult === r.id ? ' active' : '');
     const img = tmdbImg(r.poster, 'w92');
     row.innerHTML = `
-      ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">📺</div>`}
+      ${img ? `<img class="result-poster" src="${img}" loading="lazy">` : `<div class="result-poster-placeholder">${ICO('tv')}</div>`}
       <div style="flex:1;min-width:0">
         <div class="result-title">${r.title}</div>
-        <div class="result-year">📅 ${r.year}</div>
+        <div class="result-year">${ICO('calendar')}${r.year}</div>
       </div>
       ${state.selectedResult===r.id ? '<div class="result-dot"></div>' : ''}`;
     row.onclick = () => selectResult(r);
@@ -1670,10 +1697,10 @@ function buildShowInfo(r) {
     el.innerHTML = `
       <div class="show-info">
         <div class="si-top">
-          ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">🎬</div>`}
+          ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">${ICO('film')}</div>`}
           <div style="flex:1;min-width:0">
             <div class="si-title">${r.folder}</div>
-            <div class="si-year">📅 ${r.year}</div>
+            <div class="si-year">${ICO('calendar')}${r.year}</div>
             ${r.rating ? `<div class="si-rating"><span class="si-star">★</span><span class="si-score">${r.rating.toFixed(1)}</span></div>` : ''}
           </div>
         </div>
@@ -1701,7 +1728,7 @@ function buildShowInfo(r) {
   el.innerHTML = `
     <div class="show-info">
       <div class="si-top">
-        ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">📺</div>`}
+        ${pUrl ? `<div class="si-poster"><img src="${pUrl}" loading="lazy"></div>` : `<div class="si-poster-ph">${ICO('tv')}</div>`}
         <div style="flex:1;min-width:0">
           <div class="si-title">${r.title}</div>
           <div class="si-year">
@@ -1719,7 +1746,7 @@ function buildShowInfo(r) {
       <div class="seasons-header">Seasons</div>
       ${seasons.map(s => `
         <div class="season-list-row${state.activeSeasonNum===s.n?' active':''}" onclick="selectSeasonFromInfo('${r.title}',${s.n},'${s.title}')">
-          <div class="slr-poster">${pUrl ? `<img src="${tmdbImg(r.poster,'w92')}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" loading="lazy">` : '📺'}</div>
+          <div class="slr-poster">${pUrl ? `<img src="${tmdbImg(r.poster,'w92')}" style="width:100%;height:100%;object-fit:cover;border-radius:4px" loading="lazy">` : ICO('tv')}</div>
           <div style="flex:1;min-width:0">
             <div class="slr-name">${s.title}</div>
             <div class="slr-meta">${s.eps} eps · ${s.year || r.year}</div>

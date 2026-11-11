@@ -25,63 +25,40 @@ The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build st
 
 ## Architecture
 
-### Two separate CSS palettes
-
-All pages share the same blue-purple palette (`--accent: #5b8dee`, `--accent2: #7c6ff7`) and Inter font. The project pages (`artisync.html`, `matchbox.html`, `shelf.html`) use self-contained inline `<style>` blocks; `index.html` uses `style.css`.
+### Pages
 
 | File | Stylesheet | Background |
 |------|-----------|------------|
-| `index.html` | `style.css` | `#0d1117` |
-| `music-manager.html` | inline `<style>` | `#0a0a0f` |
-| `matchbox.html` | inline `<style>` | `#0a0a0f` |
-| `artisync.html` | inline `<style>` | `#0a0a0f` |
-| `shelf.html` | inline `<style>` | `#0a0a0f` |
+| `index.html` | `style.css` + `main.js` | `#0d1117` |
+| `shelf.html`, `matchbox.html`, `artisync.html` | inline `<style>` and `<script>` | `#0a0a0f` |
 
-`shelf.html` follows the `matchbox.html` structure (nav, hero, demo, features, download, setup, tech stack). Its interactive demo recreates the real Shelf web app's dark theme (Archivo font, jewel-case covers). All demo classes are prefixed `s-` and scoped under `.sh-demo` so they don't clash with page classes like `.btn` and `.hero`. The demo library (artists, albums, songs) is fictional; covers are CSS gradients.
+All pages use the same blue-purple palette (`#5b8dee` → `#7c6ff7`) and the Inter font. The project pages are self-contained by design: they don't load `style.css`, `project.css` or `main.js`. `project.css` is unused and safe to delete. `main.js` (used only by `index.html`) fades in `.fade-in` elements, staggers `.stagger-children`, and sets `.nav-active`.
 
-### Project pages are fully self-contained
+### The project pages share one layout
 
-Both `music-manager.html` and `matchbox.html` do **not** import `style.css`, `project.css`, or `main.js`. All CSS lives in an inline `<style>` block and all JS in an inline `<script>` block. This is intentional.
+`shelf.html`, `matchbox.html` and `artisync.html` have the same structure, class names and page CSS (the `--pg-*` tokens). When you change one, change the others to match. A new project page should start as a copy of one of them.
 
-### `main.js` is loaded only by `index.html`
+1. **Nav:** `← Etienne Axiak` (`.nav-back`) on the left, then `.nav-links` (Features, Download, Setup, GitHub; ArtiSync also has FAQ). Below 860px a `.hamburger` opens `#mobileMenu` via `toggleMenu()`/`closeMenu()`.
+2. **Hero:** `.hero-logo`, `.tag`, an `h1` with `.grad`, the lead text, `.hero-btns`, and `.hero-pills`.
+3. **Demo:** `.demo-section` holds the interactive app recreation.
+4. **Features:** `#features` with `h2.sh` and a `.features-grid` of `.feat` cards.
+5. **Download:** `#download` on `--pg-bg2`, with "Get <span>X</span>", `.dl-card`s, `.dl-source`, and the "All builds are vX.Y.Z" line.
+6. **Setup:** `#setup` holds the "How it Works" `.steps`.
+7. **Tech Stack:** `.stack-grid`.
+8. **Footer:** the one-line footer.
 
-Handles: `IntersectionObserver` scroll fade-in on `.fade-in` elements, staggered delay for `.stagger-children` children, and `.nav-active` class on nav links.
+ArtiSync also has a conversion-formats block inside Features and an FAQ section (`#faq`).
 
-The project pages have their own equivalent `IntersectionObserver` using `.reveal` / `.reveal.visible` classes — separate from `main.js`.
+### Icons: SVG only, never emoji
 
-### `project.css` is unused — safe to delete
+Emoji render as blank boxes in some browsers, such as Flatpak browsers without a colour emoji font. Every icon is an inline SVG symbol from the `p-*` sprite at the top of each page's `<body>`, written as `<svg class="pi"><use href="#p-name"/></svg>`. In JS, the matching helper is `ICO('name')` on Matchbox and ArtiSync. To add an icon, add a `<symbol>` to that page's sprite: a 24×24 viewBox, `stroke="currentColor"` at width 1.8, with round caps and joins. Plain text arrows and marks such as ← → ↗ ✓ ✕ ★ are fine.
 
-## Nav pattern (project pages)
+### Interactive demos
 
-Both `music-manager.html` and `matchbox.html` share the same nav structure:
-- `← Etienne Axiak` back link on the left (`.nav-back`)
-- App brand in the centre (`.nav-brand` — logo img + name span) — **music-manager only**
-- Nav links on the right (`.nav-links`)
-- Hamburger + mobile menu below 860px (`.hamburger`, `#mobileMenu`, `toggleMenu()`/`closeMenu()`)
-
-The `index.html` nav is intentionally different (portfolio home — shows section anchors via `.nav-name` + `<ul>`).
-
-## Interactive Mockup in `matchbox.html`
-
-The page contains a full interactive desktop app simulation of the real Electron/React Matchbox app. Key state variables:
-
-```js
-let currentArtist  = 'Avenged Sevenfold';
-let currentRelease = 'httk';   // default on load
-let executed       = false;
-let currentMockTab = 'preview';
-```
-
-Data is hardcoded in two objects:
-- `RELEASES` — 24 albums across 4 artists (A7X, Metallica, Iron Maiden, Tool), each with a gradient, track list, and log lines.
-- `ARTIST_DATA` — maps artist name → `{ path, albums, sidebar, count }`. `albums` drives the dropdown; `sidebar` drives the left panel.
-
-Themes (9 total, default = Dark) are applied by `applyTheme()` which sets CSS custom properties **only on `.mockup-window`**, leaving the rest of the page unaffected.
-
-## Known Issues
-
-No open structural issues. Both project pages have a working mobile hamburger menu and consistent nav patterns.
+- **Shelf:** a recreation of the real web app's dark theme (Archivo font, jewel-case covers). Every class is prefixed `s-` and scoped under `.sh-demo`, so it can't clash with page classes like `.btn` and `.hero`. The library (artists, albums, songs) is fictional, and covers are CSS gradients or inline SVG.
+- **Matchbox:** a recreation of the Electron/React app. `LIBRARY` (TV shows), `MOVIES` and the `state` object drive it, and posters come from TMDB image URLs.
+- **ArtiSync:** a recreation of the Qt app. `RELEASES` holds 24 albums across 4 artists, and `ARTIST_DATA` drives the artist dropdown and sidebar. Its classes are `.mockup-*`, `.win-*`, `.wt-*`, `.wsb`, `.wc-*`, `.wap-*` and `.mock-*`, and it uses its own tokens (`--surface`, `--fg`, `--accent`…). `applyTheme()` (9 themes) sets those tokens **only on `.mockup-window`**, so the rest of the page is unaffected.
 
 ## `unused for now/` directory
 
-Contains old experimental versions of the music manager page. Safe to ignore or delete.
+Contains old experimental versions of a music manager page. Safe to ignore or delete.

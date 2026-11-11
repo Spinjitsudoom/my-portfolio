@@ -4,16 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="ArtiSync — organise your music library with Spotify metadata, fuzzy file matching, tag writing, cover art, and audio conversion.">
-<title>ArtiSync</title>
+<title>ArtiSync — Etienne Axiak</title>
 <link rel="icon" type="image/png" href="ArtiSync.png">
 <link rel="apple-touch-icon" href="ArtiSync.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & base ─────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
 
+/* ── Page theme ────────────────────────────────────────────────────────────── */
+:root{
+  --pg-bg:#0a0a0f;
+  --pg-bg2:#0f0f18;
+  --pg-surface:#13131e;
+  --pg-surface2:#1a1a28;
+  --pg-border:rgba(255,255,255,.07);
+  --pg-border2:rgba(255,255,255,.12);
+  --pg-accent:#5b8dee;
+  --pg-accent2:#7c6ff7;
+  --pg-grad:linear-gradient(135deg,#5b8dee,#7c6ff7);
+  --pg-fg:#e8e8f0;
+  --pg-fg2:#9898b8;
+  --pg-fg3:#55556a;
+  --r:10px;--rlg:14px;
+}
+
+body{
+  background:var(--pg-bg);
+  color:var(--pg-fg);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ArtiSync demo tokens (applyTheme overrides these on .mockup-window only) */
 :root {
   --bg:        #0a0a0f;
   --bg2:       #0f0f18;
@@ -37,167 +65,63 @@ html { scroll-behavior: smooth; }
   --shadow-lg: 0 24px 80px rgba(0,0,0,.6);
 }
 
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
+/* ── Utilities ─────────────────────────────────────────────────────────────── */
+.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}
+.section{padding:6rem 0}
+.tag{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:.2rem .85rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+h2.sh{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;margin-bottom:.6rem}
+h2.sh span{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--pg-fg2);font-size:1rem;max-width:560px;margin-bottom:2.5rem}
+a{color:var(--pg-accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:5px;padding:.1rem .4rem;font-family:"SF Mono","Fira Code",monospace;font-size:.84em;color:#c8d8f8}
 
-/* ── Utility ──────────────────────────────────────────────────────────────── */
-.container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
-.section    { padding: 6rem 0; }
-.section-sm { padding: 4rem 0; }
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.6rem;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;text-decoration:none;border:none;white-space:nowrap;font-family:inherit}
+.btn-primary{background:var(--pg-grad);color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.5);text-decoration:none}
+.btn-secondary{background:var(--pg-surface2);color:var(--pg-fg);border:1px solid var(--pg-border2)}
+.btn-secondary:hover{background:#1e2338;text-decoration:none}
+.btn-sm{padding:.45rem 1rem;font-size:.85rem}
 
-.tag {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: rgba(91,141,238,.12);
-  color: var(--accent);
-  border: 1px solid rgba(91,141,238,.25);
-  border-radius: 20px;
-  padding: .2rem .85rem;
-  font-size: .78rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;background:rgba(7,10,16,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--pg-border)}
+.nav-inner{max-width:1140px;margin:0 auto;padding:0 1.5rem;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-back{font-weight:600;font-size:.9rem;color:var(--pg-fg2);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--pg-fg);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:var(--pg-fg2);font-size:.9rem;transition:color .2s;text-decoration:none}
+.nav-links a:hover{color:var(--pg-fg)}
 
-h1, h2, h3, h4 { line-height: 1.2; }
-h2.section-title {
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 800;
-  margin-bottom: .75rem;
-}
-h2.section-title span { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.section-sub { color: var(--fg2); font-size: 1.05rem; max-width: 560px; margin-bottom: 3rem; }
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 4rem;position:relative;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.g1{width:700px;height:700px;background:rgba(59,130,246,.07);top:-100px;left:50%;transform:translateX(-50%)}
+.g2{width:400px;height:400px;background:rgba(129,140,248,.05);bottom:0;right:-100px}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero h1 .grad{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--pg-fg2);font-size:clamp(1rem,2vw,1.15rem);max-width:600px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-logo{width:96px;height:96px;border-radius:22px;margin:0 auto 1.5rem;display:block;box-shadow:0 8px 40px rgba(59,130,246,.3)}
+.hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
+.pill span{color:var(--pg-fg2)}
+.pi{width:1em;height:1em;flex:none;vertical-align:-.125em}
+.pill .pi{width:16px;height:16px;color:#7c9cf5}
+.feat-icon .pi{width:21px;height:21px;color:#60a5fa}
+.btn .pi{width:16px;height:16px}
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* ── Demo section ──────────────────────────────────────────────────────────── */
+.demo-section{padding:0 0 5rem}
+.demo-hint{text-align:center;color:var(--pg-fg3);font-size:.84rem;margin-top:1.1rem}
+.wap-art .pi{width:2.4rem;height:2.4rem;color:rgba(255,255,255,.3)}
+.rel-thumb .pi{width:15px;height:15px;color:rgba(255,255,255,.4)}
+.dd-icon .pi{width:13px;height:13px;vertical-align:-2px}
+.mock-modal-hdr h3 .pi{width:16px;height:16px;vertical-align:-3px;margin-right:.35rem;color:var(--accent)}
 
-code {
-  background: var(--surface3);
-  border: 1px solid var(--border2);
-  border-radius: 5px;
-  padding: .1rem .4rem;
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: .85em;
-  color: #c8c8e8;
-}
-
-/* ── Buttons ──────────────────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  padding: .7rem 1.6rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: .95rem;
-  cursor: pointer;
-  transition: all .2s;
-  text-decoration: none;
-  border: none;
-  white-space: nowrap;
-}
-.btn-primary {
-  background: var(--accent-g);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(91,141,238,.35);
-}
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(91,141,238,.5); text-decoration: none; }
-.btn-secondary {
-  background: var(--surface2);
-  color: var(--fg);
-  border: 1px solid var(--border2);
-}
-.btn-secondary:hover { background: var(--surface3); text-decoration: none; }
-.btn-sm { padding: .45rem 1rem; font-size: .85rem; }
-
-/* ── Nav ──────────────────────────────────────────────────────────────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 60px;
-  display: flex; align-items: center;
-  background: rgba(10,10,15,.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-inner {
-  max-width: 1140px; margin: 0 auto; padding: 0 1.5rem;
-  width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-back {
-  font-weight: 600; font-size: .9rem;
-  color: var(--fg2); text-decoration: none;
-  white-space: nowrap; flex-shrink: 0;
-  transition: color .2s;
-}
-.nav-back:hover { color: var(--fg); text-decoration: none; }
-.nav-brand { display: flex; align-items: center; gap: 0.75rem; margin-right: 2rem; }
-.nav-brand img { width: 32px; height: 32px; border-radius: 6px; }
-.nav-brand span { font-weight: 700; font-size: 1.1rem; color: var(--fg); }
-.nav-links { display: flex; align-items: center; gap: 1.75rem; }
-.nav-links a {
-  color: var(--fg2); font-size: .9rem; transition: color .2s; text-decoration: none;
-}
-.nav-links a:hover { color: var(--fg); }
-
-.hamburger {
-  display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
-}
-.hamburger span { display: block; width: 22px; height: 2px; background: var(--fg2); border-radius: 2px; transition: .3s; }
-
-.mobile-menu {
-  display: none; position: fixed; top: 60px; left: 0; right: 0;
-  background: rgba(10,10,15,.97); backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: 1.5rem;
-  flex-direction: column; gap: 1rem; z-index: 199;
-}
-.mobile-menu a { color: var(--fg2); font-size: 1rem; padding: .4rem 0; text-decoration: none; }
-.mobile-menu.open { display: flex; }
-
-/* ── Hero ─────────────────────────────────────────────────────────────────── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center;
-  padding: 7rem 1.5rem 4rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-glow {
-  position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
-}
-.hero-glow-1 { width: 600px; height: 600px; background: rgba(91,141,238,.08); top: -100px; left: 50%; transform: translateX(-50%); }
-.hero-glow-2 { width: 400px; height: 400px; background: rgba(124,111,247,.06); bottom: 0; right: -100px; }
-.hero-glow-3 { width: 350px; height: 350px; background: rgba(61,220,132,.05); bottom: 50px; left: -80px; }
-
-.hero-content { position: relative; z-index: 1; max-width: 780px; }
-.hero h1 {
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 900;
-  letter-spacing: -.03em;
-  margin-bottom: 1.25rem;
-}
-.hero h1 .grad { background: var(--accent-g); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero p { color: var(--fg2); font-size: clamp(1rem, 2vw, 1.2rem); max-width: 580px; margin: 0 auto 2.5rem; }
-.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-.hero-badges {
-  margin-top: 3.5rem;
-  display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
-}
-.hero-badge {
-  display: flex; align-items: center; gap: .5rem;
-  color: var(--fg3); font-size: .82rem;
-}
-.hero-badge span { color: var(--fg2); }
-
+/* ══ ArtiSync app demo ══════════════════════════════════════════════════════ */
 /* ── App mockup ───────────────────────────────────────────────────────────── */
-.mockup-section { padding: 2rem 0 6rem; }
 .mockup-outer {
   position: relative;
   max-width: 1060px;
@@ -467,125 +391,9 @@ nav {
 .conv-run-btn:hover { opacity: .85; }
 .conv-run-btn:disabled { opacity: .5; cursor: default; }
 
-/* ── Features ─────────────────────────────────────────────────────────────── */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.25rem;
-}
-.feat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.6rem;
-  transition: border-color .25s, transform .25s;
-  position: relative;
-  overflow: hidden;
-}
-.feat-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: var(--accent-g); opacity: 0;
-  transition: opacity .25s;
-}
-.feat-card:hover { border-color: var(--border2); transform: translateY(-3px); }
-.feat-card:hover::before { opacity: .03; }
-.feat-icon {
-  width: 46px; height: 46px; border-radius: 10px;
-  background: rgba(91,141,238,.1);
-  border: 1px solid rgba(91,141,238,.2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem; margin-bottom: 1rem;
-  position: relative;
-}
-.feat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
-.feat-card p { font-size: .875rem; color: var(--fg2); line-height: 1.6; }
-
-/* ── How it works ─────────────────────────────────────────────────────────── */
-.how-bg { background: var(--bg2); }
-.steps-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem 3rem;
-  max-width: 820px;
-}
-.step-card {
-  display: flex; gap: 1rem;
-}
-.step-num {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--accent-g);
-  color: #fff; font-weight: 700; font-size: .9rem;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.step-body h3 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; margin-top: .35rem; }
-.step-body p { font-size: .85rem; color: var(--fg2); }
-
-/* ── Install ──────────────────────────────────────────────────────────────── */
-.install-tabs {
-  display: flex; gap: 0;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px 10px 0 0; overflow: hidden;
-  max-width: 680px;
-}
-.itab {
-  flex: 1; padding: .75rem 1.2rem; font-size: .9rem; font-weight: 600;
-  color: var(--fg2); cursor: pointer; transition: all .2s;
-  background: transparent; border: none; border-bottom: 2px solid transparent;
-}
-.itab.active { color: var(--fg); border-bottom-color: var(--accent); background: rgba(91,141,238,.06); }
-.itab-panel {
-  display: none; max-width: 680px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-top: none; border-radius: 0 0 10px 10px; padding: 1.5rem;
-}
-.itab-panel.active { display: block; }
-.code-block {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem 1.2rem;
-  margin: .75rem 0;
-  position: relative;
-  overflow-x: auto;
-}
-.code-block pre { font-family: "SF Mono","Fira Code",monospace; font-size: .83rem; color: #c8c8e8; white-space: pre; }
-.copy-btn {
-  position: absolute; top: .6rem; right: .6rem;
-  background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--fg2); font-size: .72rem; padding: .2rem .55rem;
-  border-radius: 4px; cursor: pointer; transition: .2s;
-}
-.copy-btn:hover { background: var(--surface3); color: var(--fg); }
-.copy-btn.copied { color: var(--green); border-color: rgba(61,220,132,.4); }
-.itab-panel p { font-size: .875rem; color: var(--fg2); margin-bottom: .5rem; }
-.itab-panel a { color: var(--accent); }
-
-/* ── Spotify setup ────────────────────────────────────────────────────────── */
-.spotify-steps {
-  display: flex; flex-direction: column; gap: 0;
-  max-width: 600px;
-}
-.spotify-step {
-  display: flex; gap: 1rem; align-items: flex-start;
-  padding-bottom: 1.5rem; position: relative;
-}
-.spotify-step:not(:last-child)::before {
-  content: ''; position: absolute; left: 17px; top: 36px; bottom: 0;
-  width: 2px; background: var(--border);
-}
-.sp-num {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(91,141,238,.12); border: 1px solid rgba(91,141,238,.3);
-  color: var(--accent); font-weight: 700; font-size: .88rem;
-  display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
-}
-.sp-body { padding-top: .45rem; }
-.sp-body h3 { font-size: .95rem; font-weight: 700; margin-bottom: .25rem; }
-.sp-body p { font-size: .85rem; color: var(--fg2); }
-
-/* ── Conversion table ─────────────────────────────────────────────────────── */
-.conv-bg { background: var(--bg2); }
+/* ── Audio conversion (inside Features) ────────────────────────────────────── */
+.subhead{font-size:1.15rem;font-weight:800;margin:4rem 0 .4rem}
+.subhead+.sub{margin-bottom:1.5rem}
 .format-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
   max-width: 780px;
@@ -613,65 +421,8 @@ nav {
 .quality-table td { color: var(--fg); }
 .quality-table tr:last-child td { border-bottom: none; }
 
-/* ── Themes ───────────────────────────────────────────────────────────────── */
-.themes-row { display: flex; gap: .6rem; flex-wrap: wrap; }
-.theme-swatch {
-  width: 44px; height: 44px; border-radius: 8px;
-  border: 2px solid transparent;
-  cursor: default; transition: transform .2s;
-  position: relative;
-}
-.theme-swatch:hover { transform: scale(1.1); }
-.theme-swatch[data-name]::after {
-  content: attr(data-name);
-  position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-  font-size: .65rem; color: var(--fg3); white-space: nowrap;
-}
-.ts-active { border-color: var(--accent); }
 
-/* ── Downloads ────────────────────────────────────────────────────────────── */
-.dl-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem; max-width: 1080px;
-}
-.dl-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 2rem;
-  display: flex; flex-direction: column; gap: 1rem;
-}
-.dl-card h3 { font-size: 1.1rem; font-weight: 700; }
-.dl-card p { font-size: .875rem; color: var(--fg2); flex: 1; }
-.dl-badge {
-  display: inline-block; background: rgba(61,220,132,.1);
-  border: 1px solid rgba(61,220,132,.25);
-  color: var(--green); font-size: .72rem; font-weight: 700;
-  padding: .15rem .55rem; border-radius: 20px; margin-bottom: .25rem;
-}
-.dl-badge.win { background: rgba(59,130,246,.1); border-color: rgba(59,130,246,.25); color: #60a5fa; }
-
-.dl-card-actions { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
-.dl-toggle {
-  background: none; border: 1px solid var(--border2); color: var(--fg2);
-  border-radius: var(--radius); padding: .45rem .9rem; font-size: .85rem;
-  cursor: pointer; transition: color .2s, border-color .2s;
-}
-.dl-toggle:hover { color: var(--fg); border-color: var(--accent); }
-.dl-toggle.open { color: var(--accent); border-color: var(--accent); }
-.dl-install { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-.dl-install p { font-size: .875rem; color: var(--fg2); margin-bottom: .5rem; }
-.dl-install a { color: var(--accent); }
-.dl-source { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-.dl-source-hdr {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 1.5rem; cursor: pointer; background: var(--surface);
-  font-weight: 600; font-size: .95rem; user-select: none;
-}
-.dl-source-hdr:hover { background: var(--surface2); }
-.dl-source-body { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); }
-.dl-source-body p { font-size: .875rem; color: var(--fg2); margin-bottom: .5rem; }
-
-/* ── FAQ ──────────────────────────────────────────────────────────────────── */
-.faq-bg { background: var(--bg2); }
+/* ── FAQ ───────────────────────────────────────────────────────────────────── */
 .faq-list { max-width: 720px; }
 .faq-item {
   border: 1px solid var(--border);
@@ -695,124 +446,161 @@ nav {
 }
 .faq-a.open { max-height: 300px; padding: .9rem 1.25rem; }
 
-/* ── Footer ───────────────────────────────────────────────────────────────── */
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding: 3rem 0 2rem;
-}
-.footer-grid {
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem;
-  margin-bottom: 2.5rem;
-}
-.footer-brand p { font-size: .875rem; color: var(--fg2); margin-top: .6rem; max-width: 280px; }
-.footer-col h4 { font-size: .85rem; font-weight: 700; color: var(--fg); margin-bottom: .75rem; letter-spacing: .04em; text-transform: uppercase; }
-.footer-col a { display: block; color: var(--fg2); font-size: .85rem; margin-bottom: .45rem; text-decoration: none; transition: color .2s; }
-.footer-col a:hover { color: var(--fg); }
-.footer-bottom {
-  border-top: 1px solid var(--border); padding-top: 1.5rem;
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 1rem;
-}
-.footer-bottom p { font-size: .82rem; color: var(--fg3); }
-.social-links { display: flex; gap: .6rem; margin-top: .9rem; flex-wrap: wrap; }
-.social-link {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--fg2); font-size: .8rem; padding: .35rem .75rem;
-  border-radius: 20px; text-decoration: none; transition: all .2s; cursor: pointer;
-}
-.social-link:hover { color: var(--fg); border-color: #444; transform: translateY(-1px); text-decoration: none; }
-.social-link.instagram:hover { border-color: #e1306c; color: #e1306c; }
-.social-link.twitter:hover   { border-color: #e8e8f0; color: #e8e8f0; }
-.social-link.discord:hover   { border-color: #5865f2; color: #5865f2; }
-.footer-badge {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: rgba(61,220,132,.08); border: 1px solid rgba(61,220,132,.2);
-  color: var(--green); font-size: .75rem; padding: .2rem .65rem; border-radius: 20px;
-}
 
-/* ── Scroll reveal ────────────────────────────────────────────────────────── */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: .1s; }
-.reveal-delay-2 { transition-delay: .2s; }
-.reveal-delay-3 { transition-delay: .3s; }
+/* ── Features grid ─────────────────────────────────────────────────────────── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
+.feat{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:1.5rem;transition:border-color .2s,transform .2s}
+.feat:hover{border-color:var(--pg-border2);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;background:rgba(59,130,246,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.85rem}
+.feat h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.feat p{color:var(--pg-fg2);font-size:.88rem;line-height:1.55}
 
-/* ── Responsive ───────────────────────────────────────────────────────────── */
-@media (max-width: 860px) {
-  .nav-links, .nav-cta { display: none; }
-  .hamburger { display: flex; }
-  .win-body { height: auto; flex-direction: column; }
-  .wsb { width: 100%; min-width: unset; height: 160px; }
-  .wap { width: 100%; min-width: unset; flex-direction: row; flex-wrap: wrap; }
-  .wap-art { width: 90px; height: 90px; }
-  .steps-grid { grid-template-columns: 1fr; }
-  .format-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+/* ── Download ──────────────────────────────────────────────────────────────── */
+.dl-group{margin-bottom:2.5rem}
+.dl-group-h{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.dl-group-h h3{font-size:1.15rem;font-weight:800}
+.dl-group-h p{color:var(--pg-fg2);font-size:.9rem}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;max-width:1080px}
+.dl-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:2rem;display:flex;flex-direction:column;gap:1rem}
+.dl-card h3{font-size:1.1rem;font-weight:700}
+.dl-card>p{font-size:.875rem;color:var(--pg-fg2);flex:1}
+.dl-badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-bottom:.25rem}
+.dl-badge.win{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa}
+.dl-badge.android{background:rgba(163,230,53,.08);border-color:rgba(163,230,53,.25);color:#a3e635}
+.dl-badge.web{background:rgba(200,200,200,.08);border-color:rgba(200,200,200,.2);color:#cbd5e1}
+.dl-card-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.dl-toggle{background:none;border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:8px;padding:.45rem .9rem;font-size:.85rem;cursor:pointer;transition:color .2s,border-color .2s;font-family:inherit}
+.dl-toggle:hover{color:var(--pg-fg);border-color:var(--pg-accent)}
+.dl-toggle.open{color:var(--pg-accent);border-color:var(--pg-accent)}
+.dl-install{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--pg-border);font-size:.875rem;color:var(--pg-fg2);display:flex;flex-direction:column;gap:.5rem}
+.dl-install p{font-size:.875rem;color:var(--pg-fg2)}
+.dl-cb{position:relative;background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:8px;padding:.75rem 4.2rem .75rem 1rem;overflow-x:auto}
+.dl-cb pre{font-family:"SF Mono","Fira Code",monospace;font-size:.8rem;color:#c8d8f8;margin:0;white-space:pre}
+.dl-cb.wrap pre{white-space:pre-wrap;word-break:break-all}
+.dl-cb-copy{position:absolute;top:.4rem;right:.5rem;background:var(--pg-surface2);border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:5px;padding:.15rem .5rem;font-size:.72rem;cursor:pointer;font-family:inherit}
+.dl-cb-copy:hover{color:var(--pg-fg)}
+.dl-source{margin-top:1.5rem;border:1px solid var(--pg-border);border-radius:var(--rlg);overflow:hidden;max-width:1080px}
+.dl-source-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;cursor:pointer;background:var(--pg-surface);font-weight:600;font-size:.95rem;user-select:none}
+.dl-source-hdr:hover{background:var(--pg-surface2)}
+.dl-source-body{padding:1.25rem 1.5rem;border-top:1px solid var(--pg-border);display:flex;flex-direction:column;gap:.6rem}
+.dl-source-body p{font-size:.875rem;color:var(--pg-fg2)}
+
+/* ── Setup ─────────────────────────────────────────────────────────────────── */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1.1rem}
+.step-n{counter-increment:step;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#60a5fa}
+.step-n::after{content:counter(step)}
+.step-body{min-width:0}
+.step-body h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.step-body p,.step-body li{color:var(--pg-fg2);font-size:.9rem;line-height:1.55}
+.note{margin-top:.5rem;padding:.55rem .85rem;background:rgba(234,179,8,.07);border-left:3px solid #ca8a04;border-radius:0 5px 5px 0;color:var(--pg-fg2);font-size:.83rem}
+
+/* ── Tech ──────────────────────────────────────────────────────────────────── */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.85rem}
+.stack-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--r);padding:1rem 1.1rem}
+.stack-layer{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--pg-fg3);margin-bottom:.3rem}
+.stack-val{font-size:.9rem;color:var(--pg-fg);font-weight:500}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--pg-border);padding:2.5rem 0;text-align:center;color:var(--pg-fg3);font-size:.88rem}
+footer a{color:var(--pg-fg2)}
+
+/* ── Hamburger / mobile menu ───────────────────────────────────────────────── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--pg-fg2);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(10,10,15,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--pg-border);padding:1.5rem;flex-direction:column;gap:1rem;z-index:199}
+.mobile-menu a{color:var(--pg-fg2);font-size:1rem;padding:.4rem 0;text-decoration:none}
+.mobile-menu.open{display:flex}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
 }
-@media (max-width: 540px) {
-  .dl-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .wt-sel { display: none; }
+@media(max-width:700px){
+  .stack-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}
+  .dl-card{padding:1.5rem}
+}
+@media(max-width:860px){
+  .win-body{height:auto;flex-direction:column}
+  .wsb{width:100%;min-width:unset;height:160px}
+  .wap{width:100%;min-width:unset;flex-direction:row;flex-wrap:wrap}
+  .wap-art{width:90px;height:90px}
+  .format-grid{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .wt-sel{display:none}
 }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-arrow" viewBox="0 0 24 24"><path d="M12 4v13m-5.5-5.5L12 17l5.5-5.5M5 20.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-computer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/></g></symbol>
+  <symbol id="p-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15H17"/></g></symbol>
+  <symbol id="p-note" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></g></symbol>
+  <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="p-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></g></symbol>
+  <symbol id="p-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.2V4a1 1 0 0 1 1-1h8.2a1 1 0 0 1 .7.3l8 8a1 1 0 0 1 0 1.4l-8.2 8.2a1 1 0 0 1-1.4 0l-8-8a1 1 0 0 1-.3-.7Z"/></g><circle cx="7.8" cy="7.8" r="1.5" fill="currentColor"/></symbol>
+  <symbol id="p-image" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9.5" r="1.8"/><path d="m21 16-5-5-9 9"/></g></symbol>
+  <symbol id="p-swap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14m-4-4 4 4-4 4M20 16H6m4-4-4 4 4 4"/></g></symbol>
+  <symbol id="p-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></g></symbol>
+  <symbol id="p-folder" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></g></symbol>
+  <symbol id="p-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3Z"/></g><circle cx="7.5" cy="11.5" r="1.3" fill="currentColor"/><circle cx="10" cy="7.3" r="1.3" fill="currentColor"/><circle cx="14.8" cy="7.3" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="p-save" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1Z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/></g></symbol>
+  <symbol id="p-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="p-x" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></g></symbol>
+</svg>
 
-<!-- ── Nav ── -->
-<nav id="nav">
+<nav>
   <div class="nav-inner">
-    <a class="nav-back" href="index.html">← Etienne Axiak</a>
-    <div class="nav-brand">
-      <img src="ArtiSync.png" alt="ArtiSync logo">
-      <span>ArtiSync</span>
-    </div>
+    <a href="index.html" class="nav-back">← Etienne Axiak</a>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#how-it-works">How it works</a>
       <a href="#download">Download</a>
+      <a href="#setup">Setup</a>
       <a href="#faq">FAQ</a>
-      <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank">GitHub</a>
+      <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank" rel="noopener">GitHub</a>
     </div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#features"  onclick="closeMenu()">Features</a>
-  <a href="#how-it-works" onclick="closeMenu()">How it works</a>
-  <a href="#download"  onclick="closeMenu()">Download</a>
-  <a href="#faq"       onclick="closeMenu()">FAQ</a>
-  <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank">GitHub ↗</a>
-  <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest" style="margin-top:.5rem;">Download</a>
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#download" onclick="closeMenu()">Download</a>
+  <a href="#setup" onclick="closeMenu()">Setup</a>
+  <a href="#faq" onclick="closeMenu()">FAQ</a>
+  <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank" rel="noopener" onclick="closeMenu()">GitHub ↗</a>
 </div>
 
-<!-- ── Hero ── -->
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-glow hero-glow-1"></div>
-  <div class="hero-glow hero-glow-2"></div>
-  <div class="hero-glow hero-glow-3"></div>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
   <div class="hero-content">
-    <div class="tag">✦ Open Source · Free · Windows · Linux</div>
-    <h1>Your music library,<br><span class="grad">perfectly organised</span></h1>
-    <p>Fetches metadata from Spotify, renames your files, writes embedded tags, downloads cover art, and converts audio formats — all in one desktop app.</p>
+    <img src="ArtiSync.png" alt="ArtiSync logo" class="hero-logo">
+    <div class="tag">Music Tools</div>
+    <h1><span class="grad">ArtiSync</span></h1>
+    <p>Organise your music library with Spotify metadata. It fetches the right track names, renames your files, writes embedded tags, downloads cover art, and converts audio formats — all in one desktop app.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Setup.exe">⬇ Windows</a>
-      <a class="btn btn-primary" href="#download">⬇ Linux</a>
-      <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank">View Source</a>
+      <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Setup.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Windows</a>
+      <a class="btn btn-primary" href="#download"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Linux</a>
+      <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank" rel="noopener">View Source</a>
     </div>
-    <div class="hero-badges">
-      <div class="hero-badge">🎵 <span>Spotify metadata</span></div>
-      <div class="hero-badge">🔍 <span>Fuzzy matching</span></div>
-      <div class="hero-badge">🏷️ <span>Tag writing</span></div>
-      <div class="hero-badge">🔄 <span>Audio conversion</span></div>
-      <div class="hero-badge">🎨 <span>9 themes</span></div>
+    <div class="hero-pills">
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-computer"/></svg><span>Windows Installer + Portable</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-terminal"/></svg><span>Linux AppImage + Flatpak</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-note"/></svg><span>Spotify metadata</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg><span>MIT License</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── App mockup ── -->
-<div class="mockup-section">
+<!-- Interactive demo -->
+<section class="demo-section" aria-label="Interactive demo">
   <div class="container">
-    <div class="mockup-outer reveal">
+    <div class="mockup-outer">
       <div class="mockup-window">
 
         <div class="win-bar">
@@ -821,10 +609,10 @@ nav {
           <div class="win-menu-wrap">
             <span class="win-menu" id="mk-file-btn" onclick="mockFileMenu()">File ▾</span>
             <div class="win-dropdown" id="mk-file-dd">
-              <div class="win-dd-item" onclick="mockSettings()"><span class="dd-icon">⚙</span> Settings</div>
-              <div class="win-dd-item" onclick="mockOpenConvert()"><span class="dd-icon">⇄</span> Convert…</div>
+              <div class="win-dd-item" onclick="mockSettings()"><span class="dd-icon"><svg class="pi" aria-hidden="true"><use href="#p-settings"/></svg></span> Settings</div>
+              <div class="win-dd-item" onclick="mockOpenConvert()"><span class="dd-icon"><svg class="pi" aria-hidden="true"><use href="#p-swap"/></svg></span> Convert…</div>
               <div class="win-dd-sep"></div>
-              <div class="win-dd-item dim" onclick="closeMockFile()"><span class="dd-icon">✕</span> Quit</div>
+              <div class="win-dd-item dim" onclick="closeMockFile()"><span class="dd-icon"><svg class="pi" aria-hidden="true"><use href="#p-x"/></svg></span> Quit</div>
             </div>
           </div>
         </div>
@@ -872,7 +660,7 @@ nav {
           </div>
 
           <div class="wap">
-            <div class="wap-art" id="mk-art">🎵</div>
+            <div class="wap-art" id="mk-art"><svg class="pi" aria-hidden="true"><use href="#p-note"/></svg></div>
             <div class="wap-meta">
               <div class="wap-row"><span class="wap-lbl">Artist</span><span class="wap-val" id="mk-meta-artist">Avenged Sevenfold</span></div>
               <div class="wap-row"><span class="wap-lbl">Album</span><span class="wap-val"  id="mk-meta-album">Hail to the King</span></div>
@@ -901,14 +689,15 @@ nav {
 
       </div>
     </div>
+    <p class="demo-hint">Try it: pick a release in the sidebar, then <strong>Execute Rename + Tag</strong>. The <strong>File</strong> menu opens Settings (with all 9 themes) and Convert.</p>
   </div>
-</div>
+</section>
 
 <!-- ── Settings modal ── -->
 <div class="mock-modal-bg" id="modal-settings" onclick="modalBgClick(event,'modal-settings')">
   <div class="mock-modal">
     <div class="mock-modal-hdr">
-      <h3>⚙ Settings</h3>
+      <h3><svg class="pi" aria-hidden="true"><use href="#p-settings"/></svg>Settings</h3>
       <div class="mock-modal-close" onclick="closeModal('modal-settings')">✕</div>
     </div>
 
@@ -939,7 +728,7 @@ nav {
 <div class="mock-modal-bg" id="modal-convert" onclick="modalBgClick(event,'modal-convert')">
   <div class="mock-modal">
     <div class="mock-modal-hdr">
-      <h3>⇄ Convert Audio</h3>
+      <h3><svg class="pi" aria-hidden="true"><use href="#p-swap"/></svg>Convert Audio</h3>
       <div class="mock-modal-close" onclick="closeModal('modal-convert')">✕</div>
     </div>
 
@@ -974,179 +763,62 @@ nav {
   </div>
 </div>
 
-<!-- ── Features ── -->
+<!-- Features -->
 <section class="section" id="features">
   <div class="container">
-    <div class="tag reveal">Features</div>
-    <h2 class="section-title reveal">Everything your library needs</h2>
-    <p class="section-sub reveal">From fuzzy filename matching to embedded cover art — every step of the organisation workflow in one place.</p>
+    <h2 class="sh"><span>Features</span></h2>
+    <p class="sub">From fuzzy filename matching to embedded cover art — every step of organising a music library in one place.</p>
     <div class="features-grid">
-
-      <div class="feat-card reveal reveal-delay-1">
-        <div class="feat-icon">🎵</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-note"/></svg></div>
         <h3>Spotify Metadata</h3>
         <p>Search any artist and browse every release with album art thumbnails loading in the background. Pulls accurate track names, years, and genres directly from Spotify's database.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-2">
-        <div class="feat-icon">🔍</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-search"/></svg></div>
         <h3>Fuzzy File Matching</h3>
         <p>Automatically maps your audio files to the correct tracks using Levenshtein edit-distance scoring. Works even with messy, numbered, or incomplete filenames.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-3">
-        <div class="feat-icon">🏷️</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-tag"/></svg></div>
         <h3>Tag Writing</h3>
         <p>Embeds artist, album, title, year, genre, track number, disc number, and cover art into ID3v2 (MP3), Vorbis comments (FLAC/OGG), and MP4/M4A atoms via TagLib.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-1">
-        <div class="feat-icon">🖼️</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-image"/></svg></div>
         <h3>Cover Art</h3>
         <p>Downloads the highest-resolution image from Spotify's CDN and embeds it directly into your files. The sidebar shows 64×64 thumbnails for every release as they load asynchronously.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-2">
-        <div class="feat-icon">🔄</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-swap"/></svg></div>
         <h3>Audio Conversion</h3>
         <p>Convert between MP3, FLAC, M4A, OGG, and WAV via FFmpeg. AAC↔M4A is remuxed losslessly; all other pairs transcode with Low / Medium / High / Best quality presets.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-3">
-        <div class="feat-icon">↩️</div>
-        <h3>Preview & Undo</h3>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-undo"/></svg></div>
+        <h3>Preview &amp; Undo</h3>
         <p>The Preview tab shows every file → new name mapping with a confidence percentage before anything is changed. Every execute can be fully reversed with one click.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-1">
-        <div class="feat-icon">📁</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-folder"/></svg></div>
         <h3>Batch Mode</h3>
         <p>Process an entire artist root directory in one click — the app auto-detects and matches every album sub-folder without manual selection.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-2">
-        <div class="feat-icon">🎨</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-palette"/></svg></div>
         <h3>9 Colour Themes</h3>
-        <p>Dark, Light, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Slate. Switch instantly from File → Settings with no restart required.</p>
+        <p>Dark, Light, Midnight, Emerald, Amethyst, Crimson, Forest, Ocean, and Slate. Switch instantly from <strong>File → Settings</strong> with no restart required. Try them in the demo above.</p>
       </div>
-
-      <div class="feat-card reveal reveal-delay-3">
-        <div class="feat-icon">💾</div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-save"/></svg></div>
         <h3>Persistent Config</h3>
         <p>Your Spotify credentials, last-used directory, selected theme, and conversion settings are saved between sessions automatically.</p>
       </div>
-
     </div>
-  </div>
-</section>
 
-<!-- ── How it works ── -->
-<section class="section how-bg" id="how-it-works">
-  <div class="container">
-    <div class="tag reveal">Workflow</div>
-    <h2 class="section-title reveal">How it <span>works</span></h2>
-    <p class="section-sub reveal">Six steps from a folder of messy audio files to a perfectly tagged library.</p>
-    <div class="steps-grid">
-
-      <div class="step-card reveal reveal-delay-1">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h3>Browse to your music folder</h3>
-          <p>Point the app at a root directory containing artist sub-folders. The path is remembered between sessions.</p>
-        </div>
-      </div>
-
-      <div class="step-card reveal reveal-delay-2">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h3>Artist auto-detected</h3>
-          <p>The app searches Spotify for the folder name and populates the releases sidebar with thumbnails loading in the background.</p>
-        </div>
-      </div>
-
-      <div class="step-card reveal reveal-delay-1">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h3>Select a release</h3>
-          <p>Click any album or single. The app fetches the full track list, cover art, and metadata from Spotify instantly.</p>
-        </div>
-      </div>
-
-      <div class="step-card reveal reveal-delay-2">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h3>Review the preview</h3>
-          <p>The Preview tab shows every file → new name mapping with a confidence percentage. Green = high confidence, amber = uncertain.</p>
-        </div>
-      </div>
-
-      <div class="step-card reveal reveal-delay-1">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h3>Execute Rename + Tag</h3>
-          <p>One click renames all files, writes every embedded tag, and embeds the full-resolution cover art.</p>
-        </div>
-      </div>
-
-      <div class="step-card reveal reveal-delay-2">
-        <div class="step-num">6</div>
-        <div class="step-body">
-          <h3>Undo if needed</h3>
-          <p>Changed your mind? Hit Undo to restore every original filename in one operation.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── Spotify setup ── -->
-<section class="section-sm how-bg">
-  <div class="container">
-    <div class="tag reveal">Configuration</div>
-    <h2 class="section-title reveal">Spotify API <span>setup</span></h2>
-    <p class="section-sub reveal">A free Spotify developer account is all you need — no paid subscription required.</p>
-    <div class="spotify-steps reveal">
-      <div class="spotify-step">
-        <div class="sp-num">1</div>
-        <div class="sp-body">
-          <h3>Create a Spotify app</h3>
-          <p>Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> and click <strong>Create App</strong>. Name it anything you like.</p>
-        </div>
-      </div>
-      <div class="spotify-step">
-        <div class="sp-num">2</div>
-        <div class="sp-body">
-          <h3>Copy your credentials</h3>
-          <p>From the app dashboard, copy your <strong>Client ID</strong> and <strong>Client Secret</strong>.</p>
-        </div>
-      </div>
-      <div class="spotify-step">
-        <div class="sp-num">3</div>
-        <div class="sp-body">
-          <h3>Paste into Settings</h3>
-          <p>In ArtiSync: open <strong>File → Settings</strong>, paste both values, and click <strong>Save</strong>.</p>
-        </div>
-      </div>
-      <div class="spotify-step">
-        <div class="sp-num">4</div>
-        <div class="sp-body">
-          <h3>You're connected</h3>
-          <p>The status bar will show a green <strong>● Spotify connected</strong> indicator. Start browsing your library.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Conversion ── -->
-<section class="section conv-bg">
-  <div class="container">
-    <div class="tag reveal">Audio Conversion</div>
-    <h2 class="section-title reveal">Convert between any <span>audio format</span></h2>
-    <p class="section-sub reveal">FFmpeg-powered conversion with lossless remux support and quality presets for lossy output.</p>
-
-    <div class="format-grid reveal">
+    <h3 class="subhead">Convert between any audio format</h3>
+    <p class="sub">FFmpeg-powered conversion with lossless remux support and quality presets for lossy output.</p>
+    <div class="format-grid">
       <div class="format-card">
         <h3>Input formats</h3>
         <div class="format-pills">
@@ -1161,17 +833,17 @@ nav {
           <span class="fpill out">MP3</span><span class="fpill out">FLAC</span><span class="fpill out">M4A</span>
           <span class="fpill out">OGG</span><span class="fpill out">WAV</span>
         </div>
-        <p style="font-size:.8rem;color:var(--fg3);margin-top:.75rem;">AAC↔M4A and MP4→M4A are remuxed losslessly (stream copy).</p>
+        <p style="font-size:.8rem;color:var(--pg-fg3);margin-top:.75rem;">AAC↔M4A and MP4→M4A are remuxed losslessly (stream copy).</p>
       </div>
     </div>
 
-    <table class="quality-table reveal" style="margin-top:2.5rem;">
+    <table class="quality-table">
       <thead>
         <tr><th>Preset</th><th>MP3</th><th>AAC / M4A</th></tr>
       </thead>
       <tbody>
         <tr><td>Low</td><td>128 kbps</td><td>128 kbps</td></tr>
-        <tr><td>Medium <span style="color:var(--accent);font-size:.75rem;">default</span></td><td>192 kbps</td><td>192 kbps</td></tr>
+        <tr><td>Medium <span style="color:var(--pg-accent);font-size:.75rem;">default</span></td><td>192 kbps</td><td>192 kbps</td></tr>
         <tr><td>High</td><td>320 kbps</td><td>256 kbps</td></tr>
         <tr><td>Best</td><td>VBR V0</td><td>256 kbps</td></tr>
       </tbody>
@@ -1179,117 +851,155 @@ nav {
   </div>
 </section>
 
-<!-- ── Download ── -->
-<section class="section" id="download">
+<!-- Download -->
+<section class="section" id="download" style="background:var(--pg-bg2)">
   <div class="container">
-    <div class="tag reveal">Download</div>
-    <h2 class="section-title reveal">Get <span>ArtiSync</span></h2>
-    <p class="section-sub reveal">Download and install in seconds — pick your platform.</p>
+    <div class="tag">Download</div>
+    <h2 class="sh">Get <span>ArtiSync</span></h2>
+    <p class="sub">Download and install in seconds — pick your platform.</p>
     <div class="dl-grid">
 
-      <div class="dl-card reveal reveal-delay-1">
+      <div class="dl-card">
         <div>
           <div class="dl-badge win">Windows 10 / 11</div>
           <h3>Windows Installer</h3>
         </div>
         <p>Runs the setup wizard and adds ArtiSync to your Start Menu. Qt6 is bundled — no extras needed.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Setup.exe">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Setup.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>1. Download and run <code>ArtiSync-Setup.exe</code>.</p>
           <p>2. Follow the wizard — Qt6 DLLs are bundled, nothing else needed.</p>
           <p>3. Launch ArtiSync from the Start Menu.</p>
         </div>
       </div>
 
-      <div class="dl-card reveal reveal-delay-2">
+      <div class="dl-card">
         <div>
           <div class="dl-badge win">Windows 10 / 11</div>
           <h3>Windows Portable</h3>
         </div>
         <p>Extract the zip anywhere and run — no installer, no admin rights, no registry entries.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Portable.zip">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Portable.zip" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>1. Extract <code>ArtiSync-Portable.zip</code> to any folder.</p>
           <p>2. Run <code>ArtiSync.exe</code> — no install, no registry changes.</p>
-          <p>3. For audio conversion, add <a href="https://ffmpeg.org/download.html" target="_blank">FFmpeg</a> to your <code>PATH</code>.</p>
+          <p>3. For audio conversion, add <a href="https://ffmpeg.org/download.html" target="_blank" rel="noopener">FFmpeg</a> to your <code>PATH</code>.</p>
         </div>
       </div>
 
-      <div class="dl-card reveal reveal-delay-3">
+      <div class="dl-card">
         <div>
           <div class="dl-badge">Linux · Any distro</div>
           <h3>AppImage</h3>
         </div>
         <p>Single executable, no install needed. Requires Qt6 runtime on the host system (<code>qt6-qtbase</code>).</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.AppImage">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.AppImage" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
+        <div class="dl-install" style="display:none">
           <p>On Fedora/RHEL:</p>
-          <div class="code-block"><pre>sudo dnf install qt6-qtbase qt6-qtbase-gui</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <div class="dl-cb"><pre>sudo dnf install qt6-qtbase qt6-qtbase-gui</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>On Ubuntu/Debian:</p>
-          <div class="code-block"><pre>sudo apt install qt6-base qt6-base-gui</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <div class="dl-cb"><pre>sudo apt install qt6-base qt6-base-gui</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           <p>Then run:</p>
-          <div class="code-block"><pre>chmod +x ArtiSync.AppImage
-./ArtiSync.AppImage</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <div class="dl-cb"><pre>chmod +x ArtiSync.AppImage
+./ArtiSync.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
       </div>
 
-      <div class="dl-card reveal reveal-delay-4">
+      <div class="dl-card">
         <div>
           <div class="dl-badge">Linux · Flatpak</div>
           <h3>Flatpak</h3>
         </div>
         <p>Fully sandboxed, self-contained bundle. No system Qt6 required — everything is included.</p>
         <div class="dl-card-actions">
-          <a class="btn btn-primary" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.flatpak">⬇ Download</a>
+          <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
           <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
         </div>
-        <div class="dl-install" hidden>
-          <div class="code-block"><pre>flatpak install --user ArtiSync.flatpak
-flatpak run com.artisync.ArtiSync</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <div class="dl-install" style="display:none">
+          <div class="dl-cb"><pre>flatpak install --user ArtiSync.flatpak
+flatpak run com.artisync.ArtiSync</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         </div>
       </div>
 
     </div>
 
-    <div class="dl-source reveal">
+    <div class="dl-source">
       <div class="dl-source-hdr" onclick="toggleSource(this)">
-        <span>⚙ Build from Source</span>
+        <span style="display:inline-flex;align-items:center;gap:.5rem"><svg class="pi" aria-hidden="true"><use href="#p-settings"/></svg>Build from Source</span>
         <span class="dl-src-arrow">▼</span>
       </div>
-      <div class="dl-source-body" hidden>
+      <div class="dl-source-body" style="display:none">
         <p>Requires CMake ≥ 3.16, a C++17 compiler, Qt6, and OpenSSL. <code>libcurl</code> and <code>TagLib</code> are auto-fetched if not found.</p>
         <p>On Fedora:</p>
-        <div class="code-block"><pre>sudo dnf install cmake gcc-c++ qt6-qtbase-devel openssl-devel</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <div class="dl-cb"><pre>sudo dnf install cmake gcc-c++ qt6-qtbase-devel openssl-devel</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
         <p>Build:</p>
-        <div class="code-block"><pre>git clone https://github.com/Spinjitsudoom/ArtiSync
+        <div class="dl-cb"><pre>git clone https://github.com/Spinjitsudoom/ArtiSync
 cd ArtiSync/"c++ source code"
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
-./build/ArtiSync</pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+./build/ArtiSync</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
       </div>
     </div>
-
-    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--fg3);">
-      All builds are v2.1.0. Source code available on <a href="https://github.com/Spinjitsudoom/ArtiSync">GitHub</a>.
-    </p>
+    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--pg-fg3);">All builds are v2.1.0. Source code available on <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 </section>
 
-<!-- ── FAQ ── -->
-<section class="section faq-bg" id="faq">
+<!-- How it Works -->
+<section class="section" id="setup">
   <div class="container">
-    <div class="tag reveal">FAQ</div>
-    <h2 class="section-title reveal">Common <span>questions</span></h2>
-    <div class="faq-list reveal">
+    <div class="tag">How it Works</div>
+    <h2 class="sh"><span>From messy folders to a tagged library</span></h2>
+    <p class="sub">Connect Spotify once, then each album takes a few clicks.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Connect Spotify</h3>
+          <p>Go to <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a>, click <strong>Create App</strong> (name it anything), and copy its <strong>Client ID</strong> and <strong>Client Secret</strong>. In ArtiSync, open <strong>File → Settings</strong>, paste both and click <strong>Save</strong>. The status bar shows <strong>Spotify connected</strong>.</p>
+          <div class="note">A free Spotify developer account is all you need — no paid subscription required.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Browse to your music folder</h3>
+          <p>Point the app at a root directory containing artist sub-folders; the path is remembered between sessions. ArtiSync searches Spotify for the folder name and fills the releases sidebar, with thumbnails loading in the background.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Select a release and review the preview</h3>
+          <p>Click any album or single to fetch its track list, cover art and metadata. The Preview tab shows every file → new name mapping with a confidence percentage: green is a confident match, amber is uncertain.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Execute Rename + Tag</h3>
+          <p>One click renames all files, writes every embedded tag, and embeds the full-resolution cover art. Changed your mind? <strong>Undo</strong> restores every original filename in one operation.</p>
+          <div class="note">Undo history lasts for the current session only, so preview before executing if you're unsure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq" style="background:var(--pg-bg2)">
+  <div class="container">
+    <div class="tag">FAQ</div>
+    <h2 class="sh">Common <span>questions</span></h2>
+    <div class="faq-list">
 
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">
@@ -1343,100 +1053,59 @@ cmake --build build -j$(nproc)
   </div>
 </section>
 
-<!-- ── Footer ── -->
-<footer class="site-footer">
+<!-- Tech stack -->
+<section class="section">
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-brand" style="color:var(--fg);">
-          <img class="nav-logo" src="ArtiSync.png" alt="ArtiSync logo">
-          ArtiSync
-        </div>
-        <p>A free, open-source music library organiser for Linux. Powered by Spotify, TagLib, and Qt6.</p>
-        <div class="social-links">
-          <a class="social-link instagram" href="https://instagram.com/etienne_xk_03" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            @etienne_xk_03
-          </a>
-          <a class="social-link twitter" href="https://x.com/etienneaxiak" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.735-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            @etienneaxiak
-          </a>
-          <button class="social-link discord" onclick="copyDiscord(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            @spinjitsudoomyt
-          </button>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Product</h4>
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#download">Download</a>
-        <a href="#faq">FAQ</a>
-      </div>
-      <div class="footer-col">
-        <h4>Install</h4>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Setup.exe">Windows Installer</a>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync-Portable.zip">Windows Portable</a>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.AppImage">AppImage</a>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync/releases/latest/download/ArtiSync.flatpak">Flatpak</a>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync">Source Code</a>
-      </div>
-      <div class="footer-col">
-        <h4>Links</h4>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank">GitHub</a>
-        <a href="https://github.com/Spinjitsudoom/ArtiSync/releases" target="_blank">Releases</a>
-        <a href="https://developer.spotify.com/dashboard" target="_blank">Spotify Dev</a>
-      </div>
+    <h2 class="sh"><span>Tech Stack</span></h2>
+    <p class="sub">A native C++/Qt6 desktop app, with a Python edition alongside it.</p>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-layer">App</div><div class="stack-val">C++17 · Qt6 Widgets</div></div>
+      <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">Spotify Web API · libcurl · OpenSSL</div></div>
+      <div class="stack-card"><div class="stack-layer">Tags &amp; Art</div><div class="stack-val">TagLib (ID3v2 · Vorbis · MP4)</div></div>
+      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">FFmpeg</div></div>
+      <div class="stack-card"><div class="stack-layer">Build</div><div class="stack-val">CMake</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">Inno Setup · AppImage · Flatpak</div></div>
+      <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions</div></div>
+      <div class="stack-card"><div class="stack-layer">Python edition</div><div class="stack-val">customtkinter · spotipy · Mutagen</div></div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 ArtiSync · MIT License</p>
-      <div class="footer-badge">● v2.1.0</div>
-    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built by <a href="index.html">Etienne Axiak</a> &mdash; MIT License &mdash; <a href="https://github.com/Spinjitsudoom/ArtiSync" target="_blank" rel="noopener">GitHub</a></p>
+    <p style="margin-top:.4rem">&copy; 2026 Etienne Axiak</p>
   </div>
 </footer>
 
 <script>
-// ── Nav scroll ────────────────────────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
-});
+// Page icons from the SVG sprite at the top of <body> (emoji don't render everywhere)
+const ICO = n => '<svg class="pi" aria-hidden="true"><use href="#p-' + n + '"/></svg>';
 
 // ── Mobile menu ───────────────────────────────────────────────────────────────
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
 
-// ── Discord copy ──────────────────────────────────────────────────────────────
-function copyDiscord(btn) {
-  navigator.clipboard.writeText('@spinjitsudoomyt').then(() => {
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!';
-    setTimeout(() => { btn.innerHTML = orig; }, 2000);
-  });
-}
-
-// ── Download accordion ────────────────────────────────────────────────────────
+// ── Download helpers ──────────────────────────────────────────────────────────
 function toggleInstall(btn) {
-  const panel = btn.closest('.dl-card').querySelector('.dl-install');
-  const open = !panel.hidden;
-  panel.hidden = open;
-  btn.classList.toggle('open', !open);
-  btn.textContent = open ? '▼ Install guide' : '▲ Install guide';
+  const box = btn.closest('.dl-card').querySelector('.dl-install');
+  const show = box.style.display === 'none' || box.style.display === '';
+  box.style.display = show ? 'flex' : 'none';
+  btn.classList.toggle('open', show);
+  btn.textContent = show ? '▲ Install guide' : '▼ Install guide';
 }
 function toggleSource(hdr) {
   const body = hdr.nextElementSibling;
-  const arrow = hdr.querySelector('.dl-src-arrow');
-  body.hidden = !body.hidden;
-  arrow.textContent = body.hidden ? '▼' : '▲';
+  const show = body.style.display === 'none' || body.style.display === '';
+  body.style.display = show ? 'flex' : 'none';
+  hdr.querySelector('.dl-src-arrow').textContent = show ? '▲' : '▼';
 }
-
-// ── Copy buttons ──────────────────────────────────────────────────────────────
-function copyCode(btn) {
-  const text = btn.parentElement.querySelector('pre').textContent;
+function dlCopy(btn) {
+  const text = btn.previousElementSibling.textContent;
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copied!'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
   });
 }
 
@@ -1448,12 +1117,6 @@ function toggleFaq(btn) {
   document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
   if (!open) { ans.classList.add('open'); btn.classList.add('open'); }
 }
-
-// ── Scroll reveal ─────────────────────────────────────────────────────────────
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // ── Interactive mockup ────────────────────────────────────────────────────────
 
@@ -1774,13 +1437,6 @@ const ARTIST_DATA = {
     count: 9,
   },
 };
-const SIDEBAR_ICONS = {
-  stt:'♪', wtf:'♪', coe:'♪', nm:'♪', httk:'♫', ts:'♪', libad:'♪',
-  kea:'♪', rtl:'♪', mop:'♫', ajfa:'♪', met:'♪', dm:'♪',
-  im80:'♪', notb:'♫', pom:'♪', ps:'♪', sit:'♪', bnw:'♪',
-  ut:'♪', aen:'♪', lat:'♫', t10k:'♪', fi:'♪',
-};
-
 let currentArtist = 'Avenged Sevenfold';
 let currentRelease = 'httk';
 let executed = false;
@@ -1793,7 +1449,7 @@ function renderSidebar(artist) {
   list.innerHTML = data.sidebar.map(id => {
     const r = RELEASES[id];
     return `<div class="rel-row${id === currentRelease ? ' sel' : ''}" data-id="${id}" onclick="mockSelect('${id}',this)">
-      <div class="rel-thumb" style="background:${r.grad}">${SIDEBAR_ICONS[id]||'♪'}</div>
+      <div class="rel-thumb" style="background:${r.grad}">${ICO('note')}</div>
       <div class="rel-info"><div class="rel-title">${r.title}</div><div class="rel-meta">${r.year} · Album</div></div>
       <div class="rel-n">${r.tracks.length}</div>
     </div>`;

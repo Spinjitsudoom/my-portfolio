@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="shelf-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Caveat:wght@700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ─────────────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -189,8 +189,54 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .s-case-sm{width:42px;height:42px;flex:none;border-radius:2px}
 .s-case-sm::before{width:9%}
 .s-case-sm .no-art{display:none}
-.s-mix-band{position:absolute;left:0;right:0;bottom:0;height:30%;display:flex;align-items:center;padding:0 9%;background:var(--mix);color:#fff;font-weight:850;font-stretch:118%;letter-spacing:-.01em;line-height:.98;font-size:10.5cqw;z-index:1}
-.s-mix-band::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,255,255,.35)}
+/* mix tapes: the card insert in the mix's colour with its albums along the top, and the cassette lying on it */
+.s-tape-cover{position:relative;display:block;width:100%;aspect-ratio:1;overflow:hidden;border-radius:6px;container-type:inline-size;box-shadow:var(--shadow);
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.14)),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 7px),var(--mix)}
+.s-tape-card{position:absolute;left:6%;right:6%;top:7%;display:grid;grid-template-columns:repeat(4,1fr);gap:2.4cqw}
+.s-tape-card span{display:block;width:100%;aspect-ratio:1;border-radius:1.2cqw;background:var(--case-bg);box-shadow:0 .6cqw 1.6cqw rgba(0,0,0,.28)}
+.s-tape{position:absolute;left:6%;width:88%;bottom:5%;aspect-ratio:200/126;transform:rotate(-3.5deg);transform-origin:50% 60%;filter:drop-shadow(0 1.6cqw 2.2cqw rgba(0,0,0,.42));transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.s-card:hover .s-tape,.s-tape-cover.rolling .s-tape{transform:rotate(-1.5deg) translateY(-1.2cqw)}
+.sh-demo .s-tape svg{display:block;width:100%;height:100%;overflow:visible}
+.sh-demo .t-body{fill:#25272e;stroke:rgba(255,255,255,.08);stroke-width:1}
+.sh-demo .t-foot{fill:#30333b}
+.sh-demo .t-screw circle{fill:#7d8290}
+.sh-demo .t-hole>*{fill:#121317}
+.sh-demo .t-paper{fill:#f3eedf}
+.sh-demo .t-band{fill:var(--mix)}
+.sh-demo .t-rule{stroke:rgba(40,32,20,.22);stroke-width:.8}
+.sh-demo .t-side{fill:rgba(40,32,20,.55);font:800 11px 'Archivo',sans-serif}
+.sh-demo .t-print{fill:rgba(40,32,20,.4);font:700 7px 'Archivo',sans-serif;letter-spacing:.06em}
+.sh-demo .t-window{fill:#17181d;stroke:rgba(0,0,0,.35);stroke-width:1}
+.sh-demo .t-pack{fill:#4b3427}
+.sh-demo .t-reel circle{fill:#e8e3d6}
+.sh-demo .t-reel path{stroke:#17181d;stroke-width:1.6;stroke-linecap:round}
+.sh-demo .t-reel{transform-box:fill-box;transform-origin:center;animation:s-reel 2.4s linear infinite paused}
+.sh-demo .t-glass{fill:rgba(255,255,255,.07)}
+.s-tape-cover.rolling .t-reel,.s-card:hover .t-reel{animation-play-state:running}
+@keyframes s-reel{to{transform:rotate(1turn)}}
+@media(prefers-reduced-motion:reduce){.sh-demo .t-reel{animation:none}.s-tape{transition:none}}
+.s-tape-title{position:absolute;left:13%;right:9%;top:8%;height:24.5%;display:flex;align-items:flex-end;color:#1d2a5c;font-family:'Caveat','Segoe Print','Comic Sans MS',cursive;font-weight:700;font-size:14cqw;line-height:.9;transform:rotate(-1deg)}
+.s-tape-title>span{display:block;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-bottom:.04em}
+.s-tape-title.long{font-size:10.5cqw}
+.s-tape-title.longer{font-size:8.4cqw;line-height:.92;right:17%}
+.s-tape-title.longer>span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* make a playlist dialog and toast */
+.s-head-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.s-modal{position:absolute;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
+.s-dialog{width:min(420px,100%);padding:20px;border-radius:14px;background:var(--sleeve);box-shadow:0 24px 60px -12px rgba(0,0,0,.8)}
+.s-dialog h3{font-size:19px;font-weight:800;font-stretch:112%;margin-bottom:4px}
+.s-dialog p{color:var(--ink-2);margin-bottom:14px}
+.s-dialog label{display:block;font-weight:650;margin-bottom:6px}
+.s-dialog input{width:100%;height:40px;padding:0 12px;border-radius:8px;border:0;background:var(--tray);box-shadow:inset 0 0 0 1px var(--rule);outline:none}
+.s-dialog input:focus{box-shadow:inset 0 0 0 2px var(--cobalt)}
+.s-hint{margin-top:6px;color:var(--ink-2);font-size:12.5px}
+.s-err{margin-top:8px;color:#ff8f8f;font-size:12.5px}
+.s-chips-try{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.s-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.s-toast{position:absolute;left:50%;bottom:88px;z-index:25;transform:translateX(-50%);padding:9px 16px;border-radius:999px;background:var(--ink);color:var(--tray);font-weight:650;white-space:nowrap;box-shadow:0 10px 30px -8px rgba(0,0,0,.7);animation:s-toast 3.2s ease forwards}
+@keyframes s-toast{0%{opacity:0;transform:translate(-50%,8px)}8%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.s-pl-made{color:var(--cobalt)}
 .s-pl-cover{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;aspect-ratio:1;width:100%;overflow:hidden;border-radius:4px;background:color-mix(in srgb,var(--ink) 9%,var(--tray))}
 .s-pl-cover > span{display:block;background:var(--case-bg)}
 .s-pl-cover.fav{display:grid;place-items:center;grid-template-columns:1fr;grid-template-rows:1fr;background:linear-gradient(135deg,#4b5fd6,#8199ff 60%,#b8c4ff);color:#fff}
@@ -469,6 +515,8 @@ footer a{color:var(--pg-fg2)}
   <symbol id="p-eq" viewBox="0 0 24 24"><path d="M6 4v16M12 4v16M18 4v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/><rect x="3.5" y="12" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="9.5" y="6.5" width="5" height="3" rx="1.2" fill="currentColor"/><rect x="15.5" y="14.5" width="5" height="3" rx="1.2" fill="currentColor"/></symbol>
   <symbol id="p-blend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></g></symbol>
   <symbol id="p-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v8m-3.5-3.5 3.5 3.5 3.5-3.5"/></g></symbol>
+  <symbol id="p-playlist" viewBox="0 0 24 24"><path d="M3 6h12M3 11h12M3 16h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 18.5V9.5l4-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.5" cy="18.5" r="2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-update" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9M4 13a8 8 0 0 0 14.3 4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 3v4h4M19 21v-4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-arrow" viewBox="0 0 24 24"><path d="M12 4v13m-5.5-5.5L12 17l5.5-5.5M5 20.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-disc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></g><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/></symbol>
@@ -515,7 +563,7 @@ footer a{color:var(--pg-fg2)}
     </div>
     <div class="hero-pills">
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-server"/></svg><span>Linux &amp; Windows server</span></div>
-      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg><span>Android app + widget</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg><span>Android app + Android Auto</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-computer"/></svg><span>Windows &amp; Linux players</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg><span>Any browser</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg><span>AGPL-3.0</span></div>
@@ -569,6 +617,8 @@ footer a{color:var(--pg-fg2)}
         <symbol id="i-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8.5" r="3.3"/><path d="M2.8 19.5c.7-3.2 3.1-5 6.2-5s5.5 1.8 6.2 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 6M17.6 14.8c1.9.6 3.2 2.2 3.6 4.7"/></g></symbol>
         <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
         <symbol id="i-mix" viewBox="0 0 24 24"><path d="M3 6.5c5.5 0 11.5 11 18 11M3 17.5c5.5 0 11.5-11 18-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+        <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9ZM18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8Z" fill="currentColor"/></symbol>
+        <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
         <symbol id="i-radio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></g></symbol>
       </svg>
 
@@ -597,7 +647,10 @@ footer a{color:var(--pg-fg2)}
         <aside class="s-lib" aria-label="Your library">
           <div class="s-lib-head">
             <span class="s-lib-title"><svg><use href="#i-library"/></svg>Your Library</span>
-            <button class="s-icon-btn" aria-label="Create playlist" title="Create playlist" data-act="noop"><svg><use href="#i-plus"/></svg></button>
+            <span style="display:flex">
+              <button class="s-icon-btn" aria-label="Create playlist" title="Create playlist" data-act="make"><svg><use href="#i-plus"/></svg></button>
+              <button class="s-icon-btn" aria-label="Show all playlists" title="Show all playlists" data-go="playlists"><svg><use href="#i-expand"/></svg></button>
+            </span>
           </div>
           <div class="s-chips" id="sChips"></div>
           <div class="s-lib-list" id="sLib"></div>
@@ -645,9 +698,11 @@ footer a{color:var(--pg-fg2)}
         </section>
 
         <div class="s-pop" id="sPop" hidden></div>
+        <div class="s-modal" id="sModal" hidden></div>
+        <div id="sToast"></div>
       </div>
     </div>
-    <p class="demo-hint">Interactive demo with a made-up library. Open an album, play a song, try the queue, Mix on the <em>Late Drive</em> playlist, and the devices button.</p>
+    <p class="demo-hint">Interactive demo with a made-up library. Open an album or a mix tape, play a song, try the queue, Mix on the <em>Late Drive</em> playlist, the devices button, and <strong>+</strong> in Your Library to make a playlist from a few words.</p>
   </div>
 </section>
 
@@ -660,7 +715,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-devices"/></svg></div>
         <h3>Your music, everywhere</h3>
-        <p>Stream to any browser (desktop, phone or TV), the <strong>Android app</strong> with lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot.</p>
+        <p>Stream to any browser (desktop, phone or TV), the native <strong>Android app</strong> with Android Auto, lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-people"/></svg></div>
@@ -670,7 +725,22 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-sparkle"/></svg></div>
         <h3>Made for you</h3>
-        <p><strong>Shelf Mixes</strong>, On Repeat, Rediscover, Discover, and song and artist radio. Songs are matched on how they actually sound (tone, brightness, danceability) as well as artist, genre, tempo and key.</p>
+        <p><strong>Shelf Mixes</strong>, On Repeat, Discover, song and artist radio, and <strong>mood mixes</strong> (Workout, Chill, Party, Feel Good, Melancholy and Heavy), new every day and drawn as mix tapes. Songs are matched on how they actually sound as well as artist, genre, tempo and key, and suggestions learn from the songs you skip.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-playlist"/></svg></div>
+        <h3>Make a playlist from a few words</h3>
+        <p>Type “metal, high energy”, “chill 90s” or “like Metallica” and Shelf builds the playlist from your library, matching genres, artists, moods, energy and decades. No AI model: it works from what Shelf has measured and knows. Try it in the demo with <strong>+</strong> in Your Library.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg></div>
+        <h3>A native Android app</h3>
+        <p>Built with Kotlin, Compose and Media3: swipe to skip, synced lyrics, editable playlists, offline downloads, Android Auto, and Now Playing as a jewel case or a spinning record. It plays on with the screen off or the app swiped away. <strong>Shelf Lite</strong> stays available for older phones.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-update"/></svg></div>
+        <h3>Keeps itself up to date</h3>
+        <p>The server checks for new releases and the admin dashboard (or the Windows tray icon) offers <strong>Update now</strong>; nothing changes until you press it. The Android app and the desktop players download updates in the background.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mix"/></svg></div>
@@ -750,13 +820,13 @@ footer a{color:var(--pg-fg2)}
             <div class="dl-badge win">Windows 10 / 11</div>
             <h3>Shelf Server for Windows</h3>
           </div>
-          <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in. Tempo and key analysis, "sounds like" and CD ripping need the Linux server.</p>
+          <p>Sits in the notification area (Open Shelf, Start with Windows, Quit), with ffmpeg built in, and measures tempo, key and "sounds like" just like the Linux server. CD ripping needs the Linux server.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.6.0.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Server-Setup-0.7.2.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Run <code>Shelf-Server-Setup-0.6.0.exe</code>.</p>
+            <p>1. Run <code>Shelf-Server-Setup-0.7.2.exe</code>.</p>
             <p>2. When Windows asks whether to let it on the network, <strong>allow it</strong> so your phone can reach it.</p>
             <p>3. Choose <strong>Open Shelf</strong> from the tray icon.</p>
           </div>
@@ -787,18 +857,30 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
 
         <div class="dl-card">
           <div>
-            <div class="dl-badge android">Android</div>
-            <h3>Android app</h3>
+            <div class="dl-badge android">Android 8+</div>
+            <h3>Shelf for Android</h3>
           </div>
-          <p>Full-screen Shelf with a media notification, lock-screen and Bluetooth controls, a home-screen widget, and offline downloads that open with no connection.</p>
+          <p>The full native app (about 13 MB): offline downloads, Android Auto, a home-screen widget, lock-screen and Bluetooth controls, and it updates itself from GitHub.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Open <code>Shelf-0.6.0.apk</code> on the phone and allow installing from this source.</p>
+            <p>1. Open <code>Shelf-0.7.2.apk</code> on the phone and allow installing from this source.</p>
             <p>2. Enter the server address, e.g. <code>192.168.1.20:4533</code> at home, or a Tailscale name away from it.</p>
             <p>3. Sign in. Add the widget by long-pressing the home screen → Widgets → Shelf.</p>
+            <p>It replaces the older Android app in place: open it once and sign in again. Anything downloaded in the old app needs downloading again.</p>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge android">Android 5+</div>
+            <h3>Shelf Lite</h3>
+          </div>
+          <p>The lightweight app (under 100 KB) for older or low-storage phones: Shelf's web app full screen, with a media notification, the widget and background play. It gets new web features first, and installs beside the full app.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2-Lite.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
           </div>
         </div>
 
@@ -809,11 +891,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>A desktop app for Shelf that works with your keyboard's media keys and the Windows playback controls.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.6.0.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-Setup-0.7.2.exe" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <p>1. Run <code>Shelf-Setup-0.6.0.exe</code>.</p>
+            <p>1. Run <code>Shelf-Setup-0.7.2.exe</code>.</p>
             <p>2. Enter your server's address and sign in.</p>
           </div>
         </div>
@@ -825,11 +907,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The desktop player for Debian-based distributions. Works with media keys and the desktop's own playback controls (MPRIS).</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.6.0_amd64.deb" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/shelf_0.7.2_amd64.deb" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
-            <div class="dl-cb"><pre>sudo apt install ./shelf_0.6.0_amd64.deb</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <div class="dl-cb"><pre>sudo apt install ./shelf_0.7.2_amd64.deb</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           </div>
         </div>
 
@@ -840,12 +922,12 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <p>The same desktop player as a sandboxed bundle that runs on any distribution.</p>
           <div class="dl-card-actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.6.0.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/shelf/releases/latest/download/Shelf-0.7.2.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
             <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
           </div>
           <div class="dl-install" style="display:none">
             <p>Install for your user (no password needed):</p>
-            <div class="dl-cb"><pre>flatpak install --user Shelf-0.6.0.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <div class="dl-cb"><pre>flatpak install --user Shelf-0.7.2.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
             <p>Then launch:</p>
             <div class="dl-cb"><pre>flatpak run io.github.spinjitsudoom.Shelf</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
           </div>
@@ -862,7 +944,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
       </div>
     </div>
 
-    <p style="font-size:.85rem;color:var(--pg-fg3);">All builds are v0.6.0. Source code available on <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>.</p>
+    <p style="font-size:.85rem;color:var(--pg-fg3);">All builds are v0.7.2. Source code available on <a href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">GitHub</a>.</p>
   </div>
 </section>
 
@@ -877,7 +959,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
         <div class="step-n"></div>
         <div class="step-body">
           <h3>Install the server</h3>
-          <p>Run the one-line installer on Linux or the setup program on Windows, then open <code>http://localhost:4533</code>. The first time, Shelf asks you to create the admin account.</p>
+          <p>Run the one-line installer on Linux or the setup program on Windows, then open <code>http://localhost:4533</code>. The first time, Shelf asks you to create the admin account. After that it keeps itself up to date: the admin dashboard says when a new version is out, with an <strong>Update now</strong> button.</p>
         </div>
       </div>
       <div class="step">
@@ -914,8 +996,8 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
     <div class="stack-grid">
       <div class="stack-card"><div class="stack-layer">Server</div><div class="stack-val">Python · FastAPI · uvicorn · SQLite</div></div>
       <div class="stack-card"><div class="stack-layer">Web app</div><div class="stack-val">Vanilla HTML · CSS · JS modules, no build step</div></div>
-      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia · Web Audio · mutagen</div></div>
-      <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android WebView (Java) · Electron · Flatpak</div></div>
+      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia (numpy on Windows) · Web Audio · mutagen</div></div>
+      <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android (Kotlin · Compose · Media3) · Electron · Flatpak</div></div>
       <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp</div></div>
       <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder</div></div>
       <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions on Linux &amp; Windows</div></div>
@@ -1027,7 +1109,95 @@ const PL = {
   discover: { id:'discover', kind:'Made for you', title:'Discover', band:'#7a56e0', desc:'Never played, picked to fit your taste. New every week.',
           tracks: pick('cc6 nh5 sw4 lg2 sb5 sn4 fa3') },
 };
-const MIXES = ['mix1','mix2','mix3','repeat','discover'];
+
+// What the real app measures from the audio (energy) and reads from tags and MusicBrainz (genre).
+const GENRE = { gh:'Indie Rock', sb:'Synth-pop', nh:'Folk', cc:'Post-Punk', fa:'Hard Rock', lg:'Indie Folk', sn:'Ambient Techno', sw:'Indie Rock' };
+const ENERGY = { gh:.45, sb:.62, nh:.2, cc:.78, fa:.95, lg:.3, sn:.55, sw:.4 };
+const energy = t => Math.min(1, ENERGY[t.album.id] + (t.bpm - 110) / 400);
+const major = t => t.key.endsWith('B');
+// The mood mixes, with the real app's names, colours and fits (by sound, tempo and key).
+const MOODS = [
+  ['workout','Workout','High-energy songs at a running pace','#e03131', t => energy(t) >= .6 && t.bpm >= 120],
+  ['chill','Chill','Calm, unhurried songs to wind down with','#1098ad', t => energy(t) <= .45 && t.bpm <= 110],
+  ['party','Party','Danceable songs with a steady beat','#d6336c', t => t.bpm >= 118 && t.bpm <= 132 && energy(t) >= .45],
+  ['feel-good','Feel Good','Bright, upbeat songs in major keys','#f59f00', t => major(t) && energy(t) >= .3],
+  ['melancholy','Melancholy','Slower, darker songs in minor keys','#5c7cfa', t => !major(t) && t.bpm <= 100],
+  ['heavy','Heavy','The loudest, most intense songs on your shelf','#495057', t => energy(t) >= .75],
+];
+// Leans the same way as the real mixes: no artist or album takes more than two places.
+function varied(tracks, n = 12) {
+  const per = {}, out = [];
+  for (const t of tracks) { if ((per[t.album.id] = (per[t.album.id] || 0) + 1) <= 2) out.push(t); if (out.length >= n) break; }
+  return out;
+}
+MOODS.forEach(([id, title, desc, band, fit]) => { PL[id] = { id, kind:'Made for you', title, band, desc, tracks: varied(ALL.filter(fit)) }; });
+const MIXES = ['mix1','mix2','mix3','repeat','discover', ...MOODS.map(m => m[0])];
+const MADE = [];   // playlists made from a few words in this demo
+
+// ── Make a playlist from a few words (the real app's rules, on the demo library) ──
+const MOOD_WORDS = {
+  workout:['workout','work out','gym','running','run','training','exercise','cardio'],
+  chill:['chill','chilled','relax','relaxing','calm','mellow','sleep','study','focus','wind down'],
+  party:['party','dance','dancing','club','groove','groovy'],
+  'feel-good':['feel good','feelgood','happy','upbeat','cheerful','sunny','summer'],
+  melancholy:['sad','melancholy','melancholic','moody','rainy','heartbreak','gloomy'],
+  heavy:['heavy','intense','aggressive','hard','angry','loud','brutal'],
+};
+const ENERGY_WORDS = { high:['high energy','energetic','energy','fast','hype','pumped'], low:['low energy','slow','quiet','soft','gentle'] };
+const FILLER = new Set('a an the and or of for from with some songs song music like playlist mix to in on my me that sounds sound stuff vibes vibe era'.split(' '));
+const andList = xs => xs.length === 1 ? xs[0] : xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1];
+function understand(words) {
+  let t = ' ' + words.toLowerCase().replace(/[^a-z0-9& ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
+  const want = { artists:new Set(), moods:new Set(), genres:new Set(), energy:null, decade:null };
+  const drop = w => { t = t.split(` ${w} `).join(' '); };
+  ARTISTS.forEach(a => { const n = a.toLowerCase(); if (t.includes(` ${n} `)) { want.artists.add(a); drop(n); } });
+  const dec = t.match(/ (?:the )?(19|20)?(\d)0s /);
+  if (dec) { want.decade = +((dec[1] || (dec[2] >= 3 ? '19' : '20')) + dec[2] + '0'); t = t.replace(dec[0], ' '); }
+  for (const [lvl, ws] of Object.entries(ENERGY_WORDS)) for (const w of ws) if (t.includes(` ${w} `) && !want.energy) { want.energy = lvl; drop(w); }
+  for (const [m, ws] of Object.entries(MOOD_WORDS)) for (const w of ws) if (t.includes(` ${w} `)) { want.moods.add(m); drop(w); }
+  const left = new Set(t.split(' ').filter(w => w.length >= 3 && !FILLER.has(w)));
+  new Set(Object.values(GENRE)).forEach(g => { if (g.toLowerCase().split(/[\s-]/).some(p => left.has(p))) want.genres.add(g); });
+  want.empty = !want.artists.size && !want.moods.size && !want.genres.size && !want.energy && !want.decade;
+  return want;
+}
+function describe(w) {
+  const out = [];
+  if (w.genres.size) out.push(andList([...w.genres].sort()));
+  if (w.artists.size) out.push('like ' + andList([...w.artists].sort()));
+  [...w.moods].sort().forEach(m => out.push(MOODS.find(x => x[0] === m)[1]));
+  if (w.energy) out.push(`${w.energy} energy`);
+  if (w.decade) out.push(`the ${w.decade}s`);
+  return out;
+}
+function makePlaylist(words) {
+  const w = understand(words);
+  if (w.empty) throw new Error('Shelf didn’t recognise any of that. Try a genre, an artist, a mood (workout, chill, party, feel good, melancholy, heavy), “high energy” or a decade like 2010s.');
+  // Named artists, plus artists in the same genres (the ones that sound like them).
+  const near = new Set([...w.artists].map(a => GENRE[RAW.find(x => x.artist === a).id]));
+  const fits = ALL.filter(t =>
+    (!w.artists.size || w.artists.has(t.artist) || near.has(GENRE[t.album.id])) &&
+    (!w.genres.size || w.genres.has(GENRE[t.album.id])) &&
+    [...w.moods].every(m => MOODS.find(x => x[0] === m)[4](t)) &&
+    (!w.energy || (w.energy === 'high' ? energy(t) >= .6 : energy(t) <= .4)) &&
+    (!w.decade || (t.album.year >= w.decade && t.album.year < w.decade + 10)));
+  if (!fits.length) throw new Error('Nothing on your shelf fits all of that. Try fewer words.');
+  // Variety: a named artist gets up to four songs, anyone else two; no artist back to back.
+  const per = {}, picked = [];
+  for (const t of fits.slice().sort(() => Math.random() - .5)) {
+    const cap = w.artists.has(t.artist) ? 4 : 2;
+    if ((per[t.artist] = (per[t.artist] || 0) + 1) <= cap) picked.push(t);
+  }
+  const order = [];
+  while (picked.length) {
+    const k = picked.findIndex(t => !order.length || t.artist !== order[order.length - 1].artist);
+    order.push(picked.splice(k < 0 ? 0 : k, 1)[0]);
+  }
+  const name = words.trim(), id = `made${MADE.length + 1}`;
+  PL[id] = { id, kind:'Playlist', title: name[0].toUpperCase() + name.slice(1), owner:'Etienne', made:true, mix:false,
+             desc:`Made by Shelf: ${describe(w).join(', ')}.`, tracks: order.slice(0, 15) };
+  MADE.push(id);
+  return PL[id];
+}
 
 // ── State ────────────────────────────────────────────────────────────────────
 const S = {
@@ -1177,6 +1347,7 @@ function renderLib() {
     html += item('pl:fav', 'pl:fav', plCover(fav), 'Favourites', `${ic('pin')}Playlist · ${plural(fav.tracks.length, 'song')}`);
     html += item('pl:late', 'pl:late', plCover(PL.late), 'Late Drive', 'Playlist · Etienne');
     html += item('pl:sunday', 'pl:sunday', plCover(PL.sunday), 'Sunday Morning', 'Playlist · Etienne');
+    MADE.forEach(id => { html += item(`pl:${id}`, `pl:${id}`, plCover(PL[id]), PL[id].title, 'Playlist · Made by Shelf'); });
   }
   if (!f || f === 'album') RAW.forEach(a => { html += item(`album:${a.id}`, `album:${a.id}`, caseHtml(a, 's-case-sm'), a.title, `Album · ${esc(a.artist)}`); });
   if (!f || f === 'artist') ARTISTS.forEach(ar => {
@@ -1194,10 +1365,65 @@ function albumCard(a) {
     <button class="s-card-title" data-go="album:${a.id}">${esc(a.title)}</button>
     <div class="s-card-sub">${esc(a.artist)}</div></div>`;
 }
-function mixCard(p) {
-  const a = p.tracks[0].album;
+const TAPE_SHELL = `<svg viewBox="0 0 200 126" aria-hidden="true">
+  <rect class="t-body" x="1" y="1" width="198" height="124" rx="9"/>
+  <path class="t-foot" d="M40 125 49 97h102l9 28z"/>
+  <g class="t-screw"><circle cx="9" cy="9" r="3"/><circle cx="191" cy="9" r="3"/><circle cx="9" cy="117" r="3"/><circle cx="191" cy="117" r="3"/><circle cx="100" cy="117" r="2.6"/></g>
+  <g class="t-hole"><circle cx="64" cy="111" r="4.2"/><circle cx="136" cy="111" r="4.2"/><rect x="93" y="101" width="14" height="7" rx="2"/></g>
+  <rect class="t-paper" x="13" y="8" width="174" height="82" rx="4"/>
+  <rect class="t-band" x="13" y="48" width="174" height="30"/>
+  <path class="t-rule" d="M24 41h152"/>
+  <text class="t-side" x="21" y="24">A</text>
+  <text class="t-print" x="179" y="22" text-anchor="end">C90</text>
+  <rect class="t-window" x="48" y="52" width="104" height="22" rx="11"/>
+  <circle class="t-pack" cx="72" cy="63" r="10.5"/><circle class="t-pack" cx="128" cy="63" r="7.2"/>
+  <g class="t-reel"><circle cx="72" cy="63" r="5.6"/><path d="M72 58.6v2M72 65.4v2M68.2 60.8l1.7 1M74.1 64.2l1.7 1M68.2 65.2l1.7-1M74.1 61.8l1.7-1"/></g>
+  <g class="t-reel"><circle cx="128" cy="63" r="5.6"/><path d="M128 58.6v2M128 65.4v2M124.2 60.8l1.7 1M130.1 64.2l1.7 1M124.2 65.2l1.7-1M130.1 61.8l1.7-1"/></g>
+  <rect class="t-glass" x="48" y="52" width="104" height="9" rx="4.5"/>
+</svg>`;
+// A mix is a tape: a cassette with a hand-written label, lying on a card insert showing its albums.
+function tapeCover(p) {
+  const albums = [...new Map(p.tracks.map(t => [t.album.id, t.album])).values()].slice(0, 4);
+  const fit = p.title.length > 30 ? ' longer' : p.title.length > 14 ? ' long' : '';
+  const rolling = S.ctx === `pl:${p.id}` && S.playing ? ' rolling' : '';
+  return `<span class="s-tape-cover${rolling}" style="--mix:${p.band}">
+    <span class="s-tape-card">${albums.map(a => `<span style="--case-bg:${a.art}"></span>`).join('')}</span>
+    <span class="s-tape">${TAPE_SHELL}<span class="s-tape-title${fit}"><span>${esc(p.title)}</span></span></span></span>`;
+}
+function plCard(p) {
   return `<div class="s-card"><div class="s-card-art">
-      <button class="s-card-open" data-go="pl:${p.id}" aria-label="Open ${esc(p.title)}"><span class="s-case" style="--case-bg:${a.art}"><span class="s-mix-band" style="--mix:${p.band}">${esc(p.title)}</span></span></button>
+      <button class="s-card-open" data-go="pl:${p.id}" aria-label="Open ${esc(p.title)}">${plCover(p)}</button>
+      <button class="s-card-play" data-play="pl:${p.id}|0" aria-label="Play ${esc(p.title)}">${ic('play')}</button></div>
+    <button class="s-card-title" data-go="pl:${p.id}">${esc(p.title)}</button>
+    <div class="s-card-sub">${p.made ? '<span class="s-pl-made">Made by Shelf</span> · ' : ''}${plural(p.tracks.length, 'song')}</div></div>`;
+}
+function playlistsView() {
+  const all = ['fav', 'late', 'sunday', ...MADE].map(getPl);
+  return `<div class="s-page"><h1 class="s-page-title">Playlists</h1><p class="s-page-sub">${plural(all.length, 'playlist')}</p>
+    <div class="s-head-tools"><button class="s-btn" data-act="make">${ic('sparkle')}Make a playlist</button><button class="s-btn s-btn-primary" data-act="noop">${ic('plus')}New playlist</button></div>
+    <div class="s-shelf" style="margin-top:22px">${all.map(plCard).join('')}</div></div>`;
+}
+function openMaker(err = '', value = '') {
+  const m = $('sModal');
+  m.innerHTML = `<form class="s-dialog" id="sMakeForm" role="dialog" aria-modal="true" aria-labelledby="sMakeTitle">
+    <h3 id="sMakeTitle">Make a playlist</h3>
+    <p>Describe it, and Shelf picks songs from your library that fit.</p>
+    <label for="sMakeInput">What should it be?</label>
+    <input id="sMakeInput" autocomplete="off" value="${esc(value)}">
+    <div class="s-hint">A genre, artist, mood or decade, like “indie rock, chill”, “high energy 2020s” or “like Marrow Lane”.</div>
+    <div class="s-chips-try">${['chill folk', 'workout', 'like Marrow Lane', 'sad 2010s'].map(x => `<button type="button" class="s-chip" data-try="${x}">${x}</button>`).join('')}</div>
+    ${err ? `<div class="s-err" role="alert">${esc(err)}</div>` : ''}
+    <div class="s-dialog-actions"><button type="button" class="s-btn" data-act="close-modal">Cancel</button><button type="submit" class="s-btn s-btn-primary">Make it</button></div>
+  </form>`;
+  m.hidden = false;
+  const input = $('sMakeInput'); input.focus(); input.setSelectionRange(value.length, value.length);
+}
+function toast(text) {
+  $('sToast').innerHTML = `<div class="s-toast" role="status">${esc(text)}</div>`;
+}
+function mixCard(p) {
+  return `<div class="s-card"><div class="s-card-art">
+      <button class="s-card-open" data-go="pl:${p.id}" aria-label="Open ${esc(p.title)}">${tapeCover(p)}</button>
       <button class="s-card-play" data-play="pl:${p.id}|0" aria-label="Play ${esc(p.title)}">${ic('play')}</button></div>
     <button class="s-card-title" data-go="pl:${p.id}">${esc(p.title)}</button>
     <div class="s-card-sub">${esc(p.desc)}</div></div>`;
@@ -1272,7 +1498,7 @@ function playlistView(id) {
   const p = getPl(id), ctx = `pl:${id}`, here = S.ctx === ctx && cur();
   const head = p.tracks[0] ? p.tracks[0].album : RAW[0];
   const isMade = p.kind === 'Made for you';
-  const cover = isMade ? `<span class="s-case" style="--case-bg:${head.art}"><span class="s-mix-band" style="--mix:${p.band}">${esc(p.title)}</span></span>` : plCover(p);
+  const cover = isMade ? tapeCover(p) : plCover(p);
   const rows = p.tracks.map((t, i) => {
     const on = cur() && cur().id === t.id;
     let pill = '';
@@ -1354,6 +1580,7 @@ function renderView(keepScroll = false) {
     v.name === 'artist' ? artistView(v.id) :
     v.name === 'search' ? searchView(v.id) :
     v.name === 'albums' ? albumsView() :
+    v.name === 'playlists' ? playlistsView() :
     STUBS[v.name] ? stubView(...STUBS[v.name]) : homeView();
   el.scrollTop = keepScroll ? top : 0;
   $('sHome').classList.toggle('on', v.name === 'home');
@@ -1411,9 +1638,11 @@ function go(target) {
 
 // ── Events ───────────────────────────────────────────────────────────────────
 root.addEventListener('click', e => {
-  const el = e.target.closest('[data-like],[data-pill],[data-mix],[data-dev],[data-filter],[data-jump],[data-act],[data-play],[data-go]');
+  if (e.target === $('sModal')) { $('sModal').hidden = true; return; }
+  const el = e.target.closest('[data-try],[data-like],[data-pill],[data-mix],[data-dev],[data-filter],[data-jump],[data-act],[data-play],[data-go]');
   if (!el || !root.contains(el)) return;
   const d = el.dataset;
+  if (d.try) { const i = $('sMakeInput'); i.value = d.try; i.focus(); return; }
   if (d.like) {
     S.liked.has(d.like) ? S.liked.delete(d.like) : S.liked.add(d.like);
     refresh(); return;
@@ -1443,6 +1672,8 @@ root.addEventListener('click', e => {
       case 'mute': S.muted = !S.muted; $('sVol').value = S.muted ? 0 : S.vol; renderPlayer(); break;
       case 'back': if (S.hist.length) { S.fwd.push(S.view); S.view = S.hist.pop(); renderView(); renderLib(); } break;
       case 'fwd': if (S.fwd.length) { S.hist.push(S.view); S.view = S.fwd.pop(); renderView(); renderLib(); } break;
+      case 'make': openMaker(); break;
+      case 'close-modal': $('sModal').hidden = true; break;
     }
     return;
   }
@@ -1454,7 +1685,20 @@ root.addEventListener('click', e => {
   }
   if (d.go) go(d.go);
 });
+root.addEventListener('submit', e => {
+  if (e.target.id !== 'sMakeForm') return;
+  e.preventDefault();
+  const words = $('sMakeInput').value.trim();
+  if (!words) { openMaker('Describe the playlist first.'); return; }
+  try {
+    const p = makePlaylist(words);
+    $('sModal').hidden = true;
+    toast(`Made “${p.title}” with ${plural(p.tracks.length, 'song')}`);
+    go(`pl:${p.id}`);
+  } catch (err) { openMaker(err.message, words); }
+});
 root.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('sModal').hidden) { $('sModal').hidden = true; return; }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.s-row[tabindex]')) { e.preventDefault(); e.target.click(); }
 });
 // close the devices popover on outside click

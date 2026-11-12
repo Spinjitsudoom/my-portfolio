@@ -529,6 +529,9 @@ footer a{color:var(--pg-fg2)}
   <symbol id="p-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.5h7M12 16.5v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.8 5.7 3.8 9s-1.2 6.3-3.8 9c-2.6-2.7-3.8-5.7-3.8-9S9.4 3 12 3Z"/></g></symbol>
+  <symbol id="p-podcast" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="2"/><path d="M12 12v8.5"/><path d="M8.5 13.5a4.95 4.95 0 1 1 7 0"/><path d="M5.6 16.4a9.05 9.05 0 1 1 12.8 0"/></g></symbol>
+  <symbol id="p-filter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5z"/></g></symbol>
+  <symbol id="p-health" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></g></symbol>
   <symbol id="p-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -725,22 +728,32 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-devices"/></svg></div>
         <h3>Your music, everywhere</h3>
-        <p>Stream to any browser (desktop, phone or TV), the native <strong>Android app</strong> with Android Auto, lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot.</p>
+        <p>Stream to any browser (desktop, phone or TV), the native <strong>Android app</strong> with Android Auto, lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot. Apps made for <strong>Subsonic</strong>, like Symfonium, Amperfy and Feishin, can play from Shelf too.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-people"/></svg></div>
         <h3>Accounts for everyone</h3>
-        <p>The music is shared, but each person has their own Favourites, playlists, history and devices. An <strong>admin dashboard</strong> adds people, resets passwords, shows two weeks of listening, and runs rescans and storage.</p>
+        <p>The music is shared, but each person has their own Favourites, playlists, history and devices, and can <strong>follow artists</strong> so their Library shows just those. An <strong>admin dashboard</strong> adds people, resets passwords, shows two weeks of listening, and runs rescans and storage.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-sparkle"/></svg></div>
         <h3>Made for you</h3>
-        <p><strong>Shelf Mixes</strong>, On Repeat, Discover, song and artist radio, and <strong>mood mixes</strong> (Workout, Chill, Party, Feel Good, Melancholy and Heavy), new every day and drawn as mix tapes. Songs are matched on how they actually sound as well as artist, genre, tempo and key, and suggestions learn from the songs you skip.</p>
+        <p><strong>Shelf Mixes</strong>, On Repeat, Discover, song and artist radio, and <strong>mood mixes</strong> (Workout, Chill, Party, Feel Good, Melancholy and Heavy), new every day and drawn as mix tapes. Songs are matched on how they actually sound as well as artist, genre, tempo and key, and suggestions learn from the songs you skip. <strong>Home</strong> learns too: rows like “More like” your favourite artists and “From artists you follow”, with the rows you use most moving up over time.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-podcast"/></svg></div>
+        <h3>Podcasts</h3>
+        <p>Follow any show: search for it, or paste its link from Apple Podcasts, Podbean or anywhere with a feed. Your shows sit in your Library, new episodes show up on Home, and Shelf remembers where you stopped on every device. Live sets, DJ mixes and audiobooks of 15 minutes or more <strong>pick up where you stopped</strong> too.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-playlist"/></svg></div>
         <h3>Make a playlist from a few words</h3>
         <p>Type “metal, high energy”, “chill 90s” or “like Metallica” and Shelf builds the playlist from your library, matching genres, artists, moods, energy and decades. No AI model: it works from what Shelf has measured and knows. Try it in the demo with <strong>+</strong> in Your Library.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-filter"/></svg></div>
+        <h3>Smart and imported playlists</h3>
+        <p><strong>Smart playlists</strong> pick their own songs by rules, like “not played in 6 months” or “added this week”, and keep themselves up to date. <strong>Import</strong> a playlist from Spotify or YouTube (paste the link, or share it to Shelf on Android), an M3U, PLS or XSPF file from another player, a CSV export or a pasted list, and Shelf finds the songs in your library.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg></div>
@@ -750,7 +763,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-update"/></svg></div>
         <h3>Keeps itself up to date</h3>
-        <p>The server <strong>installs new releases by itself at night</strong>, between 2 and 6, once nothing has played for half an hour, so music is never cut off. You can switch that off on the admin dashboard and use <strong>Update now</strong> instead. The Android app and the desktop players download updates in the background.</p>
+        <p>The server <strong>installs new releases by itself at night</strong>, between 2 and 6, once nothing has played for half an hour, so music is never cut off. You can switch that off on the admin dashboard and use <strong>Update now</strong> instead. The Android app and the desktop players download updates in the background, and after each update <strong>What’s new</strong> shows what changed, once.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mix"/></svg></div>
@@ -765,7 +778,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-blend"/></svg></div>
         <h3>Together</h3>
-        <p><strong>Party mode</strong>: guests join from their own phones, add songs to the queue and vote to skip, and can play along in step with the host. Plus public and collaborative playlists, <strong>Friend activity</strong>, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to.</p>
+        <p><strong>Party mode</strong>: guests join from their own phones, add songs to the queue and vote to skip, and can play along in step with the host. Plus public and collaborative playlists, <strong>Friend activity</strong>, and <strong>Blends</strong>, a daily playlist for two built from what you both listen to. <strong>Share links</strong> send a song, album or playlist to someone without an account, to play in their browser.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-chart"/></svg></div>
@@ -785,7 +798,12 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-disc"/></svg></div>
         <h3>Getting music in</h3>
-        <p>Upload songs, folders or ZIPs from the browser, drop them in a <strong>watch folder</strong> to be renamed from their tags and filed by artist and album, or <strong>rip a CD</strong> in the server's drive. It gets tags and cover art from MusicBrainz, rips to FLAC with cd-paranoia, and files it. <em>Not on your shelf</em> lists your artists' releases that you don't have yet.</p>
+        <p>Upload songs, folders or ZIPs from the browser, drop them in a <strong>watch folder</strong> to be renamed from their tags and filed by artist and album, or <strong>rip a CD</strong> in the server's drive. It gets tags and cover art from MusicBrainz, rips to FLAC with cd-paranoia, and files it. <em>Not on your shelf</em> lists your artists' releases that you don't have yet, and anyone can <strong>request</strong> an artist or album, with suggestions from MusicBrainz as you type. A request ticks itself off when the music arrives.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-health"/></svg></div>
+        <h3>Looks after your library</h3>
+        <p><strong>Library health</strong> on the admin dashboard finds albums without covers (and finds the covers), gaps in track numbers, songs that are there twice, even under another name by how they sound, and lossless files made from an MP3. The server keeps a <strong>daily backup</strong> of accounts, Favourites, playlists and history, ready to restore, and <strong>webhooks</strong> tell Home Assistant when music starts or pauses, a listen counts, or new albums arrive.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-volume"/></svg></div>
@@ -795,7 +813,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg></div>
         <h3>Private by default</h3>
-        <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>.</p>
+        <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>. Away from home, a <strong>secure address</strong> keeps sign-ins and music encrypted, and the apps move to it by themselves.</p>
       </div>
     </div>
   </div>
@@ -882,7 +900,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
           </div>
           <div class="dl-install" style="display:none">
             <p>1. Open <code>Shelf-0.7.7.apk</code> on the phone and allow installing from this source.</p>
-            <p>2. Enter the server address, e.g. <code>192.168.1.20:4533</code> at home, or a Tailscale name away from it.</p>
+            <p>2. Enter the server address, e.g. <code>192.168.1.20:4533</code> at home, or your secure address away from it.</p>
             <p>3. Sign in. Add the widget by long-pressing the home screen → Widgets → Shelf.</p>
             <p>It replaces the older Android app in place: open it once and sign in again. Anything downloaded in the old app needs downloading again.</p>
           </div>
@@ -996,7 +1014,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
         <div class="step-n"></div>
         <div class="step-body">
           <h3>Listen away from home</h3>
-          <p>Use <a href="https://tailscale.com" target="_blank" rel="noopener">Tailscale</a> on the server and your devices rather than exposing the port to the internet. <code>sudo tailscale serve --bg 4533</code> gives you an HTTPS address on every device in your tailnet, which also enables offline mode and home-screen install in the browser.</p>
+          <p>Don't open Shelf's port on your router. If the server's computer runs <a href="https://tailscale.com" target="_blank" rel="noopener">Tailscale</a>, <strong>Admin → Secure address</strong> gives Shelf a public HTTPS address with one button (Tailscale Funnel), or you can enter your own domain. Everyone's apps move to it by themselves, still signed in, and in the browser HTTPS also enables offline mode and home-screen install.</p>
         </div>
       </div>
     </div>
@@ -1009,11 +1027,11 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
     <h2 class="sh"><span>Tech Stack</span></h2>
     <p class="sub">A Python server and a web app with no build step, wrapped into native players for each platform.</p>
     <div class="stack-grid">
-      <div class="stack-card"><div class="stack-layer">Server</div><div class="stack-val">Python · FastAPI · uvicorn · SQLite</div></div>
+      <div class="stack-card"><div class="stack-layer">Server</div><div class="stack-val">Python · FastAPI · uvicorn · SQLite · Subsonic API</div></div>
       <div class="stack-card"><div class="stack-layer">Web app</div><div class="stack-val">Vanilla HTML · CSS · JS modules, no build step</div></div>
-      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia (numpy on Windows) · Web Audio · mutagen</div></div>
+      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia (numpy on Windows) · Chromaprint · Web Audio · mutagen</div></div>
       <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android (Kotlin · Compose · Media3) · Electron · Flatpak</div></div>
-      <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp</div></div>
+      <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp · podcast feeds</div></div>
       <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder</div></div>
       <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions on Linux &amp; Windows</div></div>
     </div>

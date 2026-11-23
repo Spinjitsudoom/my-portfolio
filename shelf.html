@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux and Windows; players for Android, Windows, Linux and any browser.">
+<meta name="description" content="Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux, Windows and Docker (Raspberry Pi too); players for Android, Windows, Linux, any browser and Subsonic apps.">
 <title>Shelf — self-hosted music server and player | Etienne Axiak</title>
 <link rel="canonical" href="https://spinjitsudoom.github.io/my-portfolio/shelf.html">
 <meta name="theme-color" content="#0a0a0f">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Etienne Axiak">
 <meta property="og:title" content="Shelf — self-hosted music server and player">
-<meta property="og:description" content="Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux and Windows; players for Android, Windows, Linux and any browser.">
+<meta property="og:description" content="Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux, Windows and Docker (Raspberry Pi too); players for Android, Windows, Linux, any browser and Subsonic apps.">
 <meta property="og:url" content="https://spinjitsudoom.github.io/my-portfolio/shelf.html">
 <meta property="og:image" content="https://spinjitsudoom.github.io/my-portfolio/og/shelf.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Shelf: a self-hosted music server and player">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Shelf", "description": "Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux and Windows; players for Android, Windows, Linux and any browser.", "url": "https://spinjitsudoom.github.io/my-portfolio/shelf.html", "image": "https://spinjitsudoom.github.io/my-portfolio/og/shelf.jpg", "applicationCategory": "MultimediaApplication", "operatingSystem": "Linux, Windows, Android, Web browser", "softwareVersion": "1.0.12", "downloadUrl": "https://spinjitsudoom.github.io/my-portfolio/shelf.html#download", "license": "https://spdx.org/licenses/AGPL-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "author": {"@type": "Person", "name": "Etienne Axiak", "url": "https://spinjitsudoom.github.io/my-portfolio/", "sameAs": ["https://github.com/Spinjitsudoom"]}, "sameAs": ["https://github.com/Spinjitsudoom/shelf"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Shelf", "description": "Shelf is a free, self-hosted music server for your own CD rips, with the features of a big streaming app: mixes, lyrics, podcasts, offline downloads and DJ-style transitions. Server for Linux, Windows and Docker (Raspberry Pi too); players for Android, Windows, Linux, any browser and Subsonic apps.", "url": "https://spinjitsudoom.github.io/my-portfolio/shelf.html", "image": "https://spinjitsudoom.github.io/my-portfolio/og/shelf.jpg", "applicationCategory": "MultimediaApplication", "operatingSystem": "Linux, Windows, Android, Web browser", "softwareVersion": "1.0.12", "downloadUrl": "https://spinjitsudoom.github.io/my-portfolio/shelf.html#download", "license": "https://spdx.org/licenses/AGPL-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "author": {"@type": "Person", "name": "Etienne Axiak", "url": "https://spinjitsudoom.github.io/my-portfolio/", "sameAs": ["https://github.com/Spinjitsudoom"]}, "sameAs": ["https://github.com/Spinjitsudoom/shelf"]}</script>
 <link rel="icon" type="image/svg+xml" href="shelf-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -464,6 +464,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;ali
 .dl-badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-bottom:.25rem}
 .dl-badge.win{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa}
 .dl-badge.android{background:rgba(163,230,53,.08);border-color:rgba(163,230,53,.25);color:#a3e635}
+.dl-badge.docker{background:rgba(14,165,233,.1);border-color:rgba(14,165,233,.28);color:#38bdf8}
 .dl-badge.web{background:rgba(200,200,200,.08);border-color:rgba(200,200,200,.2);color:#cbd5e1}
 .dl-card-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
 .dl-toggle{background:none;border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:8px;padding:.45rem .9rem;font-size:.85rem;cursor:pointer;transition:color .2s,border-color .2s;font-family:inherit}
@@ -538,6 +539,7 @@ footer a{color:var(--pg-fg2)}
   <symbol id="p-disc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></g><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/></symbol>
   <symbol id="p-volume" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="p-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v5M15 2v5"/><path d="M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v5"/></symbol>
   <symbol id="p-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="7" rx="1.5"/><rect x="3.5" y="13" width="17" height="7" rx="1.5"/></g><circle cx="7.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="7.5" cy="16.5" r="1.1" fill="currentColor"/></symbol>
   <symbol id="p-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="p-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.5h7M12 16.5v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -581,7 +583,7 @@ footer a{color:var(--pg-fg2)}
       <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/shelf" target="_blank" rel="noopener">View Source</a>
     </div>
     <div class="hero-pills">
-      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-server"/></svg><span>Linux &amp; Windows server</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-server"/></svg><span>Linux, Windows &amp; Docker server</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-phone"/></svg><span>Android app + Android Auto</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-computer"/></svg><span>Windows &amp; Linux players</span></div>
       <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg><span>Any browser</span></div>
@@ -741,7 +743,12 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-devices"/></svg></div>
         <h3>Your music, everywhere</h3>
-        <p>Stream to any browser (desktop, phone or TV), the native <strong>Android app</strong> with Android Auto, lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot. Apps made for <strong>Subsonic</strong>, like Symfonium, Amperfy and Feishin, can play from Shelf too.</p>
+        <p>Stream to any browser (desktop, phone or TV), the native <strong>Android app</strong> with Android Auto, lock-screen controls and a home-screen widget, and desktop players for Windows and Linux with media-key support. Pick a device under <strong>Play on</strong> and the music moves there, picking up at the same spot. On an iPhone, use a <strong>Subsonic app</strong>.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-plug"/></svg></div>
+        <h3>Works with Subsonic apps</h3>
+        <p>Shelf speaks the whole Subsonic API, with every OpenSubsonic addition, so apps made for Subsonic or Navidrome play from it: <strong>Symfonium</strong>, Tempo and DSub on Android, <strong>play:Sub</strong> and Substreamer on iPhone, Feishin and Sonixd on the desktop. Favourites, playlists, podcasts, share links, internet radio and the play queue are the same ones you have in Shelf, and plays count in your stats and scrobbles. Each person makes an <strong>app password</strong> or an <strong>API key</strong> for each app in Settings, so their own password never goes into an app.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-people"/></svg></div>
@@ -776,7 +783,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-update"/></svg></div>
         <h3>Keeps itself up to date</h3>
-        <p>The server <strong>installs new releases by itself at night</strong>, between 2 and 6, once nothing has played for half an hour, so music is never cut off. You can switch that off on the admin dashboard and use <strong>Update now</strong> instead. The Android app and the desktop players download updates in the background, and after each update <strong>What’s new</strong> shows what changed, once.</p>
+        <p>The server <strong>installs new releases by itself at night</strong>, between 2 and 6, once nothing has played for half an hour, so music is never cut off. You can switch that off on the admin dashboard and use <strong>Update now</strong> instead. The Android app and the desktop players download updates in the background, and after each update <strong>What’s new</strong> shows what changed, once. A Docker server updates when you pull the new image.</p>
       </div>
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-mix"/></svg></div>
@@ -819,6 +826,11 @@ footer a{color:var(--pg-fg2)}
         <p><strong>Library health</strong> on the admin dashboard finds albums without covers (and finds the covers), gaps in track numbers, songs that are there twice, even under another name by how they sound, and lossless files made from an MP3. The server keeps a <strong>daily backup</strong> of accounts, Favourites, playlists and history, ready to restore, and <strong>webhooks</strong> tell Home Assistant when music starts or pauses, a listen counts, or new albums arrive.</p>
       </div>
       <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-server"/></svg></div>
+        <h3>Quick with big libraries</h3>
+        <p>On a test library of <strong>100,000 songs</strong>, a full scan takes 23 seconds, a rescan with nothing new takes 2.5, and most pages open in under a second. The day's Mixes are made ahead of time in the background. On a small computer like a <strong>Raspberry Pi</strong>, the admin can have songs measured only at night (1 to 7 a.m.) or not at all.</p>
+      </div>
+      <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-volume"/></svg></div>
         <h3>Sound settings</h3>
         <p>Gapless playback, crossfade, loudness normalization (album-aware), a 6-band equalizer with a draggable curve, balance, mono, and separate Wi-Fi and mobile streaming quality up to lossless. In the browser and the Android app, Now Playing has a <strong>visualizer</strong>: a ring of bars around the disc that moves with the music in the album's colour.</p>
@@ -826,7 +838,7 @@ footer a{color:var(--pg-fg2)}
       <div class="feat">
         <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg></div>
         <h3>Private by default</h3>
-        <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>. Away from home, a <strong>secure address</strong> keeps sign-ins and music encrypted, and the apps move to it by themselves.</p>
+        <p>Fonts and icons are served by Shelf itself. Each outside lookup (lyrics, videos, artist info, new releases) sends only artist, title and album names, and each one can be turned off in <code>config.toml</code>. Away from home, a <strong>secure address</strong> keeps sign-ins and music encrypted, and the apps move to it by themselves. Subsonic app passwords and API keys can't change or remove accounts, so one lost with a phone can't take yours over.</p>
       </div>
     </div>
   </div>
@@ -875,6 +887,31 @@ footer a{color:var(--pg-fg2)}
             <p>1. Run <code>Shelf-Server-Setup-1.0.12.exe</code>.</p>
             <p>2. When Windows asks whether to let it on the network, <strong>allow it</strong> so your phone can reach it.</p>
             <p>3. Choose <strong>Open Shelf</strong> from the tray icon.</p>
+          </div>
+        </div>
+
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge docker">Docker · PC &amp; Raspberry Pi</div>
+            <h3>Docker image</h3>
+          </div>
+          <p>For home servers, NAS boxes and a Raspberry Pi 4 or 5 (amd64 and arm64). Your music is mounted read-only, and everything Shelf keeps goes in one folder.</p>
+          <div class="dl-cb"><pre>docker run -d \
+  --name shelf \
+  --restart unless-stopped \
+  -p 4533:4533 \
+  -v ./shelf-data:/data \
+  -v /path/to/music:/music:ro \
+  -e TZ=Europe/London \
+  ghcr.io/spinjitsudoom/shelf</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          <div class="dl-card-actions">
+            <a class="btn btn-secondary btn-sm" href="https://github.com/Spinjitsudoom/shelf/blob/main/docs/docker.md" target="_blank" rel="noopener">Docker guide</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Change <code>/path/to/music</code> to your music folder, and <code>Europe/London</code> to your time zone.</p>
+            <p>2. Run the command, then open port <code>4533</code> on that computer, like <code>http://192.168.1.20:4533</code>, and create the admin account.</p>
+            <p>In Docker, Shelf doesn't update itself. The <a href="https://github.com/Spinjitsudoom/shelf/blob/main/docs/docker.md" target="_blank" rel="noopener">Docker guide</a> has a Compose file that updates with one command, plus Raspberry Pi tips and reverse proxy setups.</p>
           </div>
         </div>
 
@@ -1005,7 +1042,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
         <div class="step-n"></div>
         <div class="step-body">
           <h3>Install the server</h3>
-          <p>Run the one-line installer on Linux or the setup program on Windows, then open <code>http://localhost:4533</code>. The first time, Shelf asks you to create the admin account. After that it keeps itself up to date, installing new versions overnight when nothing is playing.</p>
+          <p>Run the one-line installer on Linux, the setup program on Windows, or the Docker image on a home server or Raspberry Pi, then open <code>http://localhost:4533</code> (or that computer's address). The first time, Shelf asks you to create the admin account. After that the Linux and Windows servers keep themselves up to date, installing new versions overnight when nothing is playing.</p>
         </div>
       </div>
       <div class="step">
@@ -1028,6 +1065,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
         <div class="step-body">
           <h3>Listen away from home</h3>
           <p>Don't open Shelf's port on your router. If the server's computer runs <a href="https://tailscale.com" target="_blank" rel="noopener">Tailscale</a>, <strong>Admin → Secure address</strong> gives Shelf a public HTTPS address with one button (Tailscale Funnel), or you can enter your own domain. Everyone's apps move to it by themselves, still signed in, and in the browser HTTPS also enables offline mode and home-screen install.</p>
+          <div class="note">Already run Caddy, nginx or Traefik? Put Shelf behind it. If your proxy signs people in with Authelia, Authentik or oauth2-proxy, Shelf can use that sign-in instead of asking again.</div>
         </div>
       </div>
     </div>
@@ -1045,7 +1083,7 @@ bash run.sh</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button>
       <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">ffmpeg · Essentia (numpy on Windows) · Chromaprint · Web Audio · mutagen</div></div>
       <div class="stack-card"><div class="stack-layer">Players</div><div class="stack-val">Android (Kotlin · Compose · Media3) · Electron · Flatpak</div></div>
       <div class="stack-card"><div class="stack-layer">Metadata</div><div class="stack-val">MusicBrainz · Cover Art Archive · LRCLIB · Wikipedia · yt-dlp · podcast feeds</div></div>
-      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">PyInstaller · Inno Setup · electron-builder · Docker (amd64 · arm64)</div></div>
       <div class="stack-card"><div class="stack-layer">CI / Builds</div><div class="stack-val">GitHub Actions on Linux &amp; Windows</div></div>
     </div>
   </div>

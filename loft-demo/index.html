@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Loft demo</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #14110f; }
+  body { display: grid; place-items: center; color: #9a8f84; font: italic 17px Georgia, serif; }
+</style>
+</head>
+<body>
+<p>Opening the library…</p>
+<script>
+// The Loft demo: installs the service worker that serves the recorded covers and pages (sw.js),
+// then opens the real Loft web app (app.html).
+(async () => {
+  const open = () => location.replace("app.html" + (location.hash || "#/"));
+  if (!("serviceWorker" in navigator)) return open();
+  try {
+    await navigator.serviceWorker.register("sw.js");
+    if (navigator.serviceWorker.controller) return open();
+    navigator.serviceWorker.addEventListener("controllerchange", open);
+    setTimeout(open, 5000);   // no service worker after all: the app still runs, with drawn covers
+  } catch { open(); }
+})();
+</script>
+</body>
+</html>

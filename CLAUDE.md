@@ -51,14 +51,18 @@ ArtiSync also has a conversion-formats block inside Features and an FAQ section 
 
 ### Icons: SVG only, never emoji
 
-Emoji render as blank boxes in some browsers, such as Flatpak browsers without a colour emoji font. Every icon is an inline SVG symbol from the `p-*` sprite at the top of each page's `<body>`, written as `<svg class="pi"><use href="#p-name"/></svg>`. In JS, the matching helper is `ICO('name')` on Matchbox and ArtiSync. The Shelf and Loft demos carry their own sprite of the real app's icons (`i-*` on Loft, used through `I('name')`). To add an icon, add a `<symbol>` to that page's sprite: a 24×24 viewBox, `stroke="currentColor"` at width 1.8, with round caps and joins. Plain text arrows and marks such as ← → ↗ ✓ ✕ ★ are fine.
+Emoji render as blank boxes in some browsers, such as Flatpak browsers without a colour emoji font. Every icon is an inline SVG symbol from the `p-*` sprite at the top of each page's `<body>`, written as `<svg class="pi"><use href="#p-name"/></svg>`. In JS, the matching helper is `ICO('name')` on Matchbox and ArtiSync. The Shelf demo carries its own sprite of the real app's icons. To add an icon, add a `<symbol>` to that page's sprite: a 24×24 viewBox, `stroke="currentColor"` at width 1.8, with round caps and joins. Plain text arrows and marks such as ← → ↗ ✓ ✕ ★ are fine.
 
 ### Interactive demos
 
 - **Shelf:** a recreation of the real web app's dark theme (Archivo font, jewel-case covers). Every class is prefixed `s-` and scoped under `.sh-demo`, so it can't clash with page classes like `.btn` and `.hero`. The library (artists, albums, songs) is fictional, and covers are CSS gradients or inline SVG.
 - **Matchbox:** a recreation of the Electron/React app. `LIBRARY` (TV shows), `MOVIES` and the `state` object drive it, and posters come from TMDB image URLs.
-- **Loft:** a recreation of the web app (Literata and Instrument Sans, dark wood and brass). Every class is prefixed `l-` and scoped under `.lf-demo`. `BOOKS` (20 fictional books, covers drawn in CSS) and `ST` (each book's reading status and place) drive Home, the stacks, book pages and search. The reader lays the chapter text out into pages by measuring (`paginate()`), turns them with a CSS 3D leaf (`turn()`), and draws comic pages (`CBZ` books) from grid templates.
+- **Loft:** not a recreation. The demo is the real Loft web app in an `<iframe>` of `loft-demo/`: Loft's own `src/loft/web` files, copied unchanged, with `loft-demo/demo/mock.js` standing in for the server. The stand-in answers from a recording of a real Loft server on a made-up library (`loft-demo/demo/`), and `loft-demo/sw.js` serves the covers and page images. Don't edit the app's files by hand. When Loft's web app changes, record the demo again with `tools/loft-demo/` (its README has the steps).
 - **ArtiSync:** a recreation of the Qt app. `RELEASES` holds 24 albums across 4 artists, and `ARTIST_DATA` drives the artist dropdown and sidebar. Its classes are `.mockup-*`, `.win-*`, `.wt-*`, `.wsb`, `.wc-*`, `.wap-*` and `.mock-*`, and it uses its own tokens (`--surface`, `--fg`, `--accent`…). `applyTheme()` (9 themes) sets those tokens **only on `.mockup-window`**, so the rest of the page is unaffected.
+
+## `loft-demo/` and `tools/`
+
+`loft-demo/` is the Loft page's demo (see Interactive demos), about 13 MB with its recorded books, covers and page images. Its pages are marked `noindex`. `tools/loft-demo/` holds the scripts that build it. Neither is linked from the site's navigation.
 
 ## `unused for now/` directory
 

@@ -1,0 +1,6 @@
+page-flip.browser.js is StPageFlip 2.0.7 (MIT, https://github.com/Nodlik/StPageFlip), with one change:
+
+1. HTMLPage.drawHard(): a stiff ("hard") page on the LEFT is now shifted by the book's left offset,
+   translate3d(${this.render.getRect().left}px, 0, 0), as right pages already are. Upstream uses
+   translate3d(0, 0, 0), so when the book is centred with space beside it, a turning cover swung
+   around a hinge that far short of the spine (a visible gap while turning).

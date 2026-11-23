@@ -1,0 +1,131 @@
+[
+  {
+    "version": "0.1.7",
+    "date": "2026-11-23",
+    "new": [
+      {
+        "title": "Reading status",
+        "text": "Every book has a status of your own: Want to read, Not started, Reading, Incomplete, Abandoned or Finished. Loft keeps it up to date as you read: opening a book makes it Reading, the last page Finished, and a book left unread turns Incomplete after 15 days and Abandoned after 30. Set any status by hand with the Status button on the book’s page. Home has an Incomplete row, and the stacks filter by status."
+      },
+      {
+        "title": "Search that finds what you mean",
+        "text": "Search finds books from the words you remember: in any order, with typos, without apostrophes or hyphens, and from the description too. The best matches come first."
+      },
+      {
+        "title": "Page settings for picture books",
+        "text": "A picture book’s edit page has Pages settings: the reading direction, the order of pages (move, hide or add blank ones), splitting pages that hold two printed pages, and the wraparound cover. Your place and bookmarks stay on their pages.",
+        "admin": true
+      },
+      {
+        "title": "Loft on ZimaOS and CasaOS",
+        "text": "Loft’s Docker image is published for PCs and ARM boards, and each release has a file that installs it on ZimaOS or CasaOS as a custom app.",
+        "admin": true
+      }
+    ],
+    "fixed": [
+      {
+        "text": "Continue reading shows only the books you’re reading, not ones you stopped weeks ago."
+      }
+    ]
+  },
+  {
+    "version": "0.1.6",
+    "date": "2026-11-22",
+    "new": [
+      {
+        "title": "Picture books, as designed",
+        "text": "Fixed-layout books (picture books and many children’s books, as EPUB or Kindle AZW3) are read as real pages: their pictures, fonts and words exactly where the book puts them, scaled to your screen. Page turning, two-page spreads, Scroll mode, zoom, bookmarks and downloads all work as they do for comics."
+      }
+    ],
+    "fixed": [
+      {
+        "text": "Fonts some EPUBs store scrambled (a standard way of packing fonts, not copy protection) now show as the book intended."
+      },
+      {
+        "text": "A picture book downloaded before this update is downloaded again by itself, with its real pages."
+      }
+    ]
+  },
+  {
+    "version": "0.1.5",
+    "date": "2026-11-21",
+    "new": [
+      {
+        "title": "Automatic backups",
+        "text": "Loft backs up the library by itself: people, reading progress, shelves, bookmarks, edits, covers you chose and books waiting for approval. In Library settings, Backups, choose how often, how many to keep and where (another drive is safer), back up now, download a backup, or restore one.",
+        "admin": true
+      }
+    ],
+    "fixed": []
+  },
+  {
+    "version": "0.1.4",
+    "date": "2026-11-21",
+    "new": [
+      {
+        "title": "What’s new, in Loft",
+        "text": "After an update, Loft shows what changed in a pop-up like this one, once. Your settings shows it again any time, and Library settings shows a new version’s notes before you update."
+      }
+    ],
+    "fixed": [
+      {
+        "text": "On Windows, opening loft-server.exe by hand, or from a shortcut made by the first 0.1.3 setup, starts Loft Server in the tray instead of a console window.",
+        "admin": true
+      }
+    ]
+  },
+  {
+    "version": "0.1.3",
+    "date": "2026-11-21",
+    "new": [
+      {
+        "title": "A setup for Windows",
+        "text": "Loft Server for Windows installs with a setup, with no administrator needed, and updates itself by running the next one.",
+        "admin": true
+      },
+      {
+        "title": "Runs in the tray",
+        "text": "On Windows, Loft Server runs in the background with an icon by the clock. Click it to open Loft. Right-click it for the address other devices use, Update, Start with Windows, the data folder, Restart and Quit.",
+        "admin": true
+      }
+    ],
+    "fixed": []
+  },
+  {
+    "version": "0.1.2",
+    "date": "2026-11-20",
+    "new": [
+      {
+        "title": "Loft keeps itself up to date",
+        "text": "The server downloads new versions by itself, and you choose when to restart into them in Library settings.",
+        "admin": true
+      },
+      {
+        "title": "Updates for the apps",
+        "text": "The desktop app and Loft Lite download new versions and ask before installing them."
+      }
+    ],
+    "fixed": []
+  },
+  {
+    "version": "0.1.1",
+    "date": "2026-11-20",
+    "new": [
+      {
+        "title": "Previous and Next",
+        "text": "A book’s page has Previous and Next, to go through the library without going back to the shelves."
+      },
+      {
+        "title": "Details filled in for you",
+        "text": "New books’ missing details are filled in from matches Loft is sure of, and can be undone.",
+        "admin": true
+      },
+      {
+        "title": "More places to look books up",
+        "text": "Hardcover and ISBNdb join the sources for looking up a book’s details.",
+        "admin": true
+      }
+    ],
+    "fixed": []
+  }
+]

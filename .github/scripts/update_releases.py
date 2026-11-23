@@ -27,6 +27,7 @@ PAGES = {
     'shelf.html': 'shelf',
     'matchbox.html': 'Matchbox',
     'artisync.html': 'ArtiSync',
+    'loft.html': 'Loft',
 }
 CURRENT = re.compile(r'All builds are v(\d+(?:\.\d+)+)')
 

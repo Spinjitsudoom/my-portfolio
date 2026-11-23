@@ -1,6 +1,6 @@
 name: Update release versions
 
-# Hourly: bump shelf.html, matchbox.html and artisync.html to each project's
+# Hourly: bump shelf.html, matchbox.html, artisync.html and loft.html to each project's
 # latest GitHub release, after checking every download link exists.
 # Run it by hand from the Actions tab with "Run workflow".
 on:

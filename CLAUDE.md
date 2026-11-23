@@ -30,13 +30,13 @@ The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build st
 | File | Stylesheet | Background |
 |------|-----------|------------|
 | `index.html` | `style.css` + `main.js` | `#0d1117` |
-| `shelf.html`, `matchbox.html`, `artisync.html` | inline `<style>` and `<script>` | `#0a0a0f` |
+| `shelf.html`, `loft.html`, `matchbox.html`, `artisync.html` | inline `<style>` and `<script>` | `#0a0a0f` |
 
 All pages use the same blue-purple palette (`#5b8dee` → `#7c6ff7`) and the Inter font. The project pages are self-contained by design: they don't load `style.css`, `project.css` or `main.js`. `project.css` is unused and safe to delete. `main.js` (used only by `index.html`) fades in `.fade-in` elements, staggers `.stagger-children`, and sets `.nav-active`.
 
 ### The project pages share one layout
 
-`shelf.html`, `matchbox.html` and `artisync.html` have the same structure, class names and page CSS (the `--pg-*` tokens). When you change one, change the others to match. A new project page should start as a copy of one of them.
+`shelf.html`, `loft.html`, `matchbox.html` and `artisync.html` have the same structure, class names and page CSS (the `--pg-*` tokens). When you change one, change the others to match. A new project page should start as a copy of one of them.
 
 1. **Nav:** `← Etienne Axiak` (`.nav-back`) on the left, then `.nav-links` (Features, Download, Setup, GitHub; ArtiSync also has FAQ). Below 860px a `.hamburger` opens `#mobileMenu` via `toggleMenu()`/`closeMenu()`.
 2. **Hero:** `.hero-logo`, `.tag`, an `h1` with `.grad`, the lead text, `.hero-btns`, and `.hero-pills`.
@@ -51,12 +51,13 @@ ArtiSync also has a conversion-formats block inside Features and an FAQ section 
 
 ### Icons: SVG only, never emoji
 
-Emoji render as blank boxes in some browsers, such as Flatpak browsers without a colour emoji font. Every icon is an inline SVG symbol from the `p-*` sprite at the top of each page's `<body>`, written as `<svg class="pi"><use href="#p-name"/></svg>`. In JS, the matching helper is `ICO('name')` on Matchbox and ArtiSync. To add an icon, add a `<symbol>` to that page's sprite: a 24×24 viewBox, `stroke="currentColor"` at width 1.8, with round caps and joins. Plain text arrows and marks such as ← → ↗ ✓ ✕ ★ are fine.
+Emoji render as blank boxes in some browsers, such as Flatpak browsers without a colour emoji font. Every icon is an inline SVG symbol from the `p-*` sprite at the top of each page's `<body>`, written as `<svg class="pi"><use href="#p-name"/></svg>`. In JS, the matching helper is `ICO('name')` on Matchbox and ArtiSync. The Shelf and Loft demos carry their own sprite of the real app's icons (`i-*` on Loft, used through `I('name')`). To add an icon, add a `<symbol>` to that page's sprite: a 24×24 viewBox, `stroke="currentColor"` at width 1.8, with round caps and joins. Plain text arrows and marks such as ← → ↗ ✓ ✕ ★ are fine.
 
 ### Interactive demos
 
 - **Shelf:** a recreation of the real web app's dark theme (Archivo font, jewel-case covers). Every class is prefixed `s-` and scoped under `.sh-demo`, so it can't clash with page classes like `.btn` and `.hero`. The library (artists, albums, songs) is fictional, and covers are CSS gradients or inline SVG.
 - **Matchbox:** a recreation of the Electron/React app. `LIBRARY` (TV shows), `MOVIES` and the `state` object drive it, and posters come from TMDB image URLs.
+- **Loft:** a recreation of the web app (Literata and Instrument Sans, dark wood and brass). Every class is prefixed `l-` and scoped under `.lf-demo`. `BOOKS` (20 fictional books, covers drawn in CSS) and `ST` (each book's reading status and place) drive Home, the stacks, book pages and search. The reader lays the chapter text out into pages by measuring (`paginate()`), turns them with a CSS 3D leaf (`turn()`), and draws comic pages (`CBZ` books) from grid templates.
 - **ArtiSync:** a recreation of the Qt app. `RELEASES` holds 24 albums across 4 artists, and `ARTIST_DATA` drives the artist dropdown and sidebar. Its classes are `.mockup-*`, `.win-*`, `.wt-*`, `.wsb`, `.wc-*`, `.wap-*` and `.mock-*`, and it uses its own tokens (`--surface`, `--fg`, `--accent`…). `applyTheme()` (9 themes) sets those tokens **only on `.mockup-window`**, so the rest of the page is unaffected.
 
 ## `unused for now/` directory

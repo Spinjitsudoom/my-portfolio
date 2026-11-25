@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="droppix turns an Android tablet into a real second screen for a Linux PC: windows drag across to it, with touch, stylus, keyboard, rotation and sound, over USB or Wi-Fi. For KDE Plasma, GNOME, Sway, Hyprland, COSMIC and X11 desktops. A browser or a second Linux PC can be the screen too.">
+<title>droppix — use an Android tablet as a second screen for Linux | Etienne Axiak</title>
+<link rel="canonical" href="https://spinjitsudoom.github.io/my-portfolio/droppix.html">
+<meta name="theme-color" content="#0a0a0f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Etienne Axiak">
+<meta property="og:title" content="droppix — an Android tablet as a second screen for Linux">
+<meta property="og:description" content="droppix turns an Android tablet into a real second screen for a Linux PC: windows drag across to it, with touch, stylus, keyboard, rotation and sound, over USB or Wi-Fi. For KDE Plasma, GNOME, Sway, Hyprland, COSMIC and X11 desktops. A browser or a second Linux PC can be the screen too.">
+<meta property="og:url" content="https://spinjitsudoom.github.io/my-portfolio/droppix.html">
+<meta property="og:image" content="https://spinjitsudoom.github.io/my-portfolio/og/droppix.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="droppix: an Android tablet as a second screen for Linux">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "droppix", "description": "droppix turns an Android tablet into a real second screen for a Linux PC: windows drag across to it, with touch, stylus, keyboard, rotation and sound, over USB or Wi-Fi. For KDE Plasma, GNOME, Sway, Hyprland, COSMIC and X11 desktops. A browser or a second Linux PC can be the screen too.", "url": "https://spinjitsudoom.github.io/my-portfolio/droppix.html", "image": "https://spinjitsudoom.github.io/my-portfolio/og/droppix.jpg", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Linux, Android, Web browser", "softwareVersion": "0.4.0", "downloadUrl": "https://spinjitsudoom.github.io/my-portfolio/droppix.html#download", "license": "https://spdx.org/licenses/MIT.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "author": {"@type": "Person", "name": "Etienne Axiak", "url": "https://spinjitsudoom.github.io/my-portfolio/", "sameAs": ["https://github.com/Spinjitsudoom"]}, "sameAs": ["https://github.com/Spinjitsudoom/droppix"]}</script>
+<link rel="icon" type="image/svg+xml" href="droppix-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+
+/* ── Page theme ────────────────────────────────────────────────────────────── */
+:root{
+  --pg-bg:#0a0a0f;
+  --pg-bg2:#0f0f18;
+  --pg-surface:#13131e;
+  --pg-surface2:#1a1a28;
+  --pg-border:rgba(255,255,255,.07);
+  --pg-border2:rgba(255,255,255,.12);
+  --pg-accent:#5b8dee;
+  --pg-accent2:#7c6ff7;
+  --pg-grad:linear-gradient(135deg,#5b8dee,#7c6ff7);
+  --pg-fg:#e8e8f0;
+  --pg-fg2:#9898b8;
+  --pg-fg3:#55556a;
+  --r:10px;--rlg:14px;
+}
+
+body{
+  background:var(--pg-bg);
+  color:var(--pg-fg);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ── Utilities ─────────────────────────────────────────────────────────────── */
+.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}
+.section{padding:6rem 0}
+.tag{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:.2rem .85rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+h2.sh{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;margin-bottom:.6rem}
+h2.sh span{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--pg-fg2);font-size:1rem;max-width:560px;margin-bottom:2.5rem}
+a{color:var(--pg-accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:5px;padding:.1rem .4rem;font-family:"SF Mono","Fira Code",monospace;font-size:.84em;color:#c8d8f8}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.6rem;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;text-decoration:none;border:none;white-space:nowrap;font-family:inherit}
+.btn-primary{background:var(--pg-grad);color:#fff;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.5);text-decoration:none}
+.btn-secondary{background:var(--pg-surface2);color:var(--pg-fg);border:1px solid var(--pg-border2)}
+.btn-secondary:hover{background:#1e2338;text-decoration:none}
+.btn-sm{padding:.45rem 1rem;font-size:.85rem}
+
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;background:rgba(7,10,16,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--pg-border)}
+.nav-inner{max-width:1140px;margin:0 auto;padding:0 1.5rem;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-back{font-weight:600;font-size:.9rem;color:var(--pg-fg2);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--pg-fg);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:var(--pg-fg2);font-size:.9rem;transition:color .2s;text-decoration:none}
+.nav-links a:hover{color:var(--pg-fg)}
+
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 4rem;position:relative;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.g1{width:700px;height:700px;background:rgba(59,130,246,.07);top:-100px;left:50%;transform:translateX(-50%)}
+.g2{width:400px;height:400px;background:rgba(129,140,248,.05);bottom:0;right:-100px}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero h1 .grad{background:var(--pg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--pg-fg2);font-size:clamp(1rem,2vw,1.15rem);max-width:600px;margin:0 auto 2.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-logo{width:96px;height:96px;border-radius:22px;margin:0 auto 1.5rem;display:block;box-shadow:0 8px 40px rgba(59,130,246,.3)}
+.hero-pills{margin-top:3rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:.45rem;color:var(--pg-fg3);font-size:.82rem}
+.pill span{color:var(--pg-fg2)}
+.pi{width:1em;height:1em;flex:none;vertical-align:-.125em}
+.pill .pi{width:16px;height:16px;color:#7c9cf5}
+.feat-icon .pi{width:21px;height:21px;color:#60a5fa}
+.btn .pi{width:16px;height:16px}
+
+/* ── Demo section ──────────────────────────────────────────────────────────── */
+.demo-section{padding:0 0 5rem}
+.demo-wrap{max-width:1180px;margin:0 auto;padding:0 1rem;position:relative}
+.demo-wrap::before{content:'';position:absolute;inset:-1px 1rem;border-radius:15px;background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(129,140,248,.1),transparent 60%);z-index:0;pointer-events:none}
+.demo-hint{text-align:center;color:var(--pg-fg3);font-size:.84rem;margin-top:1.1rem}
+.app-window{position:relative;z-index:1;background:#0c0e12;border-radius:14px;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,.7)}
+.win-bar{background:#0c0e12;border-bottom:1px solid rgba(255,255,255,.05);padding:0 12px;height:34px;display:flex;align-items:center;gap:8px}
+.dots{display:flex;gap:5px}
+.dot{width:11px;height:11px;border-radius:50%}
+.win-title{color:#5f6675;font-size:.76rem;margin-left:8px;flex:1;font-family:'Inter',system-ui,sans-serif}
+
+/* ── droppix demo ──────────────────────────────────────────────────────────────
+   Left: a recreation of droppix's control panel (Qt app; its own tokens on .dg only).
+   Right: a desk with the PC's monitor and the tablet. Both screens show one desktop in
+   desktop pixels (.dp-vd, scaled down); a window has a copy on each screen. */
+.dp-demo{position:relative;z-index:1;display:grid;grid-template-columns:400px minmax(0,1fr);gap:24px;align-items:start;padding:22px;background:#0b0d11;border-radius:14px;box-shadow:0 32px 100px rgba(0,0,0,.7)}
+
+/* The control panel */
+.dg{--bg:#14181d;--surface:#1b1f24;--panel:#22272e;--border:#2e343d;--border2:#3a424e;--text:#e6e9ef;--muted:#8a93a3;--accent:#14b8a6;--accent2:#2dd4bf;--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--idle:#5b6573;--ink:#06231f;--list:#101317;
+  position:relative;display:flex;flex-direction:column;height:620px;background:var(--bg);color:var(--text);font:13px/1.35 'Noto Sans',system-ui,sans-serif;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);box-shadow:0 18px 60px rgba(0,0,0,.55)}
+.dg[data-theme=light]{--bg:#eaeef2;--surface:#ffffff;--panel:#ffffff;--border:#dde3e9;--border2:#c6cfd8;--text:#131820;--muted:#5b6674;--accent:#14b8a6;--accent2:#0f9e8e;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--idle:#94a1af;--ink:#ffffff;--list:#f6f8fa}
+.dg .win-bar{flex:none}
+.dg button,.dg input{font-family:inherit}
+.dg-menubar{position:relative;padding:2px 8px;font-size:12px;flex:none}
+.dg-mb{background:none;border:0;color:var(--text);font-size:12px;padding:2px 5px;border-radius:4px;cursor:pointer}
+.dg-mb:hover,.dg-mb.on{background:var(--panel)}
+.dg-menu{position:absolute;top:22px;left:8px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:4px;z-index:8;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.dg-menu button{display:flex;gap:28px;justify-content:space-between;width:100%;background:none;border:0;color:var(--text);font-size:12px;padding:5px 10px;border-radius:4px;cursor:pointer;white-space:nowrap}
+.dg-menu button:hover{background:var(--accent);color:var(--ink)}
+.dg-menu button:hover span{color:inherit}
+.dg-menu span{color:var(--muted)}
+.dg-head{display:flex;align-items:center;gap:12px;padding:6px 14px 8px;flex:none}
+.dg-logo{width:30px;height:30px;border-radius:5px;display:block}
+.dg-name{font-size:18px;font-weight:800;flex:1}
+.dg-btn{background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:5px 11px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.dg-btn:hover{border-color:var(--accent)}
+.dg-btn.wide{display:block;width:100%}
+.dg-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:0 12px 10px;flex:none}
+.dg-nav button{background:transparent;border:0;border-radius:9px;padding:9px 2px;color:var(--muted);font-size:11.5px;font-weight:600;cursor:pointer}
+.dg-nav button:hover{color:var(--text)}
+.dg-nav button.on{background:var(--accent);color:var(--ink)}
+.dg-body{flex:1;overflow:auto;padding:6px 14px 14px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.dg-page{display:flex;flex-direction:column;gap:12px}
+.dg-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.dg-card h4{font-size:17px;font-weight:800;margin-bottom:8px}
+.dg-hero-top{display:flex;align-items:center;gap:10px}
+.dg-dot{width:10px;height:10px;border-radius:50%;background:var(--idle);flex:none;transition:background .25s}
+.dg-word{font-size:25px;font-weight:800;flex:1;white-space:nowrap}
+.dg-cap{color:var(--muted);font-size:11.5px}
+.dg-switch{width:40px;height:22px;border-radius:11px;background:var(--idle);border:0;position:relative;cursor:pointer;transition:background .2s;flex:none}
+.dg-switch::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#eef1f5;transition:left .2s}
+.dg-switch[aria-checked=true]{background:var(--accent)}
+.dg-switch[aria-checked=true]::after{left:21px}
+.dg-sub{color:var(--muted);margin:4px 0 0 20px}
+.dg-metrics{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.dg-metrics b{display:block;font-size:19px;font-weight:700}
+.dg-metrics span{color:var(--muted);font-size:11.5px}
+.dg-prof{display:flex;gap:5px;align-items:center;font-size:12px}
+.dg-in{flex:1;min-width:0;background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:12.5px;padding:5px 8px;outline:0}
+.dg-in:focus{border-color:var(--accent)}
+.dg-prof .dg-btn{padding:5px 8px}
+.dg-scan{min-height:44px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.dg-qr{width:118px;height:118px;background:#fff;padding:6px;border-radius:6px;image-rendering:pixelated}
+.dg-scan p{color:var(--muted);font-size:11.5px}
+.dg-url{display:flex;gap:6px;align-items:center;width:100%}
+.dg-url code{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text);font-size:11.5px;text-align:left;font-family:"SF Mono","Fira Code",monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dg-url .dg-btn{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:600}
+.dg-list{background:var(--list);border:1px solid var(--border);border-radius:4px;min-height:118px;padding:3px;margin-bottom:8px}
+.dg-list.short{min-height:52px}
+.dg-list button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--text);font-size:12.5px;padding:3px 6px;border-radius:3px;cursor:pointer;white-space:pre}
+.dg-list button.sel{background:var(--accent);color:var(--ink)}
+.dg-empty{color:var(--muted);font-size:11.5px;text-align:center;margin:2px 0 8px}
+.dg-list .dg-empty{margin:6px}
+.dg-two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dg-checks label{display:flex;align-items:center;gap:9px;padding:3px 0;cursor:pointer}
+.dg-checks label.ind{padding-left:20px}
+.dg-cb,.dg-rad{appearance:none;-webkit-appearance:none;width:15px;height:15px;border:1px solid var(--border2);background:var(--bg);margin:0;cursor:pointer;flex:none}
+.dg-cb{border-radius:3px}
+.dg-rad{border-radius:50%}
+.dg-cb:checked,.dg-rad:checked{background:var(--accent);border-color:var(--accent)}
+.dg-cb:disabled{opacity:.4}
+.dg-form{display:grid;grid-template-columns:auto 1fr;gap:7px 8px;align-items:center}
+.dg-form>span{text-align:right;font-size:12px;white-space:nowrap}
+.dg-form .dg-in{width:100%}
+.dg-opts{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.dg-opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.dg-form .dg-checks{grid-column:2}
+.dg-about p{color:var(--muted);font-size:11.5px}
+.dg-about .ver{color:var(--text);font-size:12.5px;margin-top:3px}
+.dg-kv{display:grid;grid-template-columns:1fr 1.2fr;gap:3px 10px;font-size:11.5px;margin:12px 0}
+.dg-kv dt{color:var(--muted)}
+.dg-about .dg-btns{display:flex;gap:6px}
+.dg-about a.dg-btn{color:var(--text);text-decoration:none}
+.dg-log{height:138px;flex:none;border-top:1px solid var(--border2);background:var(--surface);display:flex;flex-direction:column}
+.dg-log-h{display:flex;align-items:center;justify-content:space-between;padding:3px 10px;font-size:11.5px;font-weight:600;border-bottom:1px solid var(--border)}
+.dg-log-h button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13px}
+.dg-log-b{flex:1;overflow:auto;font:10.5px/1.55 "SF Mono","Fira Code",monospace;padding:4px 10px;color:var(--muted);white-space:pre}
+.dg-log-b .w{color:var(--warn)}
+.dg-log-b .g{color:var(--good)}
+.dg-pop{position:absolute;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:9;padding:16px}
+.dg-pop-box{background:var(--panel);border:1px solid var(--border2);border-radius:12px;padding:16px 18px;width:100%;max-width:300px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.dg-pop-box h5{font-size:14px;font-weight:800;margin-bottom:6px}
+.dg-pop-box p{white-space:pre-line;font-size:12px;color:var(--muted)}
+.dg-pop-box .dg-qr{width:96px;height:96px;margin:10px auto 0;display:block}
+.dg-code{font-size:28px;font-weight:800;letter-spacing:.14em;color:var(--accent2);margin:8px 0 10px}
+
+/* The desk */
+.dp-deskwrap{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:14px}
+.dp-desk{display:flex;align-items:flex-end;justify-content:center;gap:22px}
+.dp-desk.below{flex-direction:column;align-items:center;gap:16px}
+.dp-mon{display:flex;flex-direction:column;align-items:center}
+.dp-mon-frame{padding:6px;background:#060709;border:1px solid #2a2f38;border-radius:9px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.dp-mon-neck{width:52px;height:28px;background:linear-gradient(90deg,#181b21,#2b3039,#181b21)}
+.dp-mon-foot{width:150px;height:7px;border-radius:5px 5px 2px 2px;background:#2b3039}
+.dp-desk.below .dp-mon-neck{height:14px}
+.dp-tab-frame{padding:11px;background:#111317;border:1px solid #363c46;border-radius:15px;box-shadow:0 18px 40px rgba(0,0,0,.6);transition:none}
+.dp-tab-frame.turning{transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.dp-scr{position:relative;overflow:hidden;background:#000;border-radius:2px}
+.dp-vd{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;font-family:'Noto Sans',system-ui,sans-serif;
+  background-color:#0f1a26;background-size:3400px 2400px;
+  background-image:radial-gradient(1100px 760px at 520px 300px,rgba(45,212,191,.34),transparent 62%),radial-gradient(1300px 900px at 2550px 520px,rgba(99,102,241,.42),transparent 62%),radial-gradient(1000px 760px at 1500px 1650px,rgba(20,184,166,.24),transparent 62%),radial-gradient(900px 600px at 1750px 900px,rgba(124,111,247,.22),transparent 65%),linear-gradient(135deg,#0c1822,#131a32 55%,#0e1c29)}
+.dp-tscr .dp-vd.off{visibility:hidden}
+.dp-desk-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.dp-ctl{display:inline-flex;align-items:center;gap:.4rem;background:#161a21;border:1px solid #2a303a;color:#c3cad6;border-radius:8px;padding:.35rem .8rem;font:500 .8rem 'Inter',system-ui,sans-serif;cursor:pointer}
+.dp-ctl:hover{border-color:#14b8a6;color:#fff}
+.dp-ctl .pi{width:15px;height:15px}
+.dp-desk-cap{color:#6b7385;font-size:.78rem}
+.dp-toast{position:absolute;left:50%;top:0;transform:translate(-50%,-4px);background:rgba(20,24,29,.97);border:1px solid #2e343d;color:#e6e9ef;font-size:.8rem;line-height:1.4;padding:.45rem .85rem;border-radius:8px;z-index:20;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;width:max-content;max-width:min(92%,420px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.dp-toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* Windows on the desktop, in desktop pixels */
+.dp-w{position:absolute;background:#1c2027;border:2px solid rgba(255,255,255,.08);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.55);overflow:hidden;display:flex;flex-direction:column}
+.dp-w.front{border-color:rgba(45,212,191,.5)}
+.dp-wbar{height:64px;flex:none;display:flex;align-items:center;gap:16px;padding:0 24px;background:#252a32;color:#d5dbe5;font-size:26px;font-weight:600;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.dp-wbar:active{cursor:grabbing}
+.dp-wbar svg{width:32px;height:32px;color:#2dd4bf;flex:none}
+.dp-wtitle{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-wbtns{display:flex;gap:14px}
+.dp-wbtns i{width:22px;height:22px;border-radius:50%;background:#3a414c}
+.dp-notes{flex:1;overflow:hidden;padding:24px 34px;color:#cfd6e2;font-size:30px;line-height:1.6;white-space:pre-wrap;user-select:none;-webkit-user-select:none}
+.dp-notes b{color:#fff}
+.dp-caret{display:inline-block;width:3px;height:36px;background:#2dd4bf;vertical-align:-7px;animation:dpBlink 1s steps(1) infinite}
+@keyframes dpBlink{50%{opacity:0}}
+.dp-tools{height:78px;flex:none;display:flex;align-items:center;gap:16px;padding:0 24px;background:#20252c;border-bottom:2px solid #2b313a}
+.dp-sw{width:44px;height:44px;border-radius:50%;border:4px solid transparent;cursor:pointer;padding:0;box-shadow:0 0 0 2px rgba(255,255,255,.12)}
+.dp-sw.on{border-color:#fff}
+.dp-tool{height:48px;padding:0 18px;border-radius:10px;border:2px solid #39404b;background:none;color:#cfd6e2;font:600 22px 'Noto Sans',system-ui,sans-serif;display:flex;align-items:center;gap:10px;cursor:pointer}
+.dp-tool svg{width:26px;height:26px}
+.dp-tool.on{border-color:#2dd4bf;color:#2dd4bf}
+.dp-tools .sep{flex:1}
+.dp-cv{flex:1;overflow:hidden;background:#f7f5f0;position:relative}
+.dp-cv canvas{display:block;touch-action:none;cursor:crosshair}
+.dp-cv-hint{position:absolute;left:0;right:0;top:38%;text-align:center;color:#b7b2a6;font-size:34px;pointer-events:none}
+.dp-panel{position:absolute;left:0;right:0;bottom:0;height:60px;background:rgba(10,13,18,.84);display:flex;align-items:center;gap:10px;padding:0 16px;color:#d5dbe5;font-size:24px;z-index:1000}
+.dp-panel .ic{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;color:#cfd6e2}
+.dp-panel .ic.on{background:rgba(255,255,255,.08);box-shadow:inset 0 -3px 0 #2dd4bf}
+.dp-panel svg{width:28px;height:28px}
+.dp-panel img{width:30px;height:30px;border-radius:6px}
+.dp-clock{margin-left:auto;font-weight:600;padding-right:6px}
+
+/* The tablet's own screens (Android app), in real pixels */
+.dp-and{position:absolute;inset:0;background:#1b1f24;color:#e5e7eb;font:10px/1.3 'Noto Sans',system-ui,sans-serif;padding:8px 11px;display:flex;flex-direction:column;gap:5px;overflow:hidden;z-index:3}
+.dp-and-top{display:flex;align-items:center;justify-content:space-between}
+.dp-and-title{color:#14b8a6;font-size:17px;font-weight:500;line-height:1}
+.dp-and button{font-family:inherit}
+.dp-and-tbtn,.dp-dlg-btns button,.dp-sheet-h button{background:none;border:0;color:#14b8a6;font-size:8.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;padding:3px}
+.dp-and-lbl{color:#9aa5b1;font-size:9px}
+.dp-and-list{background:#14181d;border-radius:3px;min-height:26px;flex:1 1 auto;overflow:auto}
+.dp-and-list button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #262b31;color:#e5e7eb;font-size:10px;padding:4px 7px;cursor:pointer}
+.dp-and-list button:hover{background:#1f252c}
+.dp-and-list small{color:#9aa5b1;font-size:8.5px;display:block}
+.dp-and-list .none{color:#6b7480;font-size:8.5px;padding:5px 7px}
+.dp-and-row{display:flex;gap:4px;align-items:center}
+.dp-and-in{flex:1;min-width:0;background:none;border:0;border-bottom:1px solid #14b8a6;color:#e5e7eb;font:10px 'Noto Sans',system-ui,sans-serif;padding:3px 1px;outline:0;border-radius:0}
+.dp-and-in::placeholder{color:#5f6874}
+.dp-and-go{background:#14b8a6;color:#1b1f24;border:0;border-radius:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:5px 8px;cursor:pointer}
+.dp-and-ib{width:24px;height:22px;border-radius:5px;background:#262b31;border:0;color:#cfd6e2;display:grid;place-items:center;cursor:pointer;flex:none}
+.dp-and-ib svg{width:13px;height:13px}
+.dp-and-status{color:#9aa5b1;font-size:8.5px;min-height:11px}
+.dp-dlg{position:absolute;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:7}
+.dp-dlg-box{background:#262b31;border-radius:4px;padding:10px 12px;width:min(88%,210px);color:#e5e7eb;font:10px/1.35 'Noto Sans',system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.dp-dlg-box h5{font-size:12px;font-weight:600;margin-bottom:4px}
+.dp-dlg-box p{color:#c3cad6}
+.dp-dlg-box .dp-and-in{width:100%;font-size:13px;letter-spacing:.2em;margin-top:5px}
+.dp-dlg-err{color:#f87171;font-size:8.5px;min-height:11px;margin-top:2px}
+.dp-dlg-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
+.dp-fab{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(20,24,29,.75);border:1px solid rgba(255,255,255,.18);color:#e6e9ef;display:grid;place-items:center;cursor:pointer;z-index:5;padding:0}
+.dp-fab svg{width:12px;height:12px}
+.dp-fmenu{position:absolute;top:31px;right:6px;background:rgba(27,31,36,.97);border:1px solid #2e343d;border-radius:6px;padding:3px;z-index:6;min-width:98px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.dp-fmenu button{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;color:#e6e9ef;font:9.5px 'Noto Sans',system-ui,sans-serif;padding:4px 6px;border-radius:4px;cursor:pointer;text-align:left;white-space:nowrap}
+.dp-fmenu button:hover{background:#2e343d}
+.dp-fmenu svg{width:11px;height:11px;color:#2dd4bf;flex:none}
+.dp-fmenu .bad,.dp-fmenu .bad svg{color:#f87171}
+.dp-sheet{position:absolute;top:0;right:0;bottom:0;width:min(100%,180px);background:rgba(27,31,36,.98);border-left:1px solid #2e343d;z-index:7;padding:7px 10px 10px;overflow:auto;color:#e6e9ef;font:9.5px/1.35 'Noto Sans',system-ui,sans-serif;scrollbar-width:thin}
+.dp-sheet-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600}
+.dp-sheet small{color:#9aa5b1;display:block;margin:5px 0 2px;font-size:8.5px}
+.dp-sheet label{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:2px 0;cursor:pointer}
+.dp-sheet input[type=range]{width:100%;accent-color:#14b8a6;height:12px;margin:0 0 2px}
+.dp-tsw{appearance:none;-webkit-appearance:none;width:22px;height:12px;border-radius:6px;background:#4b5361;position:relative;cursor:pointer;margin:0;flex:none;transition:background .2s}
+.dp-tsw::after{content:'';position:absolute;top:2px;left:2px;width:8px;height:8px;border-radius:50%;background:#fff;transition:left .2s}
+.dp-tsw:checked{background:#14b8a6}
+.dp-tsw:checked::after{left:12px}
+.dp-kbd{position:absolute;left:0;right:0;bottom:0;background:#20242a;padding:4px 4px 5px;display:flex;flex-direction:column;gap:3px;z-index:4}
+.dp-kbd div{display:flex;gap:3px;justify-content:center}
+.dp-kbd button{flex:1;max-width:24px;height:16px;border:0;border-radius:3px;background:#3a404a;color:#eef1f5;font:9px 'Noto Sans',system-ui,sans-serif;cursor:pointer;padding:0}
+.dp-kbd button:active{background:#14b8a6;color:#06231f}
+.dp-kbd button.w{max-width:44px;flex:1.6}
+.dp-kbd button.sp{max-width:none;flex:5}
+.dp-stats{position:absolute;left:5px;top:5px;background:rgba(0,0,0,.6);color:#4ade80;font:8px/1.4 "SF Mono","Fira Code",monospace;padding:3px 5px;border-radius:3px;z-index:4;pointer-events:none;white-space:pre}
+
+@media(max-width:1000px){
+  .dp-demo{grid-template-columns:1fr}
+  .dp-deskwrap{order:-1}
+  .dg{width:100%;max-width:520px;margin:0 auto}
+}
+@media(max-width:600px){
+  .dp-demo{padding:12px;gap:18px}
+  .dg{height:540px}
+}
+
+/* The long Sway variable in Setup wraps on phones */
+.step-body code{overflow-wrap:anywhere}
+
+/* ── Features grid ─────────────────────────────────────────────────────────── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
+.feat{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:1.5rem;transition:border-color .2s,transform .2s}
+.feat:hover{border-color:var(--pg-border2);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;background:rgba(59,130,246,.12);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.85rem}
+.feat h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.feat p{color:var(--pg-fg2);font-size:.88rem;line-height:1.55}
+
+/* ── Download ──────────────────────────────────────────────────────────────── */
+.dl-group{margin-bottom:2.5rem}
+.dl-group-h{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.dl-group-h h3{font-size:1.15rem;font-weight:800}
+.dl-group-h p{color:var(--pg-fg2);font-size:.9rem}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;max-width:1080px}
+.dl-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--rlg);padding:2rem;display:flex;flex-direction:column;gap:1rem}
+.dl-card h3{font-size:1.1rem;font-weight:700}
+.dl-card>p{font-size:.875rem;color:var(--pg-fg2);flex:1}
+.dl-badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-bottom:.25rem}
+.dl-badge.win{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:#60a5fa}
+.dl-badge.mac{background:rgba(226,232,240,.08);border-color:rgba(226,232,240,.22);color:#e2e8f0}
+.dl-badge.android{background:rgba(163,230,53,.08);border-color:rgba(163,230,53,.25);color:#a3e635}
+.dl-badge.docker{background:rgba(14,165,233,.1);border-color:rgba(14,165,233,.28);color:#38bdf8}
+.dl-badge.web{background:rgba(200,200,200,.08);border-color:rgba(200,200,200,.2);color:#cbd5e1}
+.dl-card-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.dl-toggle{background:none;border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:8px;padding:.45rem .9rem;font-size:.85rem;cursor:pointer;transition:color .2s,border-color .2s;font-family:inherit}
+.dl-toggle:hover{color:var(--pg-fg);border-color:var(--pg-accent)}
+.dl-toggle.open{color:var(--pg-accent);border-color:var(--pg-accent)}
+.dl-install{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--pg-border);font-size:.875rem;color:var(--pg-fg2);display:flex;flex-direction:column;gap:.5rem}
+.dl-install p{font-size:.875rem;color:var(--pg-fg2)}
+.dl-cb{position:relative;background:var(--pg-surface2);border:1px solid var(--pg-border2);border-radius:8px;padding:.75rem 4.2rem .75rem 1rem;overflow-x:auto}
+.dl-cb pre{font-family:"SF Mono","Fira Code",monospace;font-size:.8rem;color:#c8d8f8;margin:0;white-space:pre}
+.dl-cb.wrap pre{white-space:pre-wrap;word-break:break-all}
+.dl-cb-copy{position:absolute;top:.4rem;right:.5rem;background:var(--pg-surface2);border:1px solid var(--pg-border2);color:var(--pg-fg2);border-radius:5px;padding:.15rem .5rem;font-size:.72rem;cursor:pointer;font-family:inherit}
+.dl-cb-copy:hover{color:var(--pg-fg)}
+.dl-source{margin-top:1.5rem;border:1px solid var(--pg-border);border-radius:var(--rlg);overflow:hidden;max-width:1080px}
+.dl-source-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;cursor:pointer;background:var(--pg-surface);font-weight:600;font-size:.95rem;user-select:none}
+.dl-source-hdr:hover{background:var(--pg-surface2)}
+.dl-source-body{padding:1.25rem 1.5rem;border-top:1px solid var(--pg-border);display:flex;flex-direction:column;gap:.6rem}
+.dl-source-body p{font-size:.875rem;color:var(--pg-fg2)}
+
+/* ── Setup ─────────────────────────────────────────────────────────────────── */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:2rem}
+.step{display:flex;gap:1.1rem}
+.step-n{counter-increment:step;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#60a5fa}
+.step-n::after{content:counter(step)}
+.step-body{min-width:0}
+.step-body h3{font-size:.95rem;font-weight:700;margin-bottom:.35rem}
+.step-body p,.step-body li{color:var(--pg-fg2);font-size:.9rem;line-height:1.55}
+.note{margin-top:.5rem;padding:.55rem .85rem;background:rgba(234,179,8,.07);border-left:3px solid #ca8a04;border-radius:0 5px 5px 0;color:var(--pg-fg2);font-size:.83rem}
+
+/* ── Tech ──────────────────────────────────────────────────────────────────── */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.85rem}
+.stack-card{background:var(--pg-surface);border:1px solid var(--pg-border);border-radius:var(--r);padding:1rem 1.1rem}
+.stack-layer{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--pg-fg3);margin-bottom:.3rem}
+.stack-val{font-size:.9rem;color:var(--pg-fg);font-weight:500}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--pg-border);padding:2.5rem 0;text-align:center;color:var(--pg-fg3);font-size:.88rem}
+footer a{color:var(--pg-fg2)}
+
+/* ── Hamburger / mobile menu ───────────────────────────────────────────────── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--pg-fg2);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(10,10,15,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--pg-border);padding:1.5rem;flex-direction:column;gap:1rem;z-index:199}
+.mobile-menu a{color:var(--pg-fg2);font-size:1rem;padding:.4rem 0;text-decoration:none}
+.mobile-menu.open{display:flex}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
+@media(max-width:700px){
+  .stack-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}
+  .dl-card{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-arrow" viewBox="0 0 24 24"><path d="M12 4v13m-5.5-5.5L12 17l5.5-5.5M5 20.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-screens" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="12.5" height="9" rx="1.2"/><rect x="16.5" y="7" width="5" height="8.5" rx="1"/><path d="M6.5 18.5h4.5M8.75 14v4.5"/></g></symbol>
+  <symbol id="p-touch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 11.5V5.2a1.6 1.6 0 0 1 3.2 0v5.8"/><path d="M12.7 10.5V9.4a1.6 1.6 0 0 1 3.2 0v1.8"/><path d="M15.9 11.2a1.6 1.6 0 0 1 3.1.5v3a6 6 0 0 1-6 6h-.7a6 6 0 0 1-4.6-2.2l-2.9-3.4a1.6 1.6 0 0 1 2.4-2.1l2.3 2"/></g></symbol>
+  <symbol id="p-pen" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5 19.5 9 9 19.5H4.5V15z"/><path d="M12.5 7 17 11.5"/></g></symbol>
+  <symbol id="p-rotate" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.8v4.6h-4.6"/></g></symbol>
+  <symbol id="p-volume" viewBox="0 0 24 24"><path d="M4 9.5v5a.5.5 0 0 0 .5.5H8l4.2 3.6a.5.5 0 0 0 .8-.4V5.8a.5.5 0 0 0-.8-.4L8 9H4.5a.5.5 0 0 0-.5.5Z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-usb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v15M9.5 5.5 12 3l2.5 2.5M12 14.5 8 12V9.5M12 12.5l4-2.5V8"/><circle cx="12" cy="19.5" r="1.7"/><circle cx="8" cy="8.3" r="1.2"/><path d="M14.8 6h2.4v2.2h-2.4z"/></g></symbol>
+  <symbol id="d-usb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v15M9.5 5.5 12 3l2.5 2.5M12 14.5 8 12V9.5M12 12.5l4-2.5V8"/><circle cx="12" cy="19.5" r="1.7"/><circle cx="8" cy="8.3" r="1.2"/><path d="M14.8 6h2.4v2.2h-2.4z"/></g></symbol>
+  <symbol id="p-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></g></symbol>
+  <symbol id="p-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="8" height="6" rx="1"/><rect x="13" y="4.5" width="8" height="6" rx="1"/><rect x="3" y="13.5" width="8" height="6" rx="1"/><rect x="13" y="13.5" width="8" height="6" rx="1"/></g></symbol>
+  <symbol id="p-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.8 5.7 3.8 9s-1.2 6.3-3.8 9c-2.6-2.7-3.8-5.7-3.8-9S9.4 3 12 3Z"/></g></symbol>
+  <symbol id="p-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="m3 12 9 4.5 9-4.5M3 16l9 4.5 9-4.5"/></g></symbol>
+  <symbol id="p-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 18.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-tablet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M11 16h2"/></g></symbol>
+  <symbol id="p-computer" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.5h7M12 16.5v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="p-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="d-settings" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="d-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2.5v2.5M20 14v6h-3.5M14 18.5V20"/></g></symbol>
+  <symbol id="d-menu" viewBox="0 0 24 24"><path d="M4.5 7h15M4.5 12h15M4.5 17h15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="d-keyboard" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6.5 10h.01M10 10h.01M14 10h.01M17.5 10h.01M8 14.5h8"/></g></symbol>
+  <symbol id="d-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="d-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></g></symbol>
+  <symbol id="d-note" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8.5L18.5 7.5v13H6z"/><path d="M9 11.5h6M9 15h6M9 18.5h3.5"/></g></symbol>
+  <symbol id="d-eraser" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 19.5 4 15a1.5 1.5 0 0 1 0-2.1l8.9-8.9a1.5 1.5 0 0 1 2.1 0l4.9 4.9a1.5 1.5 0 0 1 0 2.1L12 19.5z"/><path d="m8.5 9.5 6.5 6.5M8.5 19.5H20"/></g></symbol>
+</svg>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Etienne Axiak</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#setup">Setup</a>
+      <a href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#download" onclick="closeMenu()">Download</a>
+  <a href="#setup" onclick="closeMenu()">Setup</a>
+  <a href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener" onclick="closeMenu()">GitHub ↗</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="hero-content">
+    <img src="droppix-logo.svg" alt="droppix logo" class="hero-logo">
+    <div class="tag">Second screen for Linux</div>
+    <h1><span class="grad">droppix</span></h1>
+    <p>Turn an Android tablet into a real second screen for your Linux PC. Not a copy of your screen or a remote view: droppix adds a monitor to your desktop, so windows drag across to it, and your fingers and stylus work on it. Over USB or Wi-Fi, with sound.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#download"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Get droppix</a>
+      <a class="btn btn-secondary" href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener">View Source</a>
+    </div>
+    <div class="hero-pills">
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-layers"/></svg><span>Plasma, GNOME, Sway, Hyprland, COSMIC &amp; X11</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-tablet"/></svg><span>Android 5.0 and newer</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg><span>Any browser</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-usb"/></svg><span>USB or Wi-Fi</span></div>
+      <div class="pill"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg><span>MIT</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive demo -->
+<section class="demo-section" aria-label="Interactive demo">
+  <div class="demo-wrap">
+    <div class="dp-demo" id="dpDemo">
+
+      <!-- droppix's control panel on the PC (a recreation of the Qt app) -->
+      <div class="dg" id="dg" data-theme="dark">
+        <div class="win-bar">
+          <div class="dots"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span></div>
+          <span class="win-title">Droppix — v0.4.0</span>
+        </div>
+        <div class="dg-menubar">
+          <button class="dg-mb" id="dgView"><u>V</u>iew</button>
+          <div class="dg-menu" id="dgViewMenu" hidden><button id="dgLogItem">Debug log <span>F12</span></button></div>
+        </div>
+        <div class="dg-head">
+          <img class="dg-logo" src="droppix-logo.svg" alt="">
+          <span class="dg-name">Droppix</span>
+          <button class="dg-btn" id="dgTheme">Theme</button>
+        </div>
+        <div class="dg-nav" id="dgNav">
+          <button data-p="status" class="on">Status</button>
+          <button data-p="connections">Connections</button>
+          <button data-p="interfaces">Interfaces</button>
+          <button data-p="settings">Settings</button>
+          <button data-p="about">About</button>
+        </div>
+        <div class="dg-body">
+          <div class="dg-page" data-page="status">
+            <div class="dg-card">
+              <div class="dg-hero-top">
+                <span class="dg-dot" id="dgDot"></span><span class="dg-word" id="dgWord">Stopped</span>
+                <span class="dg-cap">Server</span><button class="dg-switch" id="dgSwitch" role="switch" aria-checked="false" aria-label="Server"></button>
+              </div>
+              <div class="dg-sub">—</div>
+            </div>
+            <div class="dg-metrics">
+              <div><b id="dgMon">0</b><span>Active monitors</span></div>
+              <div><b id="dgCli">0</b><span>Clients</span></div>
+              <div><b id="dgIf">2</b><span>Interfaces up</span></div>
+            </div>
+            <div class="dg-prof"><span>Profile:</span><input class="dg-in" aria-label="Profile"><button class="dg-btn" data-prof="Save">Save</button><button class="dg-btn" data-prof="Save As">Save As</button><button class="dg-btn" data-prof="Delete">Delete</button></div>
+            <div class="dg-card dg-scan" id="dgScan"></div>
+          </div>
+
+          <div class="dg-page" data-page="connections" hidden>
+            <div class="dg-card">
+              <h4>Discovered devices</h4>
+              <div class="dg-list" id="dgDevs"></div>
+              <button class="dg-btn wide" id="dgConnect">Connect</button>
+            </div>
+            <div class="dg-card">
+              <h4>Active monitors</h4>
+              <p class="dg-empty" id="dgMonsEmpty">No active monitors — connect a device to extend your desktop</p>
+              <div class="dg-list short" id="dgMons" hidden></div>
+              <button class="dg-btn wide" id="dgStop">Stop selected</button>
+            </div>
+          </div>
+
+          <div class="dg-page" data-page="interfaces" hidden>
+            <div class="dg-card dg-checks">
+              <label><input type="checkbox" class="dg-cb" id="ifLan" checked>Network (Wi-Fi / Ethernet)</label>
+              <label class="ind"><input type="checkbox" class="dg-cb" data-ad="0" checked>192.168.1.20 · enp5s0</label>
+              <label class="ind"><input type="checkbox" class="dg-cb" data-ad="1" checked>100.101.4.17 · tailscale0</label>
+              <label><input type="checkbox" class="dg-cb" id="ifUsb" checked>USB (adb + tether + AOA)</label>
+            </div>
+          </div>
+
+          <div class="dg-page" data-page="settings" hidden>
+            <div class="dg-card">
+              <h4>Stream</h4>
+              <div class="dg-form">
+                <span>Source:</span><div class="dg-opts"><label><input type="radio" class="dg-rad" name="dgSrc" checked>Real monitor (evdi)</label><label><input type="radio" class="dg-rad" name="dgSrc">Test pattern (debug)</label></div>
+                <span>Resolution:</span><input class="dg-in" value="1280×800" aria-label="Resolution">
+                <span>FPS:</span><input class="dg-in" value="60" aria-label="FPS">
+                <span>Bitrate:</span><input class="dg-in" value="8000 kbps" aria-label="Bitrate">
+                <span>Port:</span><input class="dg-in" value="27000" aria-label="Port">
+                <span>Refresh (Hz):</span><input class="dg-in" value="60" aria-label="Refresh rate">
+              </div>
+            </div>
+            <div class="dg-card">
+              <h4>Session &amp; input</h4>
+              <div class="dg-form">
+                <div class="dg-checks">
+                  <label><input type="checkbox" class="dg-cb" id="setTouch" checked>Touch</label>
+                  <label><input type="checkbox" class="dg-cb" id="setAudio" checked>Audio (stream PC audio to the tablet)</label>
+                </div>
+                <span>Orientation:</span><input class="dg-in" value="0" aria-label="Orientation">
+                <div class="dg-checks">
+                  <label><input type="checkbox" class="dg-cb" id="setOverlay">Performance Overlay</label>
+                  <label><input type="checkbox" class="dg-cb" checked>Auto-connect known monitors</label>
+                  <label><input type="checkbox" class="dg-cb" id="setWeb">Offer web / PWA client (HTTPS on session port)</label>
+                </div>
+              </div>
+            </div>
+            <div class="dg-card">
+              <h4>Application</h4>
+              <div class="dg-opts" style="margin-bottom:6px"><span>Theme:</span><label><input type="radio" class="dg-rad" name="dgTheme" value="dark" checked>Dark</label><label><input type="radio" class="dg-rad" name="dgTheme" value="light">Light</label></div>
+              <div class="dg-checks">
+                <label><input type="checkbox" class="dg-cb">Launch Droppix at login</label>
+                <label><input type="checkbox" class="dg-cb">Minimize to tray on close</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="dg-page" data-page="about" hidden>
+            <div class="dg-card dg-about">
+              <h4 style="margin-bottom:2px">droppix</h4>
+              <p>Spacedesk-style extended display for Linux</p>
+              <p class="ver">Version v0.4.0</p>
+              <dl class="dg-kv"><dt>Protocol</dt><dd>HELLO v6</dd><dt>Backend</dt><dd>evdi · KWin/X11</dd><dt>Encoders</dt><dd>NVENC · VAAPI · x264</dd></dl>
+              <div class="dg-btns"><a class="dg-btn" href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener">Project page</a><a class="dg-btn" href="https://github.com/Spinjitsudoom/droppix/issues" target="_blank" rel="noopener">Report an issue</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="dg-log" id="dgLog" hidden>
+          <div class="dg-log-h"><span>Debug log</span><button id="dgLogClose" aria-label="Close the debug log">✕</button></div>
+          <div class="dg-log-b" id="dgLogBody"></div>
+        </div>
+        <div class="dg-pop" id="dgPop" hidden>
+          <div class="dg-pop-box">
+            <h5>Pairing</h5>
+            <p id="dgPopText"></p>
+            <canvas class="dg-qr" id="dgPopQr" width="116" height="116"></canvas>
+            <div class="dg-code" id="dgPopCode"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The desk: the PC's monitor and the tablet -->
+      <div class="dp-deskwrap" id="dpDeskWrap">
+        <div class="dp-toast" id="dpToast" role="status" aria-live="polite"></div>
+        <div class="dp-desk" id="dpDesk">
+          <div class="dp-mon">
+            <div class="dp-mon-frame"><div class="dp-scr" id="scrPC"><div class="dp-vd" id="vdPC"></div></div></div>
+            <div class="dp-mon-neck"></div><div class="dp-mon-foot"></div>
+          </div>
+          <div class="dp-tab">
+            <div class="dp-tab-frame" id="dpTabFrame">
+              <div class="dp-scr dp-tscr" id="scrTab">
+                <div class="dp-vd off" id="vdTab"></div>
+                <!-- droppix's Android app before it connects -->
+                <div class="dp-and" id="dpAnd">
+                  <div class="dp-and-top"><span class="dp-and-title">droppix</span><button class="dp-and-tbtn" id="andSettings">Settings</button></div>
+                  <span class="dp-and-lbl">Discovered PCs</span>
+                  <div class="dp-and-list" id="andPcs"></div>
+                  <button class="dp-and-tbtn" id="andReconnect" style="align-self:flex-start" hidden></button>
+                  <div class="dp-and-row">
+                    <input class="dp-and-in" id="andAddr" placeholder="192.168.1.50:27000" aria-label="PC address" autocomplete="off">
+                    <button class="dp-and-go" id="andConnect">Connect</button>
+                    <button class="dp-and-ib" id="andQr" aria-label="Scan QR code"><svg aria-hidden="true"><use href="#d-qr"/></svg></button>
+                    <button class="dp-and-ib" id="andUsb" aria-label="Connect over USB"><svg aria-hidden="true"><use href="#d-usb"/></svg></button>
+                  </div>
+                  <div class="dp-and-status" id="andStatus"></div>
+                </div>
+                <div class="dp-dlg" id="dpDlg" hidden>
+                  <div class="dp-dlg-box">
+                    <h5 id="dlgTitle">Pair with 192.168.1.20</h5>
+                    <p>Enter the pairing code shown on the PC.</p>
+                    <input class="dp-and-in" id="dlgCode" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="Pairing code">
+                    <div class="dp-dlg-err" id="dlgErr"></div>
+                    <div class="dp-dlg-btns"><button id="dlgCancel">Cancel</button><button id="dlgPair">Pair</button></div>
+                  </div>
+                </div>
+                <button class="dp-fab" id="dpFab" aria-label="droppix menu" hidden><svg aria-hidden="true"><use href="#d-menu"/></svg></button>
+                <div class="dp-fmenu" id="dpFmenu" hidden>
+                  <button data-m="settings"><svg aria-hidden="true"><use href="#d-settings"/></svg>Settings</button>
+                  <button data-m="keyboard"><svg aria-hidden="true"><use href="#d-keyboard"/></svg>Keyboard</button>
+                  <button data-m="audio"><svg aria-hidden="true"><use href="#p-volume"/></svg><span>Audio: on</span></button>
+                  <button data-m="touch"><svg aria-hidden="true"><use href="#p-touch"/></svg><span>Touch: on</span></button>
+                  <button data-m="bye" class="bad"><svg aria-hidden="true"><use href="#d-close"/></svg>Disconnect</button>
+                </div>
+                <div class="dp-sheet" id="dpSheet" hidden>
+                  <div class="dp-sheet-h"><span>Settings</span><button id="sheetDone">Done</button></div>
+                  <small>Applies instantly</small>
+                  <label>Flip horizontally<input type="checkbox" class="dp-tsw" id="tsFlip"></label>
+                  <label>Stats overlay<input type="checkbox" class="dp-tsw" id="tsStats"></label>
+                  <label>Lock rotation<input type="checkbox" class="dp-tsw" id="tsLock"></label>
+                  <small>Brightness</small><input type="range" min="40" max="130" value="100" id="tsBright" aria-label="Brightness">
+                  <small>Contrast</small><input type="range" min="50" max="150" value="100" id="tsContrast" aria-label="Contrast">
+                </div>
+                <div class="dp-kbd" id="dpKbd" hidden></div>
+                <div class="dp-stats" id="dpStats" hidden></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dp-desk-ctl">
+          <button class="dp-ctl" id="dpRotate"><svg class="pi" aria-hidden="true"><use href="#p-rotate"/></svg>Turn the tablet</button>
+          <span class="dp-desk-cap" id="dpCap">Nexus 10 · not connected</span>
+        </div>
+      </div>
+    </div>
+    <p class="demo-hint">A recreation of droppix, with the PC’s control panel on the left. Turn on the <strong>Server</strong> and tap <em>etienne-pc</em> on the tablet (the code is on the PC), or connect the tablet from the PC under <strong>Connections</strong>. Then drag a window across to the tablet, draw in Sketch, and open the tablet’s menu in its top corner.</p>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="tag">Features</div>
+    <h2 class="sh"><span>A monitor that fits in a bag</span></h2>
+    <p class="sub">Everything a second screen does, plus the things only a tablet can: touch, a stylus, and turning it on its side.</p>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-screens"/></svg></div>
+        <h3>A real second screen</h3>
+        <p>droppix adds a monitor to your desktop with the <strong>evdi</strong> driver, the one USB docking stations use. Windows drag across to it, apps go full screen on it, and you arrange it in your desktop's own display settings, like any other monitor.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-touch"/></svg></div>
+        <h3>Touch, and a keyboard</h3>
+        <p>Tap, drag and scroll with your fingers, with multi-touch. A <strong>two-finger tap is a right-click</strong>, and the menu opens where you tapped. The menu in the corner brings up the tablet's keyboard, and a keyboard paired with the tablet types too.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-pen"/></svg></div>
+        <h3>A stylus with pressure</h3>
+        <p>A pen with pressure and an eraser end turns the tablet into a drawing tablet with a screen, for Krita, GIMP, Xournal++ or any app that reads a pen.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-rotate"/></svg></div>
+        <h3>Turns with the tablet</h3>
+        <p>Turn the tablet and the screen turns with it: droppix sends a portrait screen in portrait and a landscape one in landscape. Rotation can be locked from the tablet.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-volume"/></svg></div>
+        <h3>Sound on the tablet</h3>
+        <p>droppix adds a sound output to the PC. Choose it and the PC's sound plays from the tablet's speakers, with the delay kept short so it stays in step with the picture.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-usb"/></svg></div>
+        <h3>USB or Wi-Fi</h3>
+        <p>Over a USB cable (with adb, USB tethering, or Android's accessory mode, which works with USB debugging off), or over Wi-Fi, where the PC shows up on the tablet by itself. A tablet plugged into the PC can be <strong>connected from the PC</strong>, without touching the tablet.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-lock"/></svg></div>
+        <h3>Paired with a code</h3>
+        <p>A new tablet pairs with the <strong>6-digit code</strong> the PC shows, or by scanning its QR code, and the connection is encrypted. Tablets you've paired reconnect without asking again.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-grid"/></svg></div>
+        <h3>Several screens at once</h3>
+        <p>Connect more than one tablet and each one becomes its own screen, at its own resolution. Tablets you've used before can connect by themselves when they're around.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-globe"/></svg></div>
+        <h3>A browser, or another Linux PC</h3>
+        <p>No Android? Turn on the <strong>web client</strong> and open the address the PC shows in a browser, on any tablet, phone or laptop. It pairs with the same code, and Chrome can install it as an app. The <strong>Linux client</strong> turns a second Linux computer into a screen.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-bolt"/></svg></div>
+        <h3>Encoded on the graphics card</h3>
+        <p>The picture is sent as H.264 video, encoded on the graphics card with NVIDIA NVENC or VAAPI (Intel and AMD), or in software when there's no graphics card to use. The tablet decodes it in hardware.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-layers"/></svg></div>
+        <h3>Your desktop, whichever it is</h3>
+        <p><strong>KDE Plasma</strong> 6 and 5.27, <strong>GNOME</strong>, <strong>Sway</strong>, <strong>Hyprland</strong> 0.42 and newer, <strong>COSMIC</strong>, and X11 desktops like Cinnamon, Xfce and MATE. droppix talks to each one in its own way, so the new screen lands beside your main one and touch goes to the right screen.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="pi" aria-hidden="true"><use href="#p-tablet"/></svg></div>
+        <h3>Old tablets welcome</h3>
+        <p>The Android app runs on Android 5.0 and newer, and was built on a Nexus 10 from 2012. The tablet sets its own resolution, frame rate, quality, brightness and contrast, and can show the frame rate and delay on screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Download -->
+<section class="section" id="download" style="background:var(--pg-bg2)">
+  <div class="container">
+    <div class="tag">Download</div>
+    <h2 class="sh">Get <span>droppix</span></h2>
+    <p class="sub">droppix on the PC, and the app on the tablet. A browser needs nothing installed.</p>
+
+    <div class="dl-group">
+      <div class="dl-group-h"><h3>On your Linux PC</h3><p>64-bit Intel or AMD, on a distribution from 2022 or newer (glibc 2.35).</p></div>
+      <div class="dl-grid">
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · AppImage</div>
+            <h3>droppix for Linux</h3>
+          </div>
+          <p>One file that runs on Ubuntu 22.04 and newer, Debian 12, Fedora, Arch, openSUSE and the rest. It needs the <strong>evdi</strong> module from your distribution (see <a href="#setup">Setup</a>).</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/droppix/releases/download/v0.4.0/droppix-host-0.4.0-x86_64.AppImage" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>Make it runnable, then start it:</p>
+            <div class="dl-cb"><pre>chmod +x droppix-host-0.4.0-x86_64.AppImage
+./droppix-host-0.4.0-x86_64.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <p>It uses your desktop's Qt 6 when there is one, and brings its own when there isn't.</p>
+          </div>
+        </div>
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · Flatpak</div>
+            <h3>droppix as a Flatpak</h3>
+          </div>
+          <p>The same app as a Flatpak bundle. The parts that need the real system (the screen driver, touch and sound) still run on the PC itself, so the same requirements apply.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/droppix/releases/download/v0.4.0/droppix-host-0.4.0.flatpak" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <div class="dl-cb"><pre>flatpak install --user droppix-host-0.4.0.flatpak</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-group">
+      <div class="dl-group-h"><h3>On the screen</h3><p>The tablet, phone or computer that becomes the second screen.</p></div>
+      <div class="dl-grid">
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge android">Android 5.0+</div>
+            <h3>droppix for Android</h3>
+          </div>
+          <p>The app for tablets and phones, with hardware video decoding, touch, stylus, keyboard, rotation and sound.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/droppix/releases/download/v0.4.0/droppix-0.4.0.apk" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download APK</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ Install guide</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <p>1. Open <code>droppix-0.4.0.apk</code> on the tablet and allow installing from this source.</p>
+            <p>2. For USB with adb, also turn on <strong>USB debugging</strong> in the developer options. Wi-Fi and accessory mode don't need it.</p>
+          </div>
+        </div>
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge">Linux · AppImage</div>
+            <h3>droppix client for Linux</h3>
+          </div>
+          <p>Turns a second Linux computer, like an old laptop, into a screen for the first. It only shows the screen, so it needs nothing special on that computer.</p>
+          <div class="dl-card-actions">
+            <a class="btn btn-primary btn-sm" href="https://github.com/Spinjitsudoom/droppix/releases/download/v0.4.0/droppix-client-0.4.0-x86_64.AppImage" target="_blank" rel="noopener"><svg class="pi" aria-hidden="true"><use href="#p-arrow"/></svg>Download</a>
+            <button class="dl-toggle" onclick="toggleInstall(this)">▼ More</button>
+          </div>
+          <div class="dl-install" style="display:none">
+            <div class="dl-cb"><pre>chmod +x droppix-client-0.4.0-x86_64.AppImage</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+            <p>Also as a <a href="https://github.com/Spinjitsudoom/droppix/releases/download/v0.4.0/droppix-client-0.4.0.flatpak" target="_blank" rel="noopener">Flatpak</a>.</p>
+          </div>
+        </div>
+        <div class="dl-card">
+          <div>
+            <div class="dl-badge web">Any browser</div>
+            <h3>Web client</h3>
+          </div>
+          <p>Nothing to install. On the PC, turn on <strong>Settings → Offer web / PWA client</strong>, then open the address the Status page shows in a browser on the other device and enter the pairing code.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dl-source">
+      <div class="dl-source-hdr" onclick="toggleSource(this)"><span>Build from source</span><span class="dl-src-arrow">▼</span></div>
+      <div class="dl-source-body" style="display:none">
+        <p>The PC app needs Qt 6, OpenSSL, FFmpeg with x264, libevdi, libusb, CMake and a C++17 compiler:</p>
+        <div class="dl-cb"><pre>git clone https://github.com/Spinjitsudoom/droppix.git && cd droppix
+cmake -S host -B build && cmake --build build -j
+ctest --test-dir build --output-on-failure</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+        <p>The Android app needs the Android SDK and JDK 17:</p>
+        <div class="dl-cb"><pre>cd android && ./gradlew assembleDebug</pre><button class="dl-cb-copy" onclick="dlCopy(this)">Copy</button></div>
+        <p>The web client is built with <code>npm ci && npm run build</code> in <code>web/</code>. The README has the Linux client and the AppImage and Flatpak builds.</p>
+      </div>
+    </div>
+    <p style="font-size:.85rem;color:var(--pg-fg3);margin-top:1.5rem">All builds are v0.4.0. Source code available on <a href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener">GitHub</a>.</p>
+  </div>
+</section>
+
+<!-- How it Works -->
+<section class="section" id="setup">
+  <div class="container">
+    <div class="tag">How it Works</div>
+    <h2 class="sh"><span>From a tablet in a drawer to a second screen</span></h2>
+    <p class="sub">A few things on the PC once, then connecting takes a tap.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Install evdi on the PC</h3>
+          <p>droppix makes its screen with the <strong>evdi</strong> kernel module, which has to come from your distribution: it's <code>evdi-dkms</code> on Ubuntu and Debian (<code>sudo apt install evdi-dkms</code>) and in the AUR on Arch. droppix loads it when it's needed. For USB with adb, install <code>adb</code> too.</p>
+          <div class="note">droppix also uses polkit, PipeWire and Avahi, which most desktops already have.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Start droppix and turn on the Server</h3>
+          <p>Open droppix and switch on <strong>Server</strong> on the Status page. It asks for your password, because making a screen and touch devices needs root. The switch stays on the next time you open droppix.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Connect the tablet</h3>
+          <p><strong>Over Wi-Fi:</strong> open droppix on the tablet, tap your PC under <strong>Discovered PCs</strong>, and enter the code the PC shows, or scan its QR code. <strong>Over USB:</strong> plug the tablet in and pick it under <strong>Connections</strong> on the PC, or tap the USB button on the tablet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n"></div>
+        <div class="step-body">
+          <h3>Use it</h3>
+          <p>The tablet becomes a screen beside your main one. Move it in your desktop's display settings like any monitor, and choose the sound output called <code>droppix-audio</code> to hear the PC through the tablet.</p>
+          <div class="note">On Sway, start Sway with <code>WLR_EVDI_RENDER_DEVICE=/dev/dri/renderD128</code> (your graphics card's render node, from <code>ls /dev/dri</code>), so it can draw the new screen. Plasma, GNOME, Hyprland, COSMIC and X11 need nothing extra.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech stack -->
+<section class="section" style="background:var(--pg-bg2)">
+  <div class="container">
+    <h2 class="sh"><span>Tech Stack</span></h2>
+    <p class="sub">A C++ engine on the PC, and three ways to show what it sends.</p>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-layer">PC</div><div class="stack-val">C++17 · Qt 6 · evdi · uinput</div></div>
+      <div class="stack-card"><div class="stack-layer">Video</div><div class="stack-val">H.264 · FFmpeg · NVENC · VAAPI · x264</div></div>
+      <div class="stack-card"><div class="stack-layer">Android</div><div class="stack-val">Kotlin · MediaCodec · OpenGL ES</div></div>
+      <div class="stack-card"><div class="stack-layer">Web client</div><div class="stack-val">TypeScript · WebCodecs · Media Source · AudioWorklet</div></div>
+      <div class="stack-card"><div class="stack-layer">Network</div><div class="stack-val">TLS · WebSockets · mDNS (Avahi) · adb · USB accessory</div></div>
+      <div class="stack-card"><div class="stack-layer">Desktops</div><div class="stack-val">KWin · Mutter · Sway · Hyprland · COSMIC · X11</div></div>
+      <div class="stack-card"><div class="stack-layer">Audio</div><div class="stack-val">PipeWire</div></div>
+      <div class="stack-card"><div class="stack-layer">Packaging</div><div class="stack-val">AppImage · Flatpak · Gradle</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Built by <a href="index.html">Etienne Axiak</a> &mdash; MIT License &mdash; <a href="https://github.com/Spinjitsudoom/droppix" target="_blank" rel="noopener">GitHub</a></p>
+    <p style="margin-top:.4rem">&copy; 2026 Etienne Axiak</p>
+  </div>
+</footer>
+<script>
+// ── Mobile menu ───────────────────────────────────────────────────────────────
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ── Download helpers ──────────────────────────────────────────────────────────
+function toggleInstall(btn) {
+  const box = btn.closest('.dl-card').querySelector('.dl-install');
+  const show = box.style.display === 'none' || box.style.display === '';
+  const label = btn.textContent.replace(/^[▼▲]\s*/, '');
+  box.style.display = show ? 'flex' : 'none';
+  btn.classList.toggle('open', show);
+  btn.textContent = (show ? '▲ ' : '▼ ') + label;
+}
+function toggleSource(hdr) {
+  const body = hdr.nextElementSibling;
+  const show = body.style.display === 'none' || body.style.display === '';
+  body.style.display = show ? 'flex' : 'none';
+  hdr.querySelector('.dl-src-arrow').textContent = show ? '▲' : '▼';
+}
+function dlCopy(btn) {
+  const text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+
+// ── droppix demo ─────────────────────────────────────────────────────────────
+// The PC's monitor and the tablet show one desktop, in desktop pixels: the monitor is
+// 1920×1080 at 0,0 and the tablet (1280×800, or 800×1280 turned) sits to its right, or
+// below it on narrow screens. Each window has a copy on each screen's layer.
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  if (!$('#dpDemo')) return;
+  const VERSION = '0.4.0';
+  const PC_W = 1920, PC_H = 1080, PANEL = 60, PORT = 27000;
+  const ADAPTERS = [{ ip: '192.168.1.20', name: 'enp5s0' }, { ip: '100.101.4.17', name: 'tailscale0' }];
+  const CODE = String(100000 + Math.floor(Math.random() * 900000));
+  const gui = $('#dg'), wrap = $('#dpDeskWrap'), desk = $('#dpDesk');
+  const scrPC = $('#scrPC'), scrTab = $('#scrTab'), vdPC = $('#vdPC'), vdTab = $('#vdTab'), frame = $('#dpTabFrame');
+  const ICO = n => `<svg aria-hidden="true"><use href="#${n}"/></svg>`;
+
+  const st = {
+    server: false, lan: true, usb: true, ads: [true, true], web: false, overlay: false,
+    touchHost: true, touchTab: true, audioTab: true, flip: false, lockRot: false, bright: 100, contrast: 100,
+    connected: false, via: null, approved: false, portrait: false, below: false, s: .2,
+    selDev: false, selMon: false, pairing: false, typed: '', turning: false,
+  };
+
+  // ── Toast (demo hints, outside the devices) ──
+  let toastT;
+  function toast(msg, ms = 3600) {
+    const t = $('#dpToast');
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), ms);
+  }
+
+  // ── Debug log (F12 dock) ──
+  const logLines = [];
+  function log(src, msg, cls = '') {
+    const d = new Date(), p = n => String(n).padStart(2, '0');
+    logLines.push({ t: `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`, src, msg, cls });
+    if (logLines.length > 200) logLines.shift();
+    if (!$('#dgLog').hidden) drawLog();
+  }
+  function drawLog() {
+    const b = $('#dgLogBody');
+    b.innerHTML = logLines.map(l => `<div class="${l.cls}">${l.t}  [${l.src}] ${l.msg.replace(/</g, '&lt;')}</div>`).join('');
+    b.scrollTop = b.scrollHeight;
+  }
+  log('gui', `droppix v${VERSION}`);
+  log('gui', 'desktop: KDE Plasma 6 (KWin, Wayland)');
+  log('gui', 'encoders: VAAPI h264 ok · x264 ok · NVENC not found');
+
+  // ── A QR-looking pattern (finder squares and random modules; it doesn't scan) ──
+  function drawQr(cv) {
+    const n = 29, m = cv.width / n, ctx = cv.getContext('2d');
+    let seed = Number(CODE);
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height); ctx.fillStyle = '#111';
+    const finder = (x, y) => { ctx.fillRect(x * m, y * m, 7 * m, 7 * m); ctx.fillStyle = '#fff'; ctx.fillRect((x + 1) * m, (y + 1) * m, 5 * m, 5 * m); ctx.fillStyle = '#111'; ctx.fillRect((x + 2) * m, (y + 2) * m, 3 * m, 3 * m); };
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const inF = (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+      if (!inF && rnd() > .52) ctx.fillRect(x * m, y * m, m, m);
+    }
+    finder(0, 0); finder(n - 7, 0); finder(0, n - 7);
+  }
+
+  // ════════ The control panel ════════
+  const hostIp = () => { const i = st.ads.findIndex(Boolean); return ADAPTERS[i < 0 ? 0 : i].ip; };
+  const ifacesUp = () => (st.lan ? 1 : 0) + (st.usb ? 1 : 0);
+
+  function renderGui() {
+    const n = st.connected ? 1 : 0;
+    const [dot, word] = n ? ['var(--good)', '1 monitor'] : st.server ? ['var(--warn)', 'Listening…'] : ['var(--idle)', 'Stopped'];
+    $('#dgDot').style.background = dot; $('#dgWord').textContent = word;
+    $('#dgSwitch').setAttribute('aria-checked', st.server);
+    $('#dgMon').textContent = n; $('#dgCli').textContent = n; $('#dgIf').textContent = ifacesUp();
+
+    const scan = $('#dgScan');
+    if (st.server && st.lan) {
+      const ip = hostIp();
+      scan.innerHTML = `<canvas class="dg-qr" width="116" height="116"></canvas><p>Scan to pair this PC (${ip}:${PORT}) — or enter code ${CODE}</p>` +
+        (st.web ? `<div class="dg-url"><code>https://${ip}:${PORT}/</code><button class="dg-btn" id="dgCopyUrl">Copy web URL</button></div>` : '');
+      drawQr($('canvas', scan));
+      const cu = $('#dgCopyUrl');
+      if (cu) cu.onclick = () => { navigator.clipboard?.writeText(`https://${ip}:${PORT}/`).catch(() => {}); cu.textContent = 'Copied'; setTimeout(() => cu.textContent = 'Copy web URL', 1500); toast('In the real app, a browser on the tablet opens this address and pairs with the same code.'); };
+    } else scan.innerHTML = '';
+
+    const devs = $('#dgDevs');
+    devs.innerHTML = st.usb ? `<button class="${st.selDev ? 'sel' : ''}" data-dev>Nexus 10 — USB (adb)</button>` : '<p class="dg-empty">Searching for tablets…</p>';
+    const b = $('[data-dev]', devs); if (b) b.onclick = () => { st.selDev = !st.selDev; renderGui(); };
+
+    const mons = $('#dgMons');
+    $('#dgMonsEmpty').hidden = !!n; mons.hidden = !n;
+    mons.innerHTML = n ? `<button class="${st.selMon ? 'sel' : ''}" data-mon>Nexus 10  ·  ${st.via === 'usb' ? 'USB (adb)' : 'Wi-Fi'}  ·  :${st.via === 'usb' ? PORT + 1 : PORT}</button>` : '';
+    const mb = $('[data-mon]', mons); if (mb) mb.onclick = () => { st.selMon = !st.selMon; renderGui(); };
+
+    $$('[data-ad]').forEach(c => { c.checked = st.ads[+c.dataset.ad]; c.disabled = !st.lan; });
+    $('#ifLan').checked = st.lan; $('#ifUsb').checked = st.usb;
+  }
+
+  $('#dgNav').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $$('#dgNav button').forEach(x => x.classList.toggle('on', x === b));
+    $$('.dg-page').forEach(p => p.hidden = p.dataset.page !== b.dataset.p);
+    $('.dg-body').scrollTop = 0;
+  });
+  function setTheme(t) {
+    gui.dataset.theme = t;
+    $$('input[name=dgTheme]').forEach(r => r.checked = r.value === t);
+  }
+  $('#dgTheme').onclick = () => setTheme(gui.dataset.theme === 'dark' ? 'light' : 'dark');
+  $$('input[name=dgTheme]').forEach(r => r.onchange = () => setTheme(r.value));
+  $('#dgView').onclick = e => { e.stopPropagation(); const m = $('#dgViewMenu'); m.hidden = !m.hidden; $('#dgView').classList.toggle('on', !m.hidden); };
+  document.addEventListener('click', () => { $('#dgViewMenu').hidden = true; $('#dgView').classList.remove('on'); });
+  const toggleLog = () => { const l = $('#dgLog'); l.hidden = !l.hidden; if (!l.hidden) drawLog(); };
+  $('#dgLogItem').onclick = toggleLog; $('#dgLogClose').onclick = toggleLog;
+  $$('[data-prof]').forEach(b => b.onclick = () => toast(b.dataset.prof === 'Delete' ? 'Deletes the profile named in the box.' : 'Profiles keep a set of settings under a name, to switch between them.'));
+
+  $('#dgSwitch').onclick = () => {
+    st.server = !st.server;
+    if (st.server) {
+      log('gui', `Server ON: listening on 0.0.0.0:${PORT} (TLS)`, 'g');
+      if (st.lan) log('gui', `mDNS: advertising this PC as etienne-pc on ${ADAPTERS.filter((a, i) => st.ads[i]).map(a => a.name).join(', ') || '(no adapters)'}`);
+      if (st.web) log('stream:' + PORT, 'web client: serving HTTPS and WSS on the session port');
+    } else {
+      log('gui', 'Server OFF');
+      if (st.connected && st.via === 'wifi') disconnect('server');
+      cancelPairing();
+    }
+    renderGui(); renderAnd();
+  };
+  $('#dgConnect').onclick = () => {
+    if (!st.usb) return;
+    if (!st.selDev) { toast('Select the Nexus 10 in the list first.'); return; }
+    if (st.connected) { toast('That tablet is already a monitor.'); return; }
+    log('gui', `Nexus 10: adb reverse tcp:${PORT + 1} tcp:${PORT + 1}; starting the client on the tablet`);
+    andStatus(`Connecting over USB (127.0.0.1:${PORT + 1})...`);
+    setTimeout(() => connect('usb'), 900);
+  };
+  $('#dgStop').onclick = () => { if (st.connected && st.selMon) disconnect('pc'); };
+  $('#ifLan').onchange = e => { st.lan = e.target.checked; log('gui', `Network ${st.lan ? 'on' : 'off'}`); renderGui(); renderAnd(); };
+  $('#ifUsb').onchange = e => { st.usb = e.target.checked; if (!st.usb) st.selDev = false; log('gui', `USB ${st.usb ? 'on' : 'off'}`); renderGui(); };
+  $$('[data-ad]').forEach(c => c.onchange = () => { st.ads[+c.dataset.ad] = c.checked; renderGui(); renderAnd(); });
+  $('#setTouch').onchange = e => { st.touchHost = e.target.checked; };
+  $('#setAudio').onchange = () => {};
+  $('#setOverlay').onchange = e => { st.overlay = e.target.checked; $('#tsStats').checked = st.overlay; renderTab(); };
+  $('#setWeb').onchange = e => { st.web = e.target.checked; renderGui(); };
+
+  // ════════ The desktop ════════
+  const tabDims = () => st.portrait ? { w: 800, h: 1280 } : { w: 1280, h: 800 };
+  const tabOrigin = () => { const t = tabDims(); return st.below ? { x: Math.round((PC_W - t.w) / 2), y: PC_H } : { x: PC_W, y: 0 }; };
+  function screens(all) {
+    const a = [{ x: 0, y: 0, w: PC_W, h: PC_H - PANEL, pc: true }];
+    if (st.connected || all) { const o = tabOrigin(), t = tabDims(); a.push({ x: o.x, y: o.y, w: t.w, h: t.h }); }
+    return a;
+  }
+  const onTabletRegion = w => { const o = tabOrigin(), t = tabDims(), cx = w.x + w.w / 2, cy = w.y + w.h / 2; return cx >= o.x && cx < o.x + t.w && cy >= o.y && cy < o.y + t.h; };
+
+  // The panel along the bottom of the PC's screen
+  vdPC.insertAdjacentHTML('beforeend', `<div class="dp-panel"><span class="ic">${ICO('d-grid')}</span><span class="ic on" data-task="notes">${ICO('d-note')}</span><span class="ic on" data-task="sketch">${ICO('p-pen')}</span><span class="ic on"><img src="droppix-logo.svg" alt=""></span><span class="dp-clock" id="dpClock"></span></div>`);
+  const clock = () => { const d = new Date(); $('#dpClock').textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+  clock(); setInterval(clock, 20000);
+
+  const NOTES = '<b>Things to try</b>\n• Drag this window onto the tablet\n• Double-click a title bar to fill\n   the screen it’s on\n• Draw in Sketch on the tablet\n• Type here with the tablet’s keyboard\n   (menu in its top corner)\n\n';
+  const COLORS = ['#1f2937', '#0d9488', '#e11d48', '#f59e0b', '#6366f1'];
+  const wins = [
+    { id: 'notes', title: 'Notes — ideas.txt', icon: 'd-note', x: 120, y: 110, w: 760, h: 600, z: 1 },
+    { id: 'sketch', title: 'Sketch', icon: 'p-pen', x: 960, y: 190, w: 880, h: 640, z: 2 },
+  ];
+  let topZ = 2;
+  const sk = { color: COLORS[0], erase: false, drawn: false, cvs: [] };
+
+  function winHtml(w) {
+    const body = w.id === 'notes'
+      ? `<div class="dp-notes">${NOTES}<span class="dp-typed"></span><span class="dp-caret"></span></div>`
+      : `<div class="dp-tools">${COLORS.map(c => `<button class="dp-sw${c === sk.color ? ' on' : ''}" data-c="${c}" style="background:${c}" aria-label="Colour"></button>`).join('')}<button class="dp-tool" data-erase>${ICO('d-eraser')}Eraser</button><span class="sep"></span><button class="dp-tool" data-clear>Clear</button></div><div class="dp-cv"><canvas width="1920" height="1100"></canvas><div class="dp-cv-hint">Draw here, with a finger, a mouse or a stylus</div></div>`;
+    return `<div class="dp-w" data-w="${w.id}"><div class="dp-wbar">${ICO(w.icon)}<span class="dp-wtitle">${w.title}</span><span class="dp-wbtns"><i></i><i></i><i></i></span></div>${body}</div>`;
+  }
+  for (const w of wins) {
+    for (const [layer, onTab] of [[vdPC, false], [vdTab, true]]) {
+      layer.insertAdjacentHTML('beforeend', winHtml(w));
+      const el = layer.lastElementChild;
+      (onTab ? (w.elTab = el) : (w.elPC = el));
+      const bar = $('.dp-wbar', el);
+      bar.addEventListener('pointerdown', e => startDrag(e, w, onTab));
+      bar.addEventListener('dblclick', () => { if (onTab && !tabInput()) return; toggleMax(w); });
+      el.addEventListener('pointerdown', () => { if (!onTab || tabInput(true)) front(w); });
+      if (w.id === 'sketch') setupSketch(el, onTab);
+    }
+  }
+
+  function front(w) { if (w.z !== topZ) { w.z = ++topZ; renderWins(); } }
+  function renderWins() {
+    const o = tabOrigin();
+    for (const w of wins) {
+      for (const [el, ox, oy] of [[w.elPC, 0, 0], [w.elTab, o.x, o.y]]) {
+        el.style.cssText = `left:${w.x - ox}px;top:${w.y - oy}px;width:${w.w}px;height:${w.h}px;z-index:${w.z}`;
+        el.classList.toggle('front', w.z === topZ);
+      }
+    }
+  }
+  function looseClamp(w) {
+    const sc = screens(); const maxX = Math.max(...sc.map(s => s.x + s.w)), maxY = Math.max(...sc.map(s => s.y + s.h + (s.pc ? PANEL : 0)));
+    w.x = Math.min(Math.max(w.x, -w.w + 160), maxX - 160);
+    w.y = Math.min(Math.max(w.y, 0), maxY - 64);
+  }
+  // Keep the title bar on a screen: move it onto the nearest one when it's off all of them.
+  function settle(w) {
+    const px = w.x + w.w / 2, py = w.y + 32, sc = screens();
+    if (sc.some(s => px >= s.x && px < s.x + s.w && py >= s.y && py < s.y + s.h)) return;
+    let best = sc[0], bd = Infinity;
+    for (const s of sc) { const dx = Math.max(s.x - px, 0, px - s.x - s.w), dy = Math.max(s.y - py, 0, py - s.y - s.h), d = dx * dx + dy * dy; if (d < bd) { bd = d; best = s; } }
+    w.x += Math.min(Math.max(px, best.x + 60), best.x + best.w - 60) - px;
+    w.y += Math.min(Math.max(py, best.y + 32), best.y + best.h - 60) - py;
+  }
+  function toggleMax(w) {
+    if (w.max) { Object.assign(w, w.max); w.max = null; }
+    else {
+      const px = w.x + w.w / 2, py = w.y + 32;
+      const s = screens().find(s => px >= s.x && px < s.x + s.w && py >= s.y && py < s.y + s.h) || screens()[0];
+      w.max = { x: w.x, y: w.y, w: w.w, h: w.h };
+      Object.assign(w, { x: s.x, y: s.y, w: s.w, h: s.h });
+    }
+    front(w); renderWins();
+  }
+  function startDrag(e, w, onTab) {
+    if (e.button || (onTab && !tabInput(true))) return;
+    e.preventDefault(); front(w);
+    if (w.max) { Object.assign(w, { w: w.max.w, h: w.max.h }); w.max = null; }
+    const bar = e.currentTarget, sx = e.clientX, sy = e.clientY, x0 = w.x, y0 = w.y, fx = onTab && st.flip ? -1 : 1;
+    try { bar.setPointerCapture(e.pointerId); } catch {}
+    const mv = ev => { w.x = x0 + fx * (ev.clientX - sx) / st.s; w.y = y0 + (ev.clientY - sy) / st.s; looseClamp(w); renderWins(); };
+    const up = () => {
+      bar.removeEventListener('pointermove', mv); bar.removeEventListener('pointerup', up); bar.removeEventListener('pointercancel', up);
+      settle(w); renderWins();
+      if (st.connected && onTabletRegion(w) && !st.movedHint) { st.movedHint = true; toast('That window is on the tablet now: it’s part of the same desktop.'); }
+    };
+    bar.addEventListener('pointermove', mv); bar.addEventListener('pointerup', up); bar.addEventListener('pointercancel', up);
+  }
+
+  // Sketch: strokes are drawn on both copies of its canvas.
+  function setupSketch(el, onTab) {
+    const cv = $('canvas', el), ctx = cv.getContext('2d');
+    ctx.fillStyle = '#f7f5f0'; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    sk.cvs.push(cv);
+    const pos = e => { const r = cv.getBoundingClientRect(); let fx = (e.clientX - r.left) / r.width; if (onTab && st.flip) fx = 1 - fx; return { x: fx * cv.width, y: (e.clientY - r.top) / r.height * cv.height }; };
+    cv.addEventListener('pointerdown', e => {
+      if (e.button || (onTab && !tabInput(true))) return;
+      e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch {}
+      if (!sk.drawn) { sk.drawn = true; $$('.dp-cv-hint').forEach(h => h.remove()); }
+      let last = pos(e);
+      const mv = ev => {
+        const p = pos(ev), pen = ev.pointerType === 'pen';
+        const lw = sk.erase ? 48 : 9 * (pen ? .35 + 1.3 * (ev.pressure || .5) : 1);
+        for (const c of sk.cvs) { const x = c.getContext('2d'); x.strokeStyle = sk.erase ? '#f7f5f0' : sk.color; x.lineWidth = lw; x.beginPath(); x.moveTo(last.x, last.y); x.lineTo(p.x, p.y); x.stroke(); }
+        last = p;
+      };
+      const up = () => { cv.removeEventListener('pointermove', mv); cv.removeEventListener('pointerup', up); cv.removeEventListener('pointercancel', up); };
+      cv.addEventListener('pointermove', mv); cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    });
+    $('.dp-tools', el).addEventListener('click', e => {
+      if (onTab && !tabInput(true)) return;
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.c) { sk.color = b.dataset.c; sk.erase = false; }
+      else if ('erase' in b.dataset) sk.erase = !sk.erase;
+      else if ('clear' in b.dataset) for (const c of sk.cvs) { const x = c.getContext('2d'); x.fillStyle = '#f7f5f0'; x.fillRect(0, 0, c.width, c.height); }
+      $$('.dp-sw').forEach(s => s.classList.toggle('on', !sk.erase && s.dataset.c === sk.color));
+      $$('[data-erase]').forEach(s => s.classList.toggle('on', sk.erase));
+    });
+  }
+
+  function typeChar(ch) {
+    if (ch === 'del') st.typed = st.typed.slice(0, -1);
+    else st.typed = (st.typed + ch).slice(-90);
+    $$('.dp-typed').forEach(t => t.textContent = st.typed);
+    front(wins[0]);
+  }
+
+  // ── Sizing: one scale for both screens, so a window keeps its size as it crosses ──
+  function layoutDesk() {
+    // The tablet sits in front of the monitor, below it on the desktop. Side by side with the
+    // control panel, the desk is as tall as the panel; stacked, it fills the width.
+    const W = wrap.clientWidth, side = getComputedStyle($('#dpDemo')).gridTemplateColumns.split(' ').length > 1;
+    st.below = true;
+    desk.classList.add('below');
+    let s = (W - 16) / PC_W;
+    if (side) s = Math.min(s, (gui.offsetHeight - 128) / (PC_H + 800));
+    s = Math.min(s, .34);
+    st.s = s;
+    const t = tabDims(), o = tabOrigin();
+    scrPC.style.width = PC_W * s + 'px'; scrPC.style.height = PC_H * s + 'px';
+    Object.assign(vdPC.style, { width: PC_W + 'px', height: PC_H + 'px', transform: `scale(${s})` });
+    scrTab.style.width = t.w * s + 'px'; scrTab.style.height = t.h * s + 'px';
+    Object.assign(vdTab.style, { width: t.w + 'px', height: t.h + 'px', backgroundPosition: `${-o.x}px ${-o.y}px`,
+      transform: st.flip ? `translateX(${t.w * s}px) scale(${-s},${s})` : `scale(${s})`,
+      filter: `brightness(${st.bright / 100}) contrast(${st.contrast / 100})` });
+    renderWins();
+  }
+  new ResizeObserver(layoutDesk).observe(wrap);
+
+  // ════════ The tablet ════════
+  // Input on the tablet only counts when droppix lets touch through.
+  function tabInput(quiet) {
+    if (!st.connected) return false;
+    if (!st.touchHost) { if (quiet) toast('Touch is off in Settings on the PC.'); return false; }
+    if (!st.touchTab) { if (quiet) toast('Touch is off in the tablet’s menu.'); return false; }
+    return true;
+  }
+  function andStatus(t) { $('#andStatus').textContent = t; }
+  function renderAnd() {
+    const list = $('#andPcs');
+    if (st.server && st.lan) {
+      const ip = hostIp();
+      list.innerHTML = `<button data-pc>etienne-pc<small>${ip}:${PORT}</small></button>`;
+      $('[data-pc]', list).onclick = () => tryWifi(ip);
+    } else list.innerHTML = '<div class="none">Searching…</div>';
+    const rc = $('#andReconnect');
+    rc.hidden = !st.approved; rc.textContent = `Reconnect to ${hostIp()}:${PORT}`;
+  }
+  function renderTab() {
+    const c = st.connected;
+    $('#dpAnd').hidden = c; vdTab.classList.toggle('off', !c);
+    $('#dpFab').hidden = !c;
+    if (!c) { $('#dpFmenu').hidden = true; $('#dpKbd').hidden = true; }
+    $('#dpStats').hidden = !(c && st.overlay);
+    const t = tabDims();
+    $('#dpCap').textContent = c ? `Nexus 10 · ${st.via === 'usb' ? 'USB' : 'Wi-Fi'} · ${t.w}×${t.h}` : 'Nexus 10 · not connected';
+    $('[data-m=audio] span').textContent = `Audio: ${st.audioTab ? 'on' : 'off'}`;
+    $('[data-m=touch] span').textContent = `Touch: ${st.touchTab ? 'on' : 'off'}`;
+    stats();
+  }
+  function stats() {
+    if ($('#dpStats').hidden) return;
+    $('#dpStats').textContent = `RTT ${9 + Math.round(Math.random() * 6)} ms  |  fps ${58 + Math.round(Math.random() * 2)}  |  decode ${4 + Math.round(Math.random() * 3)} ms`;
+  }
+  setInterval(stats, 1000);
+
+  function tryWifi(ip) {
+    if (!(st.server && st.lan)) { andStatus(`Connecting to ${ip}:${PORT}...`); setTimeout(() => { andStatus(''); toast('Nothing answers there yet: turn on the Server on the PC first.'); }, 900); return; }
+    if (st.approved) { andStatus(`Reconnecting to ${ip}:${PORT}...`); setTimeout(() => connect('wifi'), 700); return; }
+    andStatus(`Connecting to etienne-pc (${ip}:${PORT})...`);
+    st.pairing = true;
+    $('#dlgTitle').textContent = `Pair with ${ip}`;
+    $('#dlgCode').value = ''; $('#dlgErr').textContent = '';
+    $('#dpDlg').hidden = false;
+    $('#dgPopText').textContent = 'A device (192.168.1.31) is connecting.\nScan the QR code on the tablet, or enter this pairing code:';
+    $('#dgPopCode').textContent = CODE; drawQr($('#dgPopQr'));
+    $('#dgPop').hidden = false;
+    log('stream:' + PORT, 'TLS: 192.168.1.31 asks to pair; waiting for the code', 'w');
+  }
+  function cancelPairing() { st.pairing = false; $('#dpDlg').hidden = true; $('#dgPop').hidden = true; }
+  $('#dlgCancel').onclick = () => { cancelPairing(); andStatus(''); };
+  $('#dlgCode').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); });
+  $('#dlgCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#dlgPair').click(); });
+  $('#dlgPair').onclick = () => {
+    if ($('#dlgCode').value !== CODE) { $('#dlgErr').textContent = 'That code doesn’t match. Check the PC.'; log('stream:' + PORT, 'pairing: wrong code', 'w'); return; }
+    cancelPairing(); st.approved = true;
+    log('stream:' + PORT, 'pairing: code accepted; 192.168.1.31 is now trusted', 'g');
+    connect('wifi');
+  };
+  $('#andPcs').addEventListener('click', () => {});
+  $('#andReconnect').onclick = () => tryWifi(hostIp());
+  $('#andConnect').onclick = () => {
+    const raw = $('#andAddr').value.trim();
+    if (!raw) { andStatus('Enter an address, e.g. 192.168.1.50:27000'); return; }
+    const host = raw.split(':')[0];
+    if (ADAPTERS.some(a => a.ip === host) && st.server && st.lan) return tryWifi(host);
+    andStatus(`Connecting to ${raw}...`);
+    setTimeout(() => { andStatus(''); toast(`In the demo the PC is at ${hostIp()}:${PORT}, with its Server on.`); }, 1100);
+  };
+  $('#andAddr').addEventListener('keydown', e => { if (e.key === 'Enter') $('#andConnect').click(); });
+  $('#andQr').onclick = () => {
+    if (!(st.server && st.lan)) { toast('Turn on the Server on the PC first, so there’s a code to scan.'); return; }
+    andStatus(`Pairing with ${hostIp()}:${PORT} via QR...`);
+    setTimeout(() => { st.approved = true; log('stream:' + PORT, 'pairing: QR code accepted', 'g'); connect('wifi'); }, 1000);
+  };
+  $('#andUsb').onclick = () => {
+    andStatus(`Connecting over USB (127.0.0.1:${PORT})...`);
+    setTimeout(() => {
+      if (st.server && st.usb) { log('gui', `Nexus 10: adb reverse tcp:${PORT} tcp:${PORT}`); connect('usb'); }
+      else { andStatus(''); toast('Turn on the Server on the PC first, or press Connect under Connections on the PC.'); }
+    }, 900);
+  };
+  $('#andSettings').onclick = () => openSheet();
+
+  function connect(via) {
+    if (st.connected) return;
+    st.connected = true; st.via = via; st.selDev = false;
+    const t = tabDims(), port = via === 'usb' ? PORT + 1 : PORT;
+    log(`stream:${port}`, `client HELLO v6: Nexus 10, ${t.w}x${t.h}, ${st.portrait ? 'portrait' : 'landscape'}`);
+    log(`stream:${port}`, `evdi: added a ${t.w}x${t.h}@60 screen`);
+    log(`stream:${port}`, 'encoder: auto → VAAPI (h264)');
+    log('gui', 'desktop: placed the new screen ' + (st.below ? 'below' : 'right of') + ' the main one', 'g');
+    andStatus('');
+    renderGui(); renderAnd(); renderTab(); layoutDesk();
+    if (!st.connectedOnce) { st.connectedOnce = true; toast('The tablet is now a second screen: drag a window across to it.', 4500); }
+  }
+  function disconnect(why) {
+    if (!st.connected) return;
+    const port = st.via === 'usb' ? PORT + 1 : PORT;
+    log(`stream:${port}`, why === 'tablet' ? 'client said bye: removing the monitor' : 'stopped: removing the monitor', 'w');
+    for (const w of wins) {
+      if (w.max && onTabletRegion(w)) { Object.assign(w, w.max); w.max = null; }
+      if (onTabletRegion(w) || w.x + w.w / 2 > PC_W || w.y + 32 > PC_H - PANEL) {
+        w.x = Math.max(20, PC_W - w.w - 60); w.y = Math.min(Math.max(40, w.y), PC_H - PANEL - Math.min(w.h, 600) - 20);
+      }
+    }
+    st.connected = false; st.via = null; st.selMon = false;
+    $('#dpSheet').hidden = true;
+    andStatus(why === 'tablet' ? 'Disconnected' : '');
+    renderGui(); renderAnd(); renderTab(); layoutDesk();
+  }
+
+  // Tablet menu, settings and keyboard
+  $('#dpFab').onclick = e => { e.stopPropagation(); const m = $('#dpFmenu'); m.hidden = !m.hidden; };
+  $('#dpFmenu').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('#dpFmenu').hidden = true;
+    const m = b.dataset.m;
+    if (m === 'settings') openSheet();
+    else if (m === 'keyboard') { $('#dpKbd').hidden = !$('#dpKbd').hidden; if (!$('#dpKbd').hidden) toast('Typing goes to the PC: try it in Notes.'); }
+    else if (m === 'audio') { st.audioTab = !st.audioTab; renderTab(); }
+    else if (m === 'touch') { st.touchTab = !st.touchTab; renderTab(); }
+    else if (m === 'bye') disconnect('tablet');
+  });
+  function openSheet() {
+    $('#tsFlip').checked = st.flip; $('#tsStats').checked = st.overlay; $('#tsLock').checked = st.lockRot;
+    $('#tsBright').value = st.bright; $('#tsContrast').value = st.contrast;
+    $('#dpSheet').hidden = false;
+  }
+  $('#sheetDone').onclick = () => { $('#dpSheet').hidden = true; };
+  $('#tsFlip').onchange = e => { st.flip = e.target.checked; layoutDesk(); };
+  $('#tsStats').onchange = e => { st.overlay = e.target.checked; $('#setOverlay').checked = st.overlay; renderTab(); };
+  $('#tsLock').onchange = e => { st.lockRot = e.target.checked; };
+  $('#tsBright').oninput = e => { st.bright = +e.target.value; layoutDesk(); };
+  $('#tsContrast').oninput = e => { st.contrast = +e.target.value; layoutDesk(); };
+  const ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  $('#dpKbd').innerHTML = ROWS.map((r, i) => `<div>${i === 2 ? '<button class="w" data-k="hide">Hide</button>' : ''}${[...r].map(c => `<button data-k="${c}">${c}</button>`).join('')}${i === 2 ? '<button class="w" data-k="del">Del</button>' : ''}</div>`).join('') +
+    '<div><button class="w" data-k=",">,</button><button class="sp" data-k=" " aria-label="Space"></button><button class="w" data-k=".">.</button><button class="w" data-k="\n">Enter</button></div>';
+  $('#dpKbd').addEventListener('pointerdown', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    e.preventDefault();
+    if (!tabInput(true)) return;
+    if (b.dataset.k === 'hide') $('#dpKbd').hidden = true; else typeChar(b.dataset.k);
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('#dpFmenu,#dpFab')) $('#dpFmenu').hidden = true; });
+
+  // Turning the tablet: the frame turns, then droppix re-streams the screen the other way up.
+  $('#dpRotate').onclick = () => {
+    if (st.turning) return;
+    if (st.connected && st.lockRot) { toast('Rotation is locked in the tablet’s settings.'); return; }
+    st.turning = true;
+    frame.classList.add('turning');
+    frame.style.transform = `rotate(${st.portrait ? 90 : -90}deg)`;
+    setTimeout(() => {
+      frame.classList.remove('turning'); frame.style.transform = '';
+      st.portrait = !st.portrait; st.turning = false;
+      if (st.connected) {
+        const t = tabDims();
+        log(`stream:${st.via === 'usb' ? PORT + 1 : PORT}`, `orientation: ${st.portrait ? 'portrait' : 'landscape'}, re-streaming ${t.w}x${t.h}`);
+        for (const w of wins) if (w.max && onTabletRegion(w)) { const o = tabOrigin(); Object.assign(w, { x: o.x, y: o.y, w: t.w, h: t.h }); }
+      }
+      layoutDesk();
+      for (const w of wins) { settle(w); }
+      renderWins(); renderTab();
+    }, 520);
+  };
+
+  renderGui(); renderAnd(); renderTab(); layoutDesk();
+})();
+</script>
+</body>
+</html>

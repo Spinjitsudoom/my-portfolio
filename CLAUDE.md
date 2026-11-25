@@ -20,6 +20,7 @@ The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build st
 
 - Keep the "All builds are vX.Y.Z" line on each project page, since the script finds the version there.
 - Pin download links to the tag (`releases/download/vX.Y.Z/<file>`), never `releases/latest/download/<versioned file>`, which 404s as soon as a newer release ships. ArtiSync's file names carry no version, so its `latest/download` links are fine.
+- A project with no full release yet (GitHub's "latest" skips pre-releases) is skipped, so its page's links aren't checked until the first release.
 - The workflow only changes version numbers. New features still need the page's feature text updated by hand.
 - Before pushing, `git pull` first, because the workflow commits to `main` too.
 
@@ -30,13 +31,13 @@ The site is live at `https://spinjitsudoom.github.io/my-portfolio/`. No build st
 | File | Stylesheet | Background |
 |------|-----------|------------|
 | `index.html` | `style.css` + `main.js` | `#0d1117` |
-| `shelf.html`, `loft.html`, `matchbox.html`, `artisync.html` | inline `<style>` and `<script>` | `#0a0a0f` |
+| `shelf.html`, `loft.html`, `droppix.html`, `matchbox.html`, `artisync.html` | inline `<style>` and `<script>` | `#0a0a0f` |
 
 All pages use the same blue-purple palette (`#5b8dee` → `#7c6ff7`) and the Inter font. The project pages are self-contained by design: they don't load `style.css`, `project.css` or `main.js`. `project.css` is unused and safe to delete. `main.js` (used only by `index.html`) fades in `.fade-in` elements, staggers `.stagger-children`, and sets `.nav-active`.
 
 ### The project pages share one layout
 
-`shelf.html`, `loft.html`, `matchbox.html` and `artisync.html` have the same structure, class names and page CSS (the `--pg-*` tokens). When you change one, change the others to match. A new project page should start as a copy of one of them.
+`shelf.html`, `loft.html`, `droppix.html`, `matchbox.html` and `artisync.html` have the same structure, class names and page CSS (the `--pg-*` tokens). When you change one, change the others to match. A new project page should start as a copy of one of them.
 
 1. **Nav:** `← Etienne Axiak` (`.nav-back`) on the left, then `.nav-links` (Features, Download, Setup, GitHub; ArtiSync also has FAQ). Below 860px a `.hamburger` opens `#mobileMenu` via `toggleMenu()`/`closeMenu()`.
 2. **Hero:** `.hero-logo`, `.tag`, an `h1` with `.grad`, the lead text, `.hero-btns`, and `.hero-pills`.
@@ -57,12 +58,15 @@ Emoji render as blank boxes in some browsers, such as Flatpak browsers without a
 
 - **Shelf:** a recreation of the real web app's dark theme (Archivo font, jewel-case covers). Every class is prefixed `s-` and scoped under `.sh-demo`, so it can't clash with page classes like `.btn` and `.hero`. The library (artists, albums, songs) is fictional, and covers are CSS gradients or inline SVG.
 - **Matchbox:** a recreation of the Electron/React app. `LIBRARY` (TV shows), `MOVIES` and the `state` object drive it, and posters come from TMDB image URLs.
+- **droppix:** a recreation of the PC's Qt control panel (`.dg`, with the app's own tokens on `.dg` only, light and dark) beside a desk with the PC's monitor and the tablet. Both screens show one desktop in desktop pixels (`.dp-vd`, scaled with `transform`): the monitor is 1920×1080 and the tablet (1280×800, or 800×1280 when turned) sits below it. Each desktop window has a copy on each screen, and Sketch draws on both copies' canvases. The tablet's own screens (`.dp-and` connect screen, menu, settings, keyboard) are the Android app's, in real pixels. Labels and log lines follow the real app's (`host/gui/`, `android/…/res/layout/`).
 - **Loft:** not a recreation. The demo is the real Loft web app in an `<iframe>` of `loft-demo/`: Loft's own `src/loft/web` files, copied unchanged, with `loft-demo/demo/mock.js` standing in for the server. The stand-in answers from a recording of a real Loft server on a made-up library (`loft-demo/demo/`), and `loft-demo/sw.js` serves the covers and page images. Don't edit the app's files by hand. When Loft's web app changes, record the demo again with `tools/loft-demo/` (its README has the steps).
 - **ArtiSync:** a recreation of the Qt app. `RELEASES` holds 24 albums across 4 artists, and `ARTIST_DATA` drives the artist dropdown and sidebar. Its classes are `.mockup-*`, `.win-*`, `.wt-*`, `.wsb`, `.wc-*`, `.wap-*` and `.mock-*`, and it uses its own tokens (`--surface`, `--fg`, `--accent`…). `applyTheme()` (9 themes) sets those tokens **only on `.mockup-window`**, so the rest of the page is unaffected.
 
 ## `loft-demo/` and `tools/`
 
 `loft-demo/` is the Loft page's demo (see Interactive demos), about 13 MB with its recorded books, covers and page images. Its pages are marked `noindex`. `tools/loft-demo/` holds the scripts that build it. Neither is linked from the site's navigation.
+
+`tools/og/make.py` renders the link-preview images in `og/` (1200×630 JPEGs) with headless Chromium: `python3 tools/og/make.py droppix home`. A new project page needs its own entry there, and its logo on the home image.
 
 ## `unused for now/` directory
 

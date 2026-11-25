@@ -20,6 +20,7 @@ import os
 import pathlib
 import re
 import sys
+import urllib.error
 import urllib.request
 
 OWNER = 'Spinjitsudoom'
@@ -28,6 +29,7 @@ PAGES = {
     'matchbox.html': 'Matchbox',
     'artisync.html': 'ArtiSync',
     'loft.html': 'Loft',
+    'droppix.html': 'droppix',
 }
 CURRENT = re.compile(r'All builds are v(\d+(?:\.\d+)+)')
 
@@ -75,7 +77,14 @@ def main():
             problems.append(f'{page}: no "All builds are vX.Y.Z" line to read the version from')
             continue
         old = m.group(1)
-        tag, assets = latest_release(repo)
+        try:
+            tag, assets = latest_release(repo)
+        except urllib.error.HTTPError as e:
+            if e.code != 404:
+                raise
+            # No full release yet (GitHub's "latest" skips pre-releases): nothing to check.
+            print(f'{page}: {repo} has no release yet, skipped')
+            continue
         new = tag.lstrip('v')
         if new != old:
             # Whole version numbers only: not inside 10.7.3 or 0.7.31.

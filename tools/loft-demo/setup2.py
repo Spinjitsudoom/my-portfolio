@@ -24,7 +24,7 @@ class Client:
             raise SystemExit(f'{method} {path}: {e.code} {e.read().decode()}')
 
 
-me, sam, jo, priya, lena = (Client(n) for n in ('Etienne', 'Sam', 'Jo', 'Priya', 'Lena'))
+me, sam, jo, priya, lena = (Client(n) for n in ('Alex', 'Sam', 'Jo', 'Priya', 'Lena'))
 salt, star = ids['Salt in the Lamp'], ids['Starfall Academy']
 
 say = lambda who, book, text, parent=None: who.call('POST', f'/books/{book}/discussion', {'body': text, 'parent_id': parent})
@@ -42,7 +42,7 @@ say(lena, star, 'The sorting-by-starlight ceremony is such a good opening.')
 time.sleep(1.1)
 say(sam, star, 'I did NOT see the headmaster being the second student coming. Thirty years late to his own exam.')
 
-# Etienne's own statuses and shelves
+# Alex's own statuses and shelves
 me.call('PUT', f'/books/{ids["Paper Orchard"]}/status', {'status': 'incomplete'})
 me.call('PUT', f'/books/{ids["Field Guide to Clouds"]}/status', {'status': 'want'})
 me.call('PUT', f'/books/{ids["Midnight at the Museum of Clocks"]}/status', {'status': 'want'})

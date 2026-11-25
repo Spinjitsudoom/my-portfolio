@@ -25,7 +25,7 @@ cd $LOFT && LOFT_CONFIG=/nonexistent.toml LOFT_BOOKS_DIRS=$WORK/books LOFT_DATA_
   LOFT_PORT=4599 LOFT_HOST=127.0.0.1 uv run loft &
 
 # 3. People, reading, talk; then record it all into the site
-python3 $T/setup1.py $WORK/ids.json   # the admin (Etienne), four members, sections, a scan
+python3 $T/setup1.py $WORK/ids.json   # the admin (Alex), four members, sections, a scan
 python3 $T/read.py $WORK              # each person reads in the real reader; books get their tags
 python3 $T/setup2.py $WORK            # messages, statuses, shelves, a request, a submission, a join request
 python3 $T/record.py $WORK $LOFT $SITE

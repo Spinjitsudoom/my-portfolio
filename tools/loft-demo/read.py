@@ -17,8 +17,8 @@ PLAN = {
     'Jo': [('Salt in the Lamp', .30)],
     'Priya': [('Salt in the Lamp', .71)],
     'Lena': [('Starfall Academy', .20)],
-    # Etienne last, Salt in the Lamp last of all: it's the book Home opens on.
-    'Etienne': [('The Keeper of Grey Harbour', 1.0), ('Paper Orchard', .21), ('Harbour Patrol, Vol. 1', .5),
+    # Alex last, Salt in the Lamp last of all: it's the book Home opens on.
+    'Alex': [('The Keeper of Grey Harbour', 1.0), ('Paper Orchard', .21), ('Harbour Patrol, Vol. 1', .5),
                 ('Starfall Academy', .64), ('Salt in the Lamp', .38)],
 }
 LOGIN = ("fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},"
@@ -47,7 +47,7 @@ def call(method, path, body=None):
         return json.loads(r.read() or b'null')
 
 
-call('POST', '/login', {'username': 'Etienne', 'password': 'demo-password-123'})
+call('POST', '/login', {'username': 'Alex', 'password': 'demo-password-123'})
 for b in json.load(open(HERE / 'library.json')):
     patch = {'tags': b['tags']}
     if b['format'] != 'epub':

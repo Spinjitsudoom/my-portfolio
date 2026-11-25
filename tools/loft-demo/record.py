@@ -1,5 +1,5 @@
 """Record the demo Loft server into the website's loft-demo/ folder: the real web app's files, and a
-snapshot of the server (as the admin, Etienne) that the in-page stand-in serves.
+snapshot of the server (as the admin, Alex) that the in-page stand-in serves.
 
 Usage: record.py WORK_DIR LOFT_SOURCE_DIR SITE_DIR
 """
@@ -27,7 +27,7 @@ def get(path):
     return json.loads(raw('GET', path)[0])
 
 
-raw('POST', '/login', {'username': 'Etienne', 'password': 'demo-password-123'})
+raw('POST', '/login', {'username': 'Alex', 'password': 'demo-password-123'})
 
 # ── The app itself, unchanged (its sw.js is replaced by the demo's) ──────────────────────────────
 # The demo's own files (index.html, sw.js, demo/mock.js) stay; the app and the recording are replaced.
@@ -91,7 +91,7 @@ for b in books:
                 img, _ = raw('GET', f'/files/{fid}/pages/{i}?w={PAGE_W}&v={man["version"]}')
                 (DATA / 'pages' / f'{fid}-{i}.jpg').write_bytes(img)
 
-# Etienne's own reading: progress, statuses set by hand, shelves (Want to read is one), bookmarks.
+# Alex's own reading: progress, statuses set by hand, shelves (Want to read is one), bookmarks.
 H, DAY = 3600, 86400
 when = {}   # book title -> how long ago it was last read
 progress = {}
@@ -123,7 +123,7 @@ notif_ago = {'reply': 20 * H, 'request': 2 * DAY, 'submission': 6 * H, 'join': 4
 notifications = [{**n, 'at': REF - notif_ago.get(n['kind'], H)} for n in get('/notifications')['items']]
 
 # Admin screens: as the server answers them, with this computer's folders swapped for ordinary ones.
-fake = lambda o: json.loads(json.dumps(o).replace(str(D / 'data'), '/home/etienne/.local/share/loft').replace(str(D / 'books'), '/home/etienne/Books'))
+fake = lambda o: json.loads(json.dumps(o).replace(str(D / 'data'), '/home/alex/.local/share/loft').replace(str(D / 'books'), '/home/alex/Books'))
 recorded = {}
 for path in ('/status', '/me', '/settings', '/library', '/users', '/backups', '/updates', '/check', '/check/ignored',
              '/sections', '/requests', '/requests?closed=true', '/submissions', '/submissions/mine', '/join-requests',

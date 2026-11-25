@@ -57,7 +57,7 @@ const fail = (status, detail) => json({ detail }, status);
 class HttpError extends Error { constructor(status, detail) { super(detail); this.status = status; } }
 const need = (cond, status, detail) => { if (!cond) throw new HttpError(status, detail); };
 
-const ME = () => ({ id: 1, username: "Etienne", admin: true });
+const ME = () => ({ id: 1, username: "Alex", admin: true });
 
 function card(b) {
   return { id: b.id, title: b.title, authors: b.authors, series: b.series, series_index: b.series_index,
@@ -399,7 +399,7 @@ function route(method, path, q, body) {
       let parent = body.parent_id ?? null;
       if (parent != null) { const a = S.messages.find((mm) => mm.id === parent && mm.book_id === id); need(a, 404, "No such message"); parent = a.parent_id || a.id; }
       const [position, place] = where(id);
-      const msg = { id: ++S.nextId, book_id: id, user_id: 1, by: "Etienne", parent_id: parent, body: cleanBody(body.body), position, place, at: now(), edited: false, removed: false };
+      const msg = { id: ++S.nextId, book_id: id, user_id: 1, by: "Alex", parent_id: parent, body: cleanBody(body.body), position, place, at: now(), edited: false, removed: false };
       S.messages.push(msg);
       const [p, , f] = where(id);
       return message(msg, p, f);
@@ -447,7 +447,7 @@ function route(method, path, q, body) {
   const rec = S.rec;
   if (path === "/requests" && method === "POST") {
     const title = String(body.title || "").trim(); need(title, 400, "Say which book you’d like");
-    const r = { id: ++S.nextId, title, author: String(body.author || "").trim(), note: String(body.note || "").trim(), by: "Etienne", mine: true, votes: 1, voted: true, status: "open", reason: "", book_id: null, at: now() };
+    const r = { id: ++S.nextId, title, author: String(body.author || "").trim(), note: String(body.note || "").trim(), by: "Alex", mine: true, votes: 1, voted: true, status: "open", reason: "", book_id: null, at: now() };
     rec["/requests"].unshift(r); return { id: r.id };
   }
   if ((x = m(/^\/requests\/(\d+)(?:\/(vote|fulfil|decline))?$/)) && method !== "GET") {

@@ -23,7 +23,7 @@ class Client:
 
 
 admin = Client()
-admin.call('POST', '/setup', {'username': 'Etienne', 'password': PW})
+admin.call('POST', '/setup', {'username': 'Alex', 'password': PW})
 for name in ('Sam', 'Jo', 'Priya', 'Lena'):
     admin.call('POST', '/users', {'username': name, 'password': PW})
 admin.call('PATCH', '/library', {'sections': [

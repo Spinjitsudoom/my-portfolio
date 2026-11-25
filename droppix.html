@@ -666,7 +666,7 @@ footer a{color:var(--pg-fg2)}
         </div>
       </div>
     </div>
-    <p class="demo-hint">A recreation of droppix, with the PC’s control panel on the left. Turn on the <strong>Server</strong> and tap <em>etienne-pc</em> on the tablet (the code is on the PC), or connect the tablet from the PC under <strong>Connections</strong>. Then drag a window across to the tablet, draw in Sketch, and open the tablet’s menu in its top corner.</p>
+    <p class="demo-hint">A recreation of droppix, with the PC’s control panel on the left. Turn on the <strong>Server</strong> and tap <em>desk-pc</em> on the tablet (the code is on the PC), or connect the tablet from the PC under <strong>Connections</strong>. Then drag a window across to the tablet, draw in Sketch, and open the tablet’s menu in its top corner.</p>
   </div>
 </section>
 
@@ -1056,7 +1056,7 @@ function dlCopy(btn) {
     st.server = !st.server;
     if (st.server) {
       log('gui', `Server ON: listening on 0.0.0.0:${PORT} (TLS)`, 'g');
-      if (st.lan) log('gui', `mDNS: advertising this PC as etienne-pc on ${ADAPTERS.filter((a, i) => st.ads[i]).map(a => a.name).join(', ') || '(no adapters)'}`);
+      if (st.lan) log('gui', `mDNS: advertising this PC as desk-pc on ${ADAPTERS.filter((a, i) => st.ads[i]).map(a => a.name).join(', ') || '(no adapters)'}`);
       if (st.web) log('stream:' + PORT, 'web client: serving HTTPS and WSS on the session port');
     } else {
       log('gui', 'Server OFF');
@@ -1248,7 +1248,7 @@ function dlCopy(btn) {
     const list = $('#andPcs');
     if (st.server && st.lan) {
       const ip = hostIp();
-      list.innerHTML = `<button data-pc>etienne-pc<small>${ip}:${PORT}</small></button>`;
+      list.innerHTML = `<button data-pc>desk-pc<small>${ip}:${PORT}</small></button>`;
       $('[data-pc]', list).onclick = () => tryWifi(ip);
     } else list.innerHTML = '<div class="none">Searching…</div>';
     const rc = $('#andReconnect');
@@ -1275,7 +1275,7 @@ function dlCopy(btn) {
   function tryWifi(ip) {
     if (!(st.server && st.lan)) { andStatus(`Connecting to ${ip}:${PORT}...`); setTimeout(() => { andStatus(''); toast('Nothing answers there yet: turn on the Server on the PC first.'); }, 900); return; }
     if (st.approved) { andStatus(`Reconnecting to ${ip}:${PORT}...`); setTimeout(() => connect('wifi'), 700); return; }
-    andStatus(`Connecting to etienne-pc (${ip}:${PORT})...`);
+    andStatus(`Connecting to desk-pc (${ip}:${PORT})...`);
     st.pairing = true;
     $('#dlgTitle').textContent = `Pair with ${ip}`;
     $('#dlgCode').value = ''; $('#dlgErr').textContent = '';

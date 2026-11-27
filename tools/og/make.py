@@ -32,6 +32,9 @@ PAGES = {
  'droppix': f'''<div class="wrap"><div class="top"><img class="logo" src="file://{SITE}/droppix-logo.svg"><div><span class="tag">Second screen for Linux</span><h1>droppix</h1></div></div>
 <p class="lead">An Android tablet as a real second screen for your Linux PC, with touch, stylus and sound.</p></div>
 <div class="pills"><span class="pill">Plasma, GNOME, Sway, Hyprland &amp; more</span><span class="pill">Android 5.0+</span><span class="pill">Any browser</span><span class="pill">USB or Wi-Fi</span></div>''',
+ 'artisync': f'''<div class="wrap"><div class="top"><img class="logo" src="file://{SITE}/ArtiSync.png"><div><span class="tag">Music Tools</span><h1>ArtiSync</h1></div></div>
+<p class="lead">Match your albums on Deezer, MusicBrainz or Spotify, then rename, tag, add cover art and convert.</p></div>
+<div class="pills"><span class="pill">Windows</span><span class="pill">macOS</span><span class="pill">Linux</span><span class="pill">Free &amp; open source</span></div>''',
  'home': f'''<div class="wrap"><span class="tag">Developer</span><h1 style="font-size:104px">Etienne Axiak</h1>
 <p class="lead" style="margin-top:22px">Open-source apps for your own music, books, media and screens.</p></div>
 <div class="apps">''' + ''.join(f'<span class="app"><img src="file://{SITE}/{i}">{n}</span>' for n, i in [('Shelf','shelf-logo.svg'),('Loft','loft-logo.svg'),('droppix','droppix-logo.svg'),('Matchbox','matchbox-logo.svg'),('ArtiSync','ArtiSync.png')]) + '</div>',
